@@ -19,12 +19,11 @@ public class BookingService {
 	}
 	
 	public Booking getBooking(int id) {
-		return bookingDao.findById(id).get(); // select * from Products where id = id;
+		return bookingDao.findById(id).get(); 
 	}
 	
 	public Booking addBooking(Booking b) {
 		return bookingDao.save(b);
 	}
 		
-
 }

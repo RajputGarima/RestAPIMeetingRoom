@@ -11,29 +11,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adobe.prj.entity.Booking;
-import com.adobe.prj.service.BookingService;
+import com.adobe.prj.entity.Equipment;
+import com.adobe.prj.service.EquipmentService;
 
 @RestController
-@RequestMapping("api/bookings")
-public class BookingController {
-
+@RequestMapping("api/equipments")
+public class EquipmentController {
+	
 	@Autowired
-	private BookingService bookingService;
+	private EquipmentService equipmentService;
 	
 	@GetMapping()
-    public @ResponseBody List<Booking> getBookings() {
-        return bookingService.getBookings();
-    }
+	public @ResponseBody List<Equipment> getEquipments() {
+		return equipmentService.getEquipments();
+	}
 	
 	@GetMapping("/{id}")
-	public @ResponseBody Booking getBooking(@PathVariable("id") int id) {
-		return bookingService.getBooking(id);
+	public @ResponseBody Equipment getEquipment(@PathVariable("id") int id) {
+		return equipmentService.getEquipment(id);
 	}
 	
 	@PostMapping()
-	public @ResponseBody Booking addBooking(@RequestBody Booking b) {
-	  return bookingService.addBooking(b);
+	public @ResponseBody Equipment addEquipment(@RequestBody Equipment e) {
+		return equipmentService.addEquipment(e);
 	}
-	
+
 }
