@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,7 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
+import javax.persistence.ConstraintMode;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -41,11 +43,13 @@ public class Room {
 	
 	private boolean status;
 	
-	@ManyToMany(targetEntity = RoomLayout.class,cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+	@ManyToMany(targetEntity = RoomLayout.class,cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH},fetch = FetchType.LAZY)
 	@JoinTable(
 			name = "room_rlayout",
-			joinColumns = { @JoinColumn(name = "room_id")},
-			inverseJoinColumns = { @JoinColumn(name = "layout_id")}
+			joinColumns = { @JoinColumn(name = "room_id",nullable = false,updatable = false)},
+			inverseJoinColumns = { @JoinColumn(name = "layout_id",nullable = false,updatable = false)},
+					foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+			        inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
 			)
 	List<RoomLayout> roomLayouts = new ArrayList<>();
 	

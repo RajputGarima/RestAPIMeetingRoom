@@ -5,10 +5,15 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -32,7 +37,14 @@ public class RoomLayout {
 	
 	private String title;
 	                     
-	@ManyToMany(targetEntity = Room.class, mappedBy = "roomLayouts",cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+	@ManyToMany(targetEntity = Room.class,fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+	@JoinTable(
+			name = "room_rlayout",
+			inverseJoinColumns = { @JoinColumn(name = "room_id",nullable = false,updatable = false)},
+			joinColumns = { @JoinColumn(name = "layout_id",nullable = false,updatable = false)},
+					foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+			        inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
+			)
 	List<Room> rooms = new ArrayList<>();
 	
 	public int getLayoutId() {

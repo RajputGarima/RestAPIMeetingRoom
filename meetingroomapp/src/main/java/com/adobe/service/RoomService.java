@@ -3,13 +3,17 @@ package com.adobe.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.adobe.dao.RoomDao;
 import com.adobe.dao.RoomLayoutDao;
 import com.adobe.entity.Room;
 import com.adobe.entity.RoomLayout;
+import com.adobe.prj.entity.Product;
 
 
 @Service
@@ -29,6 +33,7 @@ public class RoomService {
 		return roomDao.findById(id).get();
 	}
 	
+	@Transactional
 	public Room addRoom(Room r) {
 		List<RoomLayout> roomLayouts =  r.getRoomLayouts();
 		List<RoomLayout> newRoomLayouts = new ArrayList<>();
@@ -39,5 +44,23 @@ public class RoomService {
 		}
 		r.setRoomLayouts(newRoomLayouts);
 		return roomDao.save(r);
+	}
+	
+//	@Transactional
+//	public Room updateRoom(int id,Room newr){
+//		Room oldr = roomDao.findById(id).get();
+//		return roomDao.save(newr);
+//	}
+	
+	@Transactional
+	public ResponseEntity<Object> deleteRoom(int id){
+		if(roomDao.findById(id).isPresent()) {
+			roomDao.deleteById(id);
+            if (roomDao.findById(id).isPresent()) {
+                return ResponseEntity.unprocessableEntity().body("Failed to delete the record");
+            } else return ResponseEntity.ok().body("Successfully deleted the record");
+		}else
+			return ResponseEntity.unprocessableEntity().body("Cannot find the record");
+		
 	}
 }
