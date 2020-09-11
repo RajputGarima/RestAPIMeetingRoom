@@ -6,5 +6,4 @@ import com.adobe.prj.entity.Equipment;
 
 public interface EquipmentDao extends JpaRepository<Equipment, Integer>{
 
-	
 }

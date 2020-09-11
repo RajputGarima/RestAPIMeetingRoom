@@ -1,25 +1,29 @@
 package com.adobe.prj.entity;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-//import ch.qos.logback.core.util.Duration;
 
 @Table(name="booking")
 @Entity
 public class Booking {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int bookingId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -29,27 +33,35 @@ public class Booking {
 	private int attendees;
 	private String room;
 	private String user;
-	
-//	private List<String> food = new ArrayList<String>();
-//	
-//	private List<String> equipments = new ArrayList<String>();
-//	
 	private double totalCost;
 	
-//	Instant start;
-//	Instant end;
-//	        
-//	Duration duration = Duration.between(start, end);
+	@ManyToMany(fetch = FetchType.LAZY)
+	List<Equipment> equipments = new ArrayList<>();
 	
-	public Booking() {
-//		super();
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@JoinColumn(name="booking_fk")
+	List<EquipmentDetail> equipDetails = new ArrayList<EquipmentDetail>();
+
+	public List<Equipment> getEquipments() {
+		return equipments;
 	}
 
-//	public Booking(String start, String end) {
-//		
-//		this.start = Instant.parse(start);
-//		this.end = Instant.parse(end);
-//	}
+	public void setEquipments(List<Equipment> equipments) {
+		this.equipments = equipments;
+	}
+
+
+	public List<EquipmentDetail> getEquipDetails() {
+		return equipDetails;
+	}
+
+	public void setEquipDetails(List<EquipmentDetail> equipDetails) {
+		this.equipDetails = equipDetails;
+	}
+
+	public Booking() {
+		super();
+	}
 
 	public int getBookingId() {
 		return bookingId;
@@ -91,22 +103,6 @@ public class Booking {
 		this.user = user;
 	}
 
-//	public List<String> getFood() {
-//		return food;
-//	}
-//
-//	public void setFood(List<String> food) {
-//		this.food = food;
-//	}
-//
-//	public List<String> getEquipments() {
-//		return equipments;
-//	}
-//
-//	public void setEquipments(List<String> equipments) {
-//		this.equipments = equipments;
-//	}
-
 	public double getTotalCost() {
 		return totalCost;
 	}
@@ -114,30 +110,5 @@ public class Booking {
 	public void setTotalCost(double totalCost) {
 		this.totalCost = totalCost;
 	}
-
-//	public Instant getStart() {
-//		return start;
-//	}
-//
-//	public void setStart(Instant start) {
-//		this.start = start;
-//	}
-//
-//	public Instant getEnd() {
-//		return end;
-//	}
-//
-//	public void setEnd(Instant end) {
-//		this.end = end;
-//	}
-//
-//	public Duration getDuration() {
-//		return duration;
-//	}
-//
-//	public void setDuration(Duration duration) {
-//		this.duration = duration;
-//	}
-
 
 }

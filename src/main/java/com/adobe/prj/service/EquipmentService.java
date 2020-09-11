@@ -25,5 +25,9 @@ public class EquipmentService {
 	public Equipment addEquipment(Equipment e) {
 		return equipmentDao.save(e);
 	}
+	
+	public void deleteEquipment(Equipment e) {
+		equipmentDao.delete(e);
+	}
 
 }
