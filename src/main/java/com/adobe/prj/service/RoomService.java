@@ -1,4 +1,4 @@
-package com.adobe.service;
+package com.adobe.prj.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.adobe.dao.RoomDao;
-import com.adobe.dao.RoomLayoutDao;
-import com.adobe.entity.Room;
-import com.adobe.entity.RoomLayout;
-import com.adobe.prj.entity.Product;
+import com.adobe.prj.dao.RoomDao;
+import com.adobe.prj.dao.RoomLayoutDao;
+import com.adobe.prj.entity.Room;
+import com.adobe.prj.entity.RoomLayout;
 
 
 @Service

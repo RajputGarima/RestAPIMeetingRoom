@@ -1,4 +1,4 @@
-package com.adobe.api;
+package com.adobe.prj.api;
 
 import java.util.List;
 
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adobe.entity.RoomLayout;
-import com.adobe.service.RoomLayoutService;
+import com.adobe.prj.entity.RoomLayout;
+import com.adobe.prj.service.RoomLayoutService;
 
 
 @RestController

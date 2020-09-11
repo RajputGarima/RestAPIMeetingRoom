@@ -1,5 +1,6 @@
 package com.adobe.prj.entity;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,8 +22,8 @@ import javax.persistence.TemporalType;
 
 @Table(name="booking")
 @Entity
-public class Booking {
-	
+public class Booking{
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int bookingId;
@@ -32,7 +34,6 @@ public class Booking {
 	
 	private int attendees;
 	private String room;
-	private String user;
 	private double totalCost;
 	
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -61,6 +62,41 @@ public class Booking {
 
 	public Booking() {
 		super();
+	}
+
+	@ManyToOne
+	@JoinColumn(name="user_fk") 
+	private User user;
+	
+	private Time start; 
+	private Time end;
+	
+	
+	
+	@OneToMany(
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true, 
+	        fetch= FetchType.EAGER)
+	@JoinColumn(name="booking_fk")
+	private List<FoodBooking> foods = new ArrayList<>();
+		
+	
+	
+	public Time getStart() {
+		return start;
+	}
+
+	public void setStart(Time start) {
+
+		this.start=start;
+	}
+
+	public Time getEnd() {
+		return end;
+	}
+
+	public void setEnd(Time end) {
+		this.end=end;
 	}
 
 	public int getBookingId() {
@@ -95,11 +131,20 @@ public class Booking {
 		this.room = room;
 	}
 
-	public String getUser() {
+
+	public List<FoodBooking> getFoods() {
+		return foods;
+	}
+
+	public void setFoods(List<FoodBooking> foods) {
+		this.foods = foods;
+	}
+
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(String user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
@@ -110,5 +155,6 @@ public class Booking {
 	public void setTotalCost(double totalCost) {
 		this.totalCost = totalCost;
 	}
-
+	
 }
+
