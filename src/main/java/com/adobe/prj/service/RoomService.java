@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.adobe.prj.dao.BookingDao;
 import com.adobe.prj.dao.RoomDao;
 import com.adobe.prj.dao.RoomLayoutDao;
+import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
 
@@ -20,6 +22,9 @@ public class RoomService {
 
 	@Autowired
 	private RoomDao roomDao;
+	
+	@Autowired
+	private BookingDao bookingDao;
 	
 	@Autowired
 	private RoomLayoutDao roomLayoutDao;
@@ -54,6 +59,16 @@ public class RoomService {
 	@Transactional
 	public ResponseEntity<Object> deleteRoom(int id){
 		if(roomDao.findById(id).isPresent()) {
+			
+			// to delete all the bookings made for this room
+			
+			List<Booking> bookings = bookingDao.getByRoomId(id);
+			
+			for(Booking b: bookings) {
+				bookingDao.delete(b);
+			}
+			
+			// 
 			roomDao.deleteById(id);
             if (roomDao.findById(id).isPresent()) {
                 return ResponseEntity.unprocessableEntity().body("Failed to delete the record");

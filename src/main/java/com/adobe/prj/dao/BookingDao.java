@@ -13,6 +13,10 @@ public interface BookingDao extends JpaRepository<Booking, Integer>{
 	
 	@Query(value = "select * from booking where user_fk= :pr", nativeQuery = true) 
 	public List<Booking> getByEmail(@Param("pr") String email);
+	
+	
+	@Query(value = "select * from booking where room_fk= :pr", nativeQuery = true)
+	public List<Booking> getByRoomId(@Param("pr") int id);
 
 }
 

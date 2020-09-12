@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.EquipmentDetail;
+import com.adobe.prj.entity.FoodBooking;
 import com.adobe.prj.service.BookingService;
 import com.adobe.prj.service.EquipmentService;
+import com.adobe.prj.service.FoodService;
+import com.adobe.prj.service.RoomService;
+import com.adobe.prj.service.UserService;
 
 
 @RestController
@@ -26,19 +30,31 @@ public class BookingController {
 	@Autowired
 	private BookingService bookingService;
 
-	@Autowired
-	private EquipmentService equipmentService;
+//	@Autowired
+//	private EquipmentService equipmentService;
+//	
+//	@Autowired
+//	private UserService userService;
+//	
+//	@Autowired
+//	private FoodService foodService;
+//	
+//	@Autowired
+//	private RoomService roomService;
 	
 	@GetMapping()
     public @ResponseBody List<Booking> getBookings() {
 		
+//		long milli = 123456789999l;
 //		Booking b = new Booking();
 //		b.setAttendees(10);
 //		b.setRoom("Large Conference Room");
+//		b.setRoom(roomService.getRoom(1));
 //		b.setTotalCost(2700);
-//		b.setUser("Garima");
-//		b.getEquipments().add(equipmentService.getEquipment(1));
-//		b.getEquipments().add(equipmentService.getEquipment(2));
+//		java.sql.Time time = new java.sql.Time(milli);
+//		b.setStart(time);
+//		b.setEnd(time);
+//		b.setUser(userService.getUser("k@adobe.com"));
 //		
 //		EquipmentDetail ed = new EquipmentDetail();
 //		ed.setEquipment(equipmentService.getEquipment(1));
@@ -54,8 +70,28 @@ public class BookingController {
 //		
 //		b.getEquipDetails().add(ed1);
 //		
+//		FoodBooking fb = new FoodBooking();
+//		fb.setFood(foodService.getFood(1));
+//		fb.setQuantity(6);
+//		fb.setAmount(fb.getQuantity() * foodService.getFood(1).getFoodPrice());
+//		
+//		b.getFoods().add(fb);
+//		
+//		FoodBooking fb1 = new FoodBooking();
+//		fb1.setFood(foodService.getFood(2));
+//		fb1.setQuantity(10);
+//		fb1.setAmount(fb1.getQuantity() * foodService.getFood(2).getFoodPrice());
+//		
+//		b.getFoods().add(fb1);
+//		
+//		FoodBooking fb2 = new FoodBooking();
+//		fb2.setFood(foodService.getFood(3));
+//		fb2.setQuantity(5);
+//		fb2.setAmount(fb2.getQuantity() * foodService.getFood(3).getFoodPrice());
+//		
+//		b.getFoods().add(fb2);
+//		
 //		bookingService.addBooking(b);
-		
 
         return bookingService.getBookings();
     }

@@ -13,12 +13,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 
 @Table(name="booking")
 @Entity
@@ -33,23 +33,12 @@ public class Booking{
 	private Date orderDate = new Date();
 	
 	private int attendees;
-	private String room;
 	private double totalCost;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
-	List<Equipment> equipments = new ArrayList<>();
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn(name="booking_fk")
 	List<EquipmentDetail> equipDetails = new ArrayList<EquipmentDetail>();
-
-	public List<Equipment> getEquipments() {
-		return equipments;
-	}
-
-	public void setEquipments(List<Equipment> equipments) {
-		this.equipments = equipments;
-	}
 
 
 	public List<EquipmentDetail> getEquipDetails() {
@@ -63,6 +52,10 @@ public class Booking{
 	public Booking() {
 		super();
 	}
+	
+	@ManyToOne
+	@JoinColumn(name="room_fk")
+	private Room room;
 
 	@ManyToOne
 	@JoinColumn(name="user_fk") 
@@ -123,14 +116,13 @@ public class Booking{
 		this.attendees = attendees;
 	}
 
-	public String getRoom() {
+	public Room getRoom() {
 		return room;
 	}
 
-	public void setRoom(String room) {
+	public void setRoom(Room room) {
 		this.room = room;
 	}
-
 
 	public List<FoodBooking> getFoods() {
 		return foods;
