@@ -1,12 +1,11 @@
 package com.adobe.prj.entity;
 
-import java.sql.Time;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,8 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import com.adobe.prj.util.BookingSchedule;
 
 
 @Table(name="booking")
@@ -28,30 +27,11 @@ public class Booking{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int bookingId;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="order_date")
-	private Date orderDate = new Date();
-	
 	private int attendees;
 	private double totalCost;
 	
-	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	@JoinColumn(name="booking_fk")
-	List<EquipmentDetail> equipDetails = new ArrayList<EquipmentDetail>();
-
-
-	public List<EquipmentDetail> getEquipDetails() {
-		return equipDetails;
-	}
-
-	public void setEquipDetails(List<EquipmentDetail> equipDetails) {
-		this.equipDetails = equipDetails;
-	}
-
-	public Booking() {
-		super();
-	}
+	@Embedded
+	private BookingSchedule schedule;
 	
 	@ManyToOne
 	@JoinColumn(name="room_fk")
@@ -61,10 +41,6 @@ public class Booking{
 	@JoinColumn(name="user_fk") 
 	private User user;
 	
-	private Time start; 
-	private Time end;
-	
-	
 	
 	@OneToMany(
 	        cascade = CascadeType.ALL,
@@ -72,26 +48,16 @@ public class Booking{
 	        fetch= FetchType.EAGER)
 	@JoinColumn(name="booking_fk")
 	private List<FoodBooking> foods = new ArrayList<>();
+	
+	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@JoinColumn(name="booking_fk")
+	List<EquipmentDetail> equipDetails = new ArrayList<EquipmentDetail>();
+
+	public Booking() {
+		super();
+	}
 		
-	
-	
-	public Time getStart() {
-		return start;
-	}
-
-	public void setStart(Time start) {
-
-		this.start=start;
-	}
-
-	public Time getEnd() {
-		return end;
-	}
-
-	public void setEnd(Time end) {
-		this.end=end;
-	}
-
 	public int getBookingId() {
 		return bookingId;
 	}
@@ -100,13 +66,6 @@ public class Booking{
 		this.bookingId = bookingId;
 	}
 
-	public Date getOrderDate() {
-		return orderDate;
-	}
-
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
-	}
 
 	public int getAttendees() {
 		return attendees;
@@ -147,6 +106,22 @@ public class Booking{
 	public void setTotalCost(double totalCost) {
 		this.totalCost = totalCost;
 	}
+	
+	public List<EquipmentDetail> getEquipDetails() {
+		return equipDetails;
+	}
+
+	public void setEquipDetails(List<EquipmentDetail> equipDetails) {
+		this.equipDetails = equipDetails;
+	}
+	
+	public BookingSchedule getSchedule() {
+		return schedule;
+	}
+	
+	public void setSchedule(BookingSchedule schedule) {
+		this.schedule = schedule;
+	}	
 	
 }
 
