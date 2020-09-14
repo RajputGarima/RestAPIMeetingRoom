@@ -1,4 +1,4 @@
-package com.adobe.service;
+package com.adobe.prj.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.adobe.dao.RoomDao;
-import com.adobe.dao.RoomLayoutDao;
-import com.adobe.entity.Room;
-import com.adobe.entity.RoomLayout;
-import com.adobe.prj.entity.Product;
+import com.adobe.prj.dao.BookingDao;
+import com.adobe.prj.dao.RoomDao;
+import com.adobe.prj.dao.RoomLayoutDao;
+import com.adobe.prj.entity.Booking;
+import com.adobe.prj.entity.Room;
+import com.adobe.prj.entity.RoomLayout;
 
 
 @Service
@@ -21,6 +22,9 @@ public class RoomService {
 
 	@Autowired
 	private RoomDao roomDao;
+	
+	@Autowired
+	private BookingDao bookingDao;
 	
 	@Autowired
 	private RoomLayoutDao roomLayoutDao;
@@ -46,15 +50,17 @@ public class RoomService {
 		return roomDao.save(r);
 	}
 	
-//	@Transactional
-//	public Room updateRoom(int id,Room newr){
-//		Room oldr = roomDao.findById(id).get();
-//		return roomDao.save(newr);
-//	}
 	
 	@Transactional
 	public ResponseEntity<Object> deleteRoom(int id){
-		if(roomDao.findById(id).isPresent()) {
+		if(roomDao.findById(id).isPresent()) {			
+			// to delete all the bookings made for this room
+			List<Booking> bookings = bookingDao.getByRoomId(id);
+			
+			for(Booking b: bookings) {
+				bookingDao.delete(b);
+			}	
+			// 
 			roomDao.deleteById(id);
             if (roomDao.findById(id).isPresent()) {
                 return ResponseEntity.unprocessableEntity().body("Failed to delete the record");

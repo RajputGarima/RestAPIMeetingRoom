@@ -1,4 +1,4 @@
-package com.adobe.entity;
+package com.adobe.prj.entity;
 
 import java.util.ArrayList;
 import java.util.List;

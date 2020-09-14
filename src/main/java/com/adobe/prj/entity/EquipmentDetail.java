@@ -11,7 +11,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table
 @Entity
@@ -24,7 +23,6 @@ public class EquipmentDetail {
 	private int units;
 	private double price;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "equip_fk")
 	@OnDelete(action = OnDeleteAction.CASCADE)

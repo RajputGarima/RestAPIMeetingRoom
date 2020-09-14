@@ -26,8 +26,6 @@ public class BookingService {
 		return bookingDao.save(b);
 	}
 		
-<<<<<<< HEAD
-=======
 	public void deleteBooking(int id) {
 		Booking b = bookingDao.findById(id).get(); 
 		bookingDao.delete(b);
@@ -37,5 +35,4 @@ public class BookingService {
 		return bookingDao.getByEmail(email);
 	}
 	
->>>>>>> 3d686a6d409962f44b8758a42da2d344de5941d5
 }

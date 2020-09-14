@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.Equipment;
 import com.adobe.prj.service.EquipmentService;
 
@@ -44,11 +43,11 @@ public class EquipmentController {
 	@DeleteMapping("/{id}")
     public Map<String, Boolean> deletePost(@PathVariable int id) {
 		Equipment e = equipmentService.getEquipment(id);
-		List<Booking> bookingsList = e.getBookings();
-		
-		for(Booking b: bookingsList) {
-			b.getEquipments().remove(e);
-		}
+//		List<Booking> bookingsList = e.getBookings();
+//		
+//		for(Booking b: bookingsList) {
+//			b.getEquipments().remove(e);
+//		}
         equipmentService.deleteEquipment(e);
         
 		Map<String, Boolean> response = new HashMap<>();
