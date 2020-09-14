@@ -42,5 +42,10 @@ public class RoomController {
 	public ResponseEntity<Object> deleteRoom(@PathVariable("id") int id){
 		return service.deleteRoom(id);
 	}
+	
+	@PostMapping("/{id}")
+	public @ResponseBody Room updateRoom(@PathVariable("id") int id, @RequestBody Room r) {
+		return service.updateRoom(id, r);
+	}
 }
 

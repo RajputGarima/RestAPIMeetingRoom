@@ -41,4 +41,9 @@ public class RoomLayoutController {
 	public ResponseEntity<Object> deleteRoomLayout(@PathVariable("id") int id){
 		return service.deleteRoomLayout(id);
 	}
+	
+	@PostMapping("/{id}")
+	public @ResponseBody RoomLayout updateRoomLayout(@PathVariable("id") int id, @RequestBody RoomLayout r) {
+		return service.updateRoomLayout(id, r);
+	}
 }
