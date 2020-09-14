@@ -50,6 +50,33 @@ public class RoomService {
 		return roomDao.save(r);
 	}
 	
+	@Transactional
+	public Room updateRoom(int id,Room newr){
+		Room oldr = roomDao.findById(id).get();
+//		if(newr.getTitle() != null)
+			oldr.setTitle(newr.getTitle());
+//		if(newr.getPricePerDay() != 0)
+			oldr.setPricePerDay(newr.getPricePerDay());
+//		if(newr.getCapacity() != 0)
+			oldr.setCapacity(newr.getCapacity());
+//		if(newr.getBookings() != 0)
+			oldr.setBookings(newr.getBookings());
+//		if(newr.getImageUrl() != null)
+			oldr.setImageUrl(newr.getImageUrl());
+//		if(newr.getRoomLayouts().size() != 0) {
+			List<RoomLayout> roomLayouts =  newr.getRoomLayouts();
+			List<RoomLayout> newRoomLayouts = new ArrayList<>();
+			for(RoomLayout l : roomLayouts)
+			{
+				RoomLayout rl = roomLayoutDao.findById(l.getLayoutId()).get();
+				newRoomLayouts.add(rl);
+			}
+			oldr.setRoomLayouts(newRoomLayouts);
+//			newr.setRoomLayouts(newRoomLayouts);
+//		}
+		return roomDao.save(oldr);
+//		return roomDao.save(newr);
+	}
 	
 	@Transactional
 	public ResponseEntity<Object> deleteRoom(int id){
