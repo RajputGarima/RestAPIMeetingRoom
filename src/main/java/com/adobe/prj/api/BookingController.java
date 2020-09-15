@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.EquipmentDetail;
 import com.adobe.prj.entity.FoodBooking;
+import com.adobe.prj.entity.User;
 import com.adobe.prj.service.BookingService;
 import com.adobe.prj.service.EquipmentService;
 import com.adobe.prj.service.FoodService;
@@ -106,6 +107,8 @@ public class BookingController {
 	
 	@PostMapping()
 	public @ResponseBody Booking addBooking(@RequestBody Booking b) {
+		User user = userService.addUser(b.getUser());
+		b.setUser(user);
 	  return bookingService.addBooking(b);
 	}
 	
