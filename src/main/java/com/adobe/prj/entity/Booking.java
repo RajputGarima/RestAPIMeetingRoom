@@ -61,6 +61,10 @@ public class Booking{
 	@JoinColumn(name="user_fk") 
 	private User user;
 	
+	@ManyToOne
+	@JoinColumn(name="layout_fk")
+	private RoomLayout roomLayout;
+	
 	private Time start; 
 	private Time end;
 	
@@ -146,6 +150,14 @@ public class Booking{
 
 	public void setTotalCost(double totalCost) {
 		this.totalCost = totalCost;
+	}
+
+	public RoomLayout getRoomLayout() {
+		return roomLayout;
+	}
+
+	public void setRoomLayout(RoomLayout roomLayout) {
+		this.roomLayout = roomLayout;
 	}
 	
 }

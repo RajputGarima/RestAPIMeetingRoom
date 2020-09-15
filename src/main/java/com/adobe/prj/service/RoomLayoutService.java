@@ -33,6 +33,14 @@ public class RoomLayoutService {
 	
 	@Transactional
 	public RoomLayout addRoomLayout(RoomLayout r) {
+		List<Room> rooms =  r.getRooms();
+		List<Room> newRooms = new ArrayList<>();
+		for(Room i : rooms)
+		{
+			Room R = roomDao.findById(i.getRoomId()).get();
+			newRooms.add(R);
+		}
+		r.setRooms(newRooms);
 		return roomLayoutDao.save(r);
 	}
 	
