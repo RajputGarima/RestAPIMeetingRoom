@@ -23,17 +23,20 @@ public class UserService {
 		return userDao.findAll();
 	}
 	
-	public User getUser(String id) {
+	public User getUser(int id) {
 		return userDao.findById(id).get(); 
 	}
 	
 	public User addUser(User b) {
-		return userDao.save(b);
+		User u = userDao.save(b);
+		int userId = u.getUserId();
+//		System.out.println("user id is "+userId);
+		return u;
 	}
 	
-	public void deleteUser(String id) {
+	public void deleteUser(int id) {
 		
-		List<Booking> bookings = bookingDao.getByEmail(id);
+		List<Booking> bookings = bookingDao.getByUserId(id);
 		
 		for(Booking b: bookings) {
 			bookingDao.delete(b);
