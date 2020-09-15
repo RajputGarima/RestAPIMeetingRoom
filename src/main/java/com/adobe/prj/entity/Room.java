@@ -22,9 +22,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Table(name="room")
 @Entity
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "roomId")
 public class Room {
 	
 	@Id
