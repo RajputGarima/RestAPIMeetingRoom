@@ -41,17 +41,10 @@ public class BookingSchedule {
 
 	public BookingSchedule(Date date, Time startTime, Time endTime) {
 		super();
-		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}
 
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
 	public Time getStartTime() {
 		return startTime;
 	}
