@@ -39,19 +39,14 @@ public class BookingSchedule {
 		super();
 	}
 
-	public BookingSchedule(Date date, Time startTime, Time endTime) {
+	public BookingSchedule(Date bookedOn, Time startTime, Time endTime) {
 		super();
-		this.date = date;
+		this.bookedOn = bookedOn;
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}
 
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
+
 	public Time getStartTime() {
 		return startTime;
 	}
