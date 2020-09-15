@@ -6,13 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.BookingDao;
+import com.adobe.prj.dao.RoomDao;
+import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.Booking;
+import com.adobe.prj.entity.Room;
+import com.adobe.prj.entity.RoomLayout;
 
 @Service
 public class BookingService {
 	
 	@Autowired
 	private BookingDao bookingDao;
+	
+	@Autowired
+	private RoomDao roomDao;
+	
+	@Autowired
+	private RoomLayoutDao roomLayoutDao;
 	
 	public List<Booking> getBookings(){
 		return bookingDao.findAll();
@@ -23,6 +33,11 @@ public class BookingService {
 	}
 	
 	public Booking addBooking(Booking b) {
+		Room r = b.getRoom();
+		RoomLayout l = b.getRoomLayout();
+		
+		b.setRoom(roomDao.findById(r.getRoomId()).get());
+		b.setRoomLayout(roomLayoutDao.findById(l.getLayoutId()).get());
 		return bookingDao.save(b);
 	}
 		
@@ -31,8 +46,8 @@ public class BookingService {
 		bookingDao.delete(b);
 	}
 	
-	public List<Booking> getByEmail(String email){
-		return bookingDao.getByEmail(email);
+	public List<Booking> getByUserId(int id){
+		return bookingDao.getByUserId(id);
 	}
 	
 }

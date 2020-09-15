@@ -12,7 +12,25 @@ public class BookingSchedule {
 
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date date = new Date();
+	private Date bookedOn = new Date();
+	
+	private Date bookedFor;
+	
+	public Date getBookedOn() {
+		return bookedOn;
+	}
+
+	public void setBookedOn(Date bookedOn) {
+		this.bookedOn = bookedOn;
+	}
+	
+	public Date getBookedFor() {
+		return bookedFor;
+	}
+
+	public void setBookedFor(Date bookedFor) {
+		this.bookedFor = bookedFor;
+	}
 	
 	private Time startTime;
 	private Time endTime;
@@ -21,19 +39,15 @@ public class BookingSchedule {
 		super();
 	}
 
-	public BookingSchedule(Date date, Time startTime, Time endTime) {
+	public BookingSchedule(Date bookedOn, Date bookedFor, Time startTime, Time endTime) {
 		super();
-		this.date = date;
+		this.bookedOn = bookedOn;
+		this.bookedFor = bookedFor;
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}
 
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
+
 	public Time getStartTime() {
 		return startTime;
 	}

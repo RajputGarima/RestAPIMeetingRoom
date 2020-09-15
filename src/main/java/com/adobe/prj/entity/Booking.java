@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -41,6 +42,20 @@ public class Booking{
 	@JoinColumn(name="user_fk") 
 	private User user;
 	
+	@ManyToOne
+	@JoinColumn(name="layout_fk")
+	private RoomLayout roomLayout;
+	
+	@Column(columnDefinition = "boolean default false")
+	private boolean status;
+	
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 	
 	@OneToMany(
 	        cascade = CascadeType.ALL,
@@ -105,6 +120,14 @@ public class Booking{
 
 	public void setTotalCost(double totalCost) {
 		this.totalCost = totalCost;
+	}
+
+	public RoomLayout getRoomLayout() {
+		return roomLayout;
+	}
+
+	public void setRoomLayout(RoomLayout roomLayout) {
+		this.roomLayout = roomLayout;
 	}
 	
 	public List<EquipmentDetail> getEquipDetails() {

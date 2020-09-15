@@ -1,4 +1,4 @@
-package com.adobe.prj.api;
+package com.adobe.api;
 
 import java.util.List;
 
@@ -8,14 +8,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adobe.prj.entity.RoomLayout;
-import com.adobe.prj.service.RoomLayoutService;
+import com.adobe.entity.RoomLayout;
+import com.adobe.service.RoomLayoutService;
 
 
 @RestController
@@ -41,10 +40,5 @@ public class RoomLayoutController {
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Object> deleteRoomLayout(@PathVariable("id") int id){
 		return service.deleteRoomLayout(id);
-	}
-	
-	@PutMapping("/{id}")
-	public @ResponseBody RoomLayout updateRoomLayout(@PathVariable("id") int id, @RequestBody RoomLayout r) {
-		return service.updateRoomLayout(id, r);
 	}
 }

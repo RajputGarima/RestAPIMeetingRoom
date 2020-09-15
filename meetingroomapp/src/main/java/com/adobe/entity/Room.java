@@ -1,4 +1,4 @@
-package com.adobe.prj.entity;
+package com.adobe.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +16,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.ConstraintMode;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Table(name="room")
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "roomId")
 public class Room {
 	
 	@Id
@@ -51,7 +53,6 @@ public class Room {
 			)
 	List<RoomLayout> roomLayouts = new ArrayList<>();
 	
-
 	public Room() {
 
 	}

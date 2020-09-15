@@ -39,6 +39,7 @@ public class RoomService {
 	
 	@Transactional
 	public Room addRoom(Room r) {
+		
 		List<RoomLayout> roomLayouts =  r.getRoomLayouts();
 		List<RoomLayout> newRoomLayouts = new ArrayList<>();
 		for(RoomLayout l : roomLayouts)
