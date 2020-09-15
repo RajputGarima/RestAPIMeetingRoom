@@ -31,8 +31,8 @@ public class BookingService {
 		bookingDao.delete(b);
 	}
 	
-	public List<Booking> getByEmail(String email){
-		return bookingDao.getByEmail(email);
+	public List<Booking> getByUserId(int id){
+		return bookingDao.getByUserId(id);
 	}
 	
 }

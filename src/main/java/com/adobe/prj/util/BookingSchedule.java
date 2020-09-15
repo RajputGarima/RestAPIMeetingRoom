@@ -12,7 +12,25 @@ public class BookingSchedule {
 
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date date = new Date();
+	private Date bookedOn = new Date();
+	
+	private Date bookedFor;
+	
+	public Date getBookedOn() {
+		return bookedOn;
+	}
+
+	public void setBookedOn(Date bookedOn) {
+		this.bookedOn = bookedOn;
+	}
+	
+	public Date getBookedFor() {
+		return bookedFor;
+	}
+
+	public void setBookedFor(Date bookedFor) {
+		this.bookedFor = bookedFor;
+	}
 	
 	private Time startTime;
 	private Time endTime;

@@ -1,8 +1,13 @@
 package com.adobe.prj.entity;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.adobe.prj.util.UserAddress;
 
 
 @Table(name="user")
@@ -11,6 +16,9 @@ public class User {
 	
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int userId;
+	
 	private String email;
 	
 	private String title;
@@ -22,21 +30,31 @@ public class User {
 	private String notes;
 	
 	private String company;
-
-	private String address;
 	
-	private String city;
-
-	private String state;
-	
-	private int zip;
-	
-	private String country;
 	
 	private String paymentMethod;
 	
+	@Embedded
+	private UserAddress address;	
 	
 	
+	
+	public UserAddress getAddress() {
+		return address;
+	}
+
+	public void setAddress(UserAddress address) {
+		this.address = address;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
 	public User() {
 		
 	}
@@ -90,45 +108,6 @@ public class User {
 		this.company = company;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public int getZip() {
-		return zip;
-	}
-
-	public void setZip(int zip) {
-		this.zip = zip;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
 
 	public String getPaymentMethod() {
 		return paymentMethod;
@@ -137,9 +116,6 @@ public class User {
 	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
-	
-	
-	
 	
 
 }
