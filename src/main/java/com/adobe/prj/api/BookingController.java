@@ -31,6 +31,9 @@ public class BookingController {
 
 	@Autowired
 	private BookingService bookingService;
+	
+	@Autowired
+	private UserService userService;
 
 //	@Autowired
 //	private EquipmentService equipmentService;
