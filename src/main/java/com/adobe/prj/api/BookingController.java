@@ -21,6 +21,7 @@ import com.adobe.prj.service.EquipmentService;
 import com.adobe.prj.service.FoodService;
 import com.adobe.prj.service.RoomService;
 import com.adobe.prj.service.UserService;
+import com.adobe.prj.util.BookingSchedule;
 
 
 @RestController
@@ -29,9 +30,6 @@ public class BookingController {
 
 	@Autowired
 	private BookingService bookingService;
-
-	@Autowired
-	private EquipmentService equipmentService;
 
 //	@Autowired
 //	private EquipmentService equipmentService;
@@ -44,14 +42,16 @@ public class BookingController {
 //	
 //	@Autowired
 //	private RoomService roomService;
+
 	
 	@GetMapping()
     public @ResponseBody List<Booking> getBookings() {
 		
+
 //		long milli = 123456789999l;
 //		Booking b = new Booking();
 //		b.setAttendees(10);
-//		b.setRoom("Large Conference Room");
+
 //		b.setRoom(roomService.getRoom(1));
 //		b.setTotalCost(2700);
 //		java.sql.Time time = new java.sql.Time(milli);
@@ -95,7 +95,7 @@ public class BookingController {
 //		b.getFoods().add(fb2);
 //		
 //		bookingService.addBooking(b);
-//	 GET http://localhost:8080/api/bookings
+
         return bookingService.getBookings();
     }
 	
