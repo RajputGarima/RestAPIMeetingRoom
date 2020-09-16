@@ -1,4 +1,4 @@
-package com.adobe.prj.entity;
+package com.adobe.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import javax.validation.constraints.NotNull;
-
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -36,13 +33,9 @@ public class RoomLayout {
 	@Column(name = "layout_id")
 	private int layoutId;
 	
-
-	@Column(unique = true)
-	@NotNull(message = "Room Layout Name cannot be NULL")
-	private String title;
-	
 	private String imageUrl;
-
+	
+	private String title;
 	                     
 	@ManyToMany(targetEntity = Room.class,fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
 	@JoinTable(

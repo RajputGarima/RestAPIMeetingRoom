@@ -8,8 +8,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,7 +22,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.adobe.prj.util.BookingSchedule;
+
 import com.adobe.prj.util.BookingStatus;
+
 
 
 @Table(name="booking")
@@ -31,12 +35,14 @@ public class Booking{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int bookingId;
 	
+
 	@Embedded
 	private BookingSchedule schedule;
 	
 	private int attendees;
 	private double totalCost;
 	private BookingStatus status;
+
 	
 	@ManyToOne
 	@JoinColumn(name="room_fk")
@@ -50,6 +56,7 @@ public class Booking{
 	@JoinColumn(name="layout_fk")
 	private RoomLayout roomLayout;
 	
+
 	@OneToMany(
 	        cascade = CascadeType.ALL,
 	        orphanRemoval = true, 
@@ -73,6 +80,7 @@ public class Booking{
 	public void setBookingId(int bookingId) {
 		this.bookingId = bookingId;
 	}
+
 
 	public int getAttendees() {
 		return attendees;
@@ -136,6 +144,7 @@ public class Booking{
 	
 	public void setSchedule(BookingSchedule schedule) {
 		this.schedule = schedule;
+
 	}
 
 	@Enumerated(EnumType.ORDINAL)
@@ -145,6 +154,7 @@ public class Booking{
 
 	public void setStatus(BookingStatus status) {
 		this.status = status;
+
 	}	
 	
 }

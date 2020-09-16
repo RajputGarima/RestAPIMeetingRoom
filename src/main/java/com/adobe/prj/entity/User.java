@@ -6,7 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import javax.validation.constraints.NotNull;
+
 
 import com.adobe.prj.util.UserAddress;
 
@@ -20,6 +22,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userId;
 	
+
 	@NotNull(message = "User Name cannot be NULL")
 	private String name;
 	
@@ -36,6 +39,7 @@ public class User {
 	
 	@Embedded
 	private UserAddress address;		
+
 	
 	public UserAddress getAddress() {
 		return address;
@@ -81,6 +85,7 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String getPhoneNumber() {
 		return phoneNumber;

@@ -1,13 +1,10 @@
-package com.adobe.prj.entity;
+package com.adobe.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-
-import javax.persistence.ConstraintMode;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -18,19 +15,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-
 import javax.persistence.ConstraintMode;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-
 @Table(name="room")
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "roomId")
 public class Room {
 	
 	@Id
@@ -38,20 +31,16 @@ public class Room {
 	@Column(name = "room_id")
 	private int roomId;
 	
-
-	@Column(unique = true)
-	@NotNull(message = "Room Name cannot be NULL")
 	private String title;
 	
-	@Min(1)
+	private String imageUrl;
+	
 	private int pricePerDay;
 	
-	@Min(1)
 	private int capacity;
 	
 	private int bookings;
-	private String imageUrl;
-
+	
 	private boolean status;
 	
 	@ManyToMany(targetEntity = RoomLayout.class,cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH},fetch = FetchType.LAZY)
@@ -64,7 +53,6 @@ public class Room {
 			)
 	List<RoomLayout> roomLayouts = new ArrayList<>();
 	
-
 	public Room() {
 
 	}
