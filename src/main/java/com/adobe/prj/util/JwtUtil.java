@@ -2,7 +2,6 @@ package com.adobe.prj.util;
 
 
 import static com.adobe.prj.constants.SecurityConstants.*;
-import static com.adobe.prj.constants.SecurityConstants.KEY;
 
 import java.security.Key;
 import java.util.Date;
@@ -22,7 +21,7 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtUtil {
 
-//    private String SECRET_KEY = "secret";
+    private String key = "secret";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

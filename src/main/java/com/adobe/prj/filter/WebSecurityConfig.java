@@ -53,6 +53,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						antMatchers(HttpMethod.GET, FOOD_URL ).permitAll().
 						antMatchers(HttpMethod.GET, LAYOUT_URL ).permitAll().
 						antMatchers(HttpMethod.POST, BOOK_URL ).permitAll().
+						antMatchers("/api/register").permitAll().
 						anyRequest().authenticated().and().
 						exceptionHandling().and().sessionManagement() 
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
