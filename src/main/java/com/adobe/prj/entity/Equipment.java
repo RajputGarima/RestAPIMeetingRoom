@@ -1,15 +1,16 @@
 package com.adobe.prj.entity;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
-import com.adobe.prj.util.PriceType;
+
 
 @Table
 @Entity
@@ -19,9 +20,14 @@ public class Equipment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int equipId;
 	
+	@Column(unique = true)
+	@NotNull(message = "Equipment Name cannot be NULL")
 	private String title;
-	private boolean multiUnits;
+	
+	@Min(1)
 	private double price;
+	
+	private boolean multiUnits;
 	private boolean hourlyAllowed;
 //	private PriceType priceType;
 	

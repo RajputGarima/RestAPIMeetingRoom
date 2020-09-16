@@ -1,5 +1,5 @@
 package com.adobe.prj.util;
 
-public enum PriceType {	
+public enum EqpPriceType {	
 	PER_HOUR, PER_BOOKING;
 }
