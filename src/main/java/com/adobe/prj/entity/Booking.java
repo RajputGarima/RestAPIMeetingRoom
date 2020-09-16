@@ -9,8 +9,10 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
+
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
 
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,6 +24,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.adobe.prj.util.BookingSchedule;
+import com.adobe.prj.util.BookingStatus;
 
 import com.adobe.prj.util.BookingStatus;
 
@@ -80,7 +83,6 @@ public class Booking{
 	public void setBookingId(int bookingId) {
 		this.bookingId = bookingId;
 	}
-
 
 	public int getAttendees() {
 		return attendees;

@@ -32,6 +32,7 @@ public class UserService {
 
 //		int userId = u.getUserId();
 
+
 //		System.out.println("user id is "+userId);
 		return u;
 	}

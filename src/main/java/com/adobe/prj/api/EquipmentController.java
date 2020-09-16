@@ -40,7 +40,6 @@ public class EquipmentController {
         return equipmentService.getEquipments();
     }
 
-	
 	@GetMapping("/{id}")
 	public @ResponseBody Equipment getEquipment(@PathVariable("id") int id) {
 		return equipmentService.getEquipment(id);

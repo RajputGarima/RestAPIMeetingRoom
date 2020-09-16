@@ -1,28 +1,26 @@
 package com.adobe.prj.api;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adobe.prj.dao.RoomDao;
 import com.adobe.prj.entity.Booking;
-import com.adobe.prj.entity.EquipmentDetail;
-import com.adobe.prj.entity.FoodBooking;
+import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.User;
+import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.service.BookingService;
-import com.adobe.prj.service.EquipmentService;
-import com.adobe.prj.service.FoodService;
-import com.adobe.prj.service.RoomService;
 import com.adobe.prj.service.UserService;
-import com.adobe.prj.util.BookingSchedule;
 
 
 @RestController
@@ -39,13 +37,13 @@ public class BookingController {
 //	private EquipmentService equipmentService;
 //	
 //	@Autowired
-//	private UserService userService;
-//	
-//	@Autowired
 //	private FoodService foodService;
 //	
 //	@Autowired
 //	private RoomService roomService;
+	
+	@Autowired
+	private RoomDao roomDao;
 
 	
 	@GetMapping()
@@ -115,10 +113,21 @@ public class BookingController {
 	
 	@PostMapping()
 	public @ResponseBody Booking addBooking(@RequestBody Booking b) {
+		Room r = b.getRoom();
+		
+//		Room R = roomDao.findById(r.getRoomId()).get();
+		Optional<Room> room = roomDao.findById(r.getRoomId());
+
+		if (!room.isPresent())
+			throw new ExceptionNotFound("Room doesn't exist");
+
+		
 		User user = userService.addUser(b.getUser());
 		b.setUser(user);
 
+
 		return bookingService.addBooking(b);
+
 
 	}
 	

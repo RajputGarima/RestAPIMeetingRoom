@@ -2,6 +2,7 @@ package com.adobe.prj.entity;
 
 
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -9,10 +10,15 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -20,7 +26,8 @@ import javax.validation.constraints.NotNull;
 
 
 
-import com.adobe.prj.util.PriceType;
+
+
 
 
 @Table
@@ -80,6 +87,7 @@ public class Equipment {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+
 	}
 	public boolean isHourlyAllowed() {
 		return hourlyAllowed;
@@ -87,6 +95,7 @@ public class Equipment {
 	public void setHourlyAllowed(boolean hourlyAllowed) {
 		this.hourlyAllowed = hourlyAllowed;
 	}
+
 //	@Enumerated(EnumType.ORDINAL)
 //	public PriceType getPriceType() {
 //		return priceType;
