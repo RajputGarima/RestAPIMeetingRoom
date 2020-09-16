@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.EquipmentDetail;
 import com.adobe.prj.entity.FoodBooking;
+import com.adobe.prj.entity.User;
 import com.adobe.prj.service.BookingService;
 import com.adobe.prj.service.EquipmentService;
 import com.adobe.prj.service.FoodService;
@@ -30,12 +31,12 @@ public class BookingController {
 
 	@Autowired
 	private BookingService bookingService;
+	
+	@Autowired
+	private UserService userService;
 
 //	@Autowired
 //	private EquipmentService equipmentService;
-//	
-//	@Autowired
-//	private UserService userService;
 //	
 //	@Autowired
 //	private FoodService foodService;
@@ -51,13 +52,16 @@ public class BookingController {
 //		long milli = 123456789999l;
 //		Booking b = new Booking();
 //		b.setAttendees(10);
-
+//
 //		b.setRoom(roomService.getRoom(1));
 //		b.setTotalCost(2700);
 //		java.sql.Time time = new java.sql.Time(milli);
-//		b.setStart(time);
-//		b.setEnd(time);
-//		b.setUser(userService.getUser("k@adobe.com"));
+//		BookingSchedule bs = new BookingSchedule();
+//		bs.setStartTime(time);
+//		bs.setEndTime(time);
+//
+//		b.setSchedule(bs);
+////		b.setUser(userService.getUser("k@adobe.com"));
 //		
 //		EquipmentDetail ed = new EquipmentDetail();
 //		ed.setEquipment(equipmentService.getEquipment(1));
@@ -106,7 +110,9 @@ public class BookingController {
 	
 	@PostMapping()
 	public @ResponseBody Booking addBooking(@RequestBody Booking b) {
-	  return bookingService.addBooking(b);
+		User user = userService.addUser(b.getUser());
+		b.setUser(user);
+		return bookingService.addBooking(b);
 	}
 	
 	@DeleteMapping("/{id}")

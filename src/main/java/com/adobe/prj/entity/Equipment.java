@@ -1,15 +1,16 @@
 package com.adobe.prj.entity;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
-import com.adobe.prj.util.PriceType;
+
 
 @Table
 @Entity
@@ -19,10 +20,16 @@ public class Equipment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int equipId;
 	
-	private String name;
-	private boolean multiUnits;
+	@Column(unique = true)
+	@NotNull(message = "Equipment Name cannot be NULL")
+	private String title;
+	
+	@Min(1)
 	private double price;
-	private PriceType priceType;
+	
+	private boolean multiUnits;
+	private boolean hourlyAllowed;
+//	private PriceType priceType;
 	
 //	@JsonIgnore
 //	@ManyToMany(mappedBy = "equipments")
@@ -47,24 +54,31 @@ public class Equipment {
 	public void setEquipId(int equipId) {
 		this.equipId = equipId;
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+	
 	public double getPrice() {
 		return price;
 	}
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	@Enumerated(EnumType.ORDINAL)
-	public PriceType getPriceType() {
-		return priceType;
+	public String getTitle() {
+		return title;
 	}
-	public void setPriceType(PriceType priceType) {
-		this.priceType = priceType;
+	public void setTitle(String title) {
+		this.title = title;
 	}
+	public boolean isHourlyAllowed() {
+		return hourlyAllowed;
+	}
+	public void setHourlyAllowed(boolean hourlyAllowed) {
+		this.hourlyAllowed = hourlyAllowed;
+	}
+//	@Enumerated(EnumType.ORDINAL)
+//	public PriceType getPriceType() {
+//		return priceType;
+//	}
+//	public void setPriceType(PriceType priceType) {
+//		this.priceType = priceType;
+//	}
 
 }

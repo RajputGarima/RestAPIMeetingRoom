@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.adobe.prj.util.UserAddress;
 
@@ -19,25 +20,22 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userId;
 	
-	private String email;
-	
-	private String title;
-	
+	@NotNull(message = "User Name cannot be NULL")
 	private String name;
 	
-	private long phoneNumber;
+	@NotNull(message = "Email cannot be NULL")
+	private String email;
 	
+	@NotNull(message = "Phone number cannot be NULL")
+	private String phoneNumber;
+	
+	private String title;		
 	private String notes;
-	
-	private String company;
-	
-	
+	private String company;		
 	private String paymentMethod;
 	
 	@Embedded
-	private UserAddress address;	
-	
-	
+	private UserAddress address;		
 	
 	public UserAddress getAddress() {
 		return address;
@@ -84,11 +82,11 @@ public class User {
 		this.name = name;
 	}
 
-	public long getPhoneNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(long phoneNumber) {
+	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 

@@ -25,10 +25,19 @@ public class EquipmentController {
 	@Autowired
 	private EquipmentService equipmentService;
 	
+//	@GetMapping()
+//	public ResponseEntity<Equipment> getEquipments() {
+//		HttpHeaders responseHeaders = new HttpHeaders();
+//	    responseHeaders.set("Allow-Access-Control-Origin", 
+//	      "*");
+//	    return ResponseEntity.ok().headers(responseHeaders)
+//	    	      .body(equipmentService.getEquipment(2));
+//	}
+	
 	@GetMapping()
-	public @ResponseBody List<Equipment> getEquipments() {
-		return equipmentService.getEquipments();
-	}
+    public @ResponseBody List<Equipment> getFoods() {
+        return equipmentService.getEquipments();
+    }
 	
 	@GetMapping("/{id}")
 	public @ResponseBody Equipment getEquipment(@PathVariable("id") int id) {

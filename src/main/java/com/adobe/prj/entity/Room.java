@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -15,10 +16,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.ConstraintMode;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Table(name="room")
 @Entity
@@ -29,16 +29,18 @@ public class Room {
 	@Column(name = "room_id")
 	private int roomId;
 	
+	@Column(unique = true)
+	@NotNull(message = "Room Name cannot be NULL")
 	private String title;
 	
-	private String imageUrl;
-	
+	@Min(1)
 	private int pricePerDay;
 	
+	@Min(1)
 	private int capacity;
 	
 	private int bookings;
-	
+	private String imageUrl;
 	private boolean status;
 	
 	@ManyToMany(targetEntity = RoomLayout.class,cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH},fetch = FetchType.LAZY)
