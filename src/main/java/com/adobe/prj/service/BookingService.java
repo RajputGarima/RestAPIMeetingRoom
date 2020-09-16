@@ -3,6 +3,7 @@ package com.adobe.prj.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.BookingDao;
@@ -33,11 +34,27 @@ public class BookingService {
 	}
 	
 	public Booking addBooking(Booking b) {
+//		Entities extracted from booking
 		Room r = b.getRoom();
 		RoomLayout l = b.getRoomLayout();
+//		Entities fetched from database
+		Room R = roomDao.findById(r.getRoomId()).get();
+		RoomLayout L = roomLayoutDao.findById(l.getLayoutId()).get();
 		
-		b.setRoom(roomDao.findById(r.getRoomId()).get());
-		b.setRoomLayout(roomLayoutDao.findById(l.getLayoutId()).get());
+		int rlId = l.getLayoutId();
+		List<RoomLayout> rl = R.getRoomLayouts();
+		
+		for(RoomLayout i : rl) {
+			int x = i.getLayoutId();
+			if(x == rlId) {
+				b.setRoom(R);
+				b.setRoomLayout(L);
+				break;
+			}
+			else {
+				throw new RuntimeException("Layout not available for this booking"); 
+			}
+		}
 		return bookingDao.save(b);
 	}
 		
