@@ -31,7 +31,7 @@ public class RoomLayoutController {
 	
 	@GetMapping("/{id}")
 	public @ResponseBody RoomLayout getRoomLayout(@PathVariable("id") int id) {
-		return service.getRoomLayout(id);
+		return service.getRoomLayout(id).get();
 	}
 	
 	@PostMapping()

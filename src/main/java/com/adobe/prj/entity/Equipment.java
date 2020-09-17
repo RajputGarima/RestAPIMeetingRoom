@@ -36,7 +36,7 @@ public class Equipment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int equipId;
+	private int id;
 	
 
 	@Column(unique = true)
@@ -68,13 +68,13 @@ public class Equipment {
 	public void setMultiUnits(boolean multiUnits) {
 		this.multiUnits = multiUnits;
 	}
-	public int getEquipId() {
-		return equipId;
-	}
-	public void setEquipId(int equipId) {
-		this.equipId = equipId;
-	}
 
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public double getPrice() {
 		return price;
 	}

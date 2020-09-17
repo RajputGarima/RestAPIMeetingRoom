@@ -1,10 +1,8 @@
 package com.adobe.prj.service;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
-import org.hibernate.HibernateException;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -23,8 +21,8 @@ public class EquipmentService {
 		return equipmentDao.findAll();
 	}
 	
-	public Equipment getEquipment(int id) {
-		return equipmentDao.findById(id).get(); 
+	public Optional<Equipment> getEquipment(int id) {
+		return equipmentDao.findById(id); 
 	}
 	
 	public Equipment addEquipment(Equipment e) {

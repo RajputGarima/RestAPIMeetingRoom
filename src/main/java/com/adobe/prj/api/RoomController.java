@@ -32,7 +32,7 @@ public class RoomController {
 	
 	@GetMapping("/{id}")
 	public @ResponseBody Room getRoom(@PathVariable("id") int id) {
-		return service.getRoom(id);
+		return service.getRoom(id).get();
 	}
 	
 	@GetMapping("/{id}/{date}")

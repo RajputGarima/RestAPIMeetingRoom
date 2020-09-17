@@ -2,6 +2,7 @@ package com.adobe.prj.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -27,8 +28,8 @@ public class RoomLayoutService {
 		return roomLayoutDao.findAll();
 	}
 	
-	public RoomLayout getRoomLayout(int id) {
-		return roomLayoutDao.findById(id).get();
+	public Optional<RoomLayout> getRoomLayout(int id) {
+		return roomLayoutDao.findById(id);
 	}
 	
 	@Transactional
@@ -37,7 +38,7 @@ public class RoomLayoutService {
 		List<Room> newRooms = new ArrayList<>();
 		for(Room i : rooms)
 		{
-			Room R = roomDao.findById(i.getRoomId()).get();
+			Room R = roomDao.findById(i.getId()).get();
 			newRooms.add(R);
 		}
 		r.setRooms(newRooms);
@@ -52,7 +53,7 @@ public class RoomLayoutService {
 		List<Room> rooms = newr.getRooms();
 		List<Room> newRooms = new ArrayList<>();
 		for(Room r: rooms) {
-			Room R = roomDao.findById(r.getRoomId()).get();
+			Room R = roomDao.findById(r.getId()).get();
 			newRooms.add(R);
 		}
 		oldr.setRooms(newRooms);

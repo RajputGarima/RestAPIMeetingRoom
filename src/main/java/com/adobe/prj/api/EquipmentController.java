@@ -1,8 +1,7 @@
 package com.adobe.prj.api;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adobe.prj.entity.Equipment;
+import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.service.EquipmentService;
 
 @RestController
@@ -24,50 +24,49 @@ public class EquipmentController {
 	
 	@Autowired
 	private EquipmentService equipmentService;
-	
 
-//	@GetMapping()
-//	public ResponseEntity<Equipment> getEquipments() {
-//		HttpHeaders responseHeaders = new HttpHeaders();
-//	    responseHeaders.set("Allow-Access-Control-Origin", 
-//	      "*");
-//	    return ResponseEntity.ok().headers(responseHeaders)
-//	    	      .body(equipmentService.getEquipment(2));
-//	}
-	
+	// fetch all equipments
 	@GetMapping()
     public @ResponseBody List<Equipment> getFoods() {
         return equipmentService.getEquipments();
     }
 
+	// equipment with id = 'id'
 	@GetMapping("/{id}")
 	public @ResponseBody Equipment getEquipment(@PathVariable("id") int id) {
-		return equipmentService.getEquipment(id);
+		try {
+			Optional<Equipment> e = equipmentService.getEquipment(id);
+			if(!e.isPresent())
+				throw new ExceptionNotFound("Equipment with id " + id + " doesn't exist");
+		}catch(Exception e) {	
+			e.printStackTrace();
+		}
+		return equipmentService.getEquipment(id).get();
 	}
 	
+	// add a new equipment
 	@PostMapping()
 	public @ResponseBody Equipment addEquipment(@RequestBody Equipment e) {
 		return equipmentService.addEquipment(e);
 	}
 	
+	// delete an equipment
 	@DeleteMapping("/{id}")
-    public Map<String, Boolean> deletePost(@PathVariable int id) {
-		Equipment e = equipmentService.getEquipment(id);
-//		List<Booking> bookingsList = e.getBookings();
-//		
-//		for(Booking b: bookingsList) {
-//			b.getEquipments().remove(e);
-//		}
+    public @ResponseBody void deletEquipment(@PathVariable int id) {
+		try {
+			Optional<Equipment> e = equipmentService.getEquipment(id);
+			if(!e.isPresent())
+				throw new ExceptionNotFound("Equipment with id " + id + " doesn't exist");
+		}catch(Exception e) {	
+			e.printStackTrace();
+		}
+		Equipment e = equipmentService.getEquipment(id).get();
         equipmentService.deleteEquipment(e);
-        
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
-		return response;
     }
 	
+	// update an equipment
 	@PutMapping()
 	public @ResponseBody Equipment updateEquipment(@RequestBody Equipment e) {
-//		Equipment e1 = equipmentService.getEquipment(e.getEquipId());
 		return equipmentService.addEquipment(e);
 	}
 	

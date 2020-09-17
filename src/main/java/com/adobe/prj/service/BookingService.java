@@ -30,10 +30,6 @@ public class BookingService {
 		return bookingDao.findAll();
 	}
 	
-//	public Booking getBooking(int id) {
-//		return bookingDao.findById(id).get(); 
-//	}
-	
 	public Optional<Booking> getBooking(int id){
 		return bookingDao.findById(id);
 	}
@@ -42,8 +38,8 @@ public class BookingService {
 		Room r = b.getRoom();
 		RoomLayout l = b.getRoomLayout();
 		
-		b.setRoom(roomDao.findById(r.getRoomId()).get());
-		b.setRoomLayout(roomLayoutDao.findById(l.getLayoutId()).get());
+		b.setRoom(roomDao.findById(r.getId()).get());
+		b.setRoomLayout(roomLayoutDao.findById(l.getId()).get());
 		return bookingDao.save(b);
 	}
 		

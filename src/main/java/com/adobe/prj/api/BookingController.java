@@ -1,6 +1,7 @@
 package com.adobe.prj.api;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,13 +18,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adobe.prj.dao.BookingDao;
-import com.adobe.prj.dao.RoomDao;
 import com.adobe.prj.entity.Booking;
+import com.adobe.prj.entity.Equipment;
+import com.adobe.prj.entity.EquipmentDetail;
+import com.adobe.prj.entity.Food;
+import com.adobe.prj.entity.FoodBooking;
 import com.adobe.prj.entity.Room;
+import com.adobe.prj.entity.RoomLayout;
 import com.adobe.prj.entity.User;
 import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.service.BookingService;
+import com.adobe.prj.service.EquipmentService;
+import com.adobe.prj.service.FoodService;
+import com.adobe.prj.service.RoomLayoutService;
+import com.adobe.prj.service.RoomService;
 import com.adobe.prj.service.UserService;
 import com.adobe.prj.util.BookingStatus;
 
@@ -37,93 +45,33 @@ public class BookingController {
 	
 	@Autowired
 	private UserService userService;
-
-//	@Autowired
-//	private EquipmentService equipmentService;
-//	
-//	@Autowired
-//	private FoodService foodService;
-//	
-//	@Autowired
-//	private RoomService roomService;
 	
 	@Autowired
-	private RoomDao roomDao;
+	private RoomService roomService;
 	
 	@Autowired
-	private BookingDao bookingDao;
-
+	private RoomLayoutService layoutService;
 	
+	@Autowired
+	private EquipmentService equipmentService;
+	
+	@Autowired
+	private FoodService foodService;
+	
+	
+	// fetch all bookings
 	@GetMapping()
     public @ResponseBody List<Booking> getBookings() {
-		
-
-//		long milli = 123456789999l;
-//		Booking b = new Booking();
-//		b.setAttendees(10);
-
-//
-//		b.setRoom(roomService.getRoom(1));
-//		b.setTotalCost(2700);
-//		java.sql.Time time = new java.sql.Time(milli);
-//		BookingSchedule bs = new BookingSchedule();
-//		bs.setStartTime(time);
-//		bs.setEndTime(time);
-//
-//		b.setSchedule(bs);
-////		b.setUser(userService.getUser("k@adobe.com"));
-
-//		
-//		EquipmentDetail ed = new EquipmentDetail();
-//		ed.setEquipment(equipmentService.getEquipment(1));
-//		ed.setUnits(10);
-//		ed.setPrice(ed.getUnits() * equipmentService.getEquipment(1).getPrice());
-//		
-//		b.getEquipDetails().add(ed);
-//		
-//		EquipmentDetail ed1 = new EquipmentDetail();
-//		ed1.setEquipment(equipmentService.getEquipment(2));
-//		ed1.setUnits(20);
-//		ed1.setPrice(ed1.getUnits() * equipmentService.getEquipment(2).getPrice());
-//		
-//		b.getEquipDetails().add(ed1);
-//		
-//		FoodBooking fb = new FoodBooking();
-//		fb.setFood(foodService.getFood(1));
-//		fb.setQuantity(6);
-//		fb.setAmount(fb.getQuantity() * foodService.getFood(1).getFoodPrice());
-//		
-//		b.getFoods().add(fb);
-//		
-//		FoodBooking fb1 = new FoodBooking();
-//		fb1.setFood(foodService.getFood(2));
-//		fb1.setQuantity(10);
-//		fb1.setAmount(fb1.getQuantity() * foodService.getFood(2).getFoodPrice());
-//		
-//		b.getFoods().add(fb1);
-//		
-//		FoodBooking fb2 = new FoodBooking();
-//		fb2.setFood(foodService.getFood(3));
-//		fb2.setQuantity(5);
-//		fb2.setAmount(fb2.getQuantity() * foodService.getFood(3).getFoodPrice());
-//		
-//		b.getFoods().add(fb2);
-//		
-//		bookingService.addBooking(b);
-
         return bookingService.getBookings();
     }
 	
+	// booking with id = 'id'
 	@GetMapping("/{id}")
 	public @ResponseBody Booking getBooking(@PathVariable("id") int id) {
-		try {
-			Optional<Booking> b = bookingService.getBooking(id);
-			if(!b.isPresent())
-				throw new ExceptionNotFound("Booking doesn't exist");
-		}catch(Exception e) {	
-			e.printStackTrace();
-		}	
-		return bookingService.getBooking(id).get();
+		Optional<Booking> b = bookingService.getBooking(id);
+		if(!b.isPresent())
+			throw new ExceptionNotFound("Booking with id " + id + " doesn't exist");
+		return b.get();
 	}
 	
 	// top 3 upcoming bookings - booked_for
@@ -156,42 +104,102 @@ public class BookingController {
 	    return new ResponseEntity<>(bookingService.getBookingsCountMadeToday(), HttpStatus.OK);
 	}
 	
+	// add new booking
 	@PostMapping()
-	public @ResponseBody Booking addBooking(@RequestBody Booking b) {
-		Room r = b.getRoom();
-		
-//		Room R = roomDao.findById(r.getRoomId()).get();
-		Optional<Room> room = roomDao.findById(r.getRoomId());
-
-		if (!room.isPresent())
-			throw new ExceptionNotFound("Room doesn't exist");
-
-		
+	public @ResponseBody Booking addBooking(@RequestBody Booking b) {	
+		try {
+			verifyBookingContent(b);
+		}catch(Exception e) {
+			throw new ExceptionNotFound(e.getMessage());
+		}
+	
 		User user = userService.addUser(b.getUser());
 		b.setUser(user);
-
 
 		return bookingService.addBooking(b);
 	}
 	
+	// delete booking with id = 'id'
 	@DeleteMapping("/{id}")
 	public @ResponseBody void deleteBooking(@PathVariable("id") int id) {
+		Optional<Booking> b = bookingService.getBooking(id);
+		if(!b.isPresent())
+			throw new ExceptionNotFound("Booking with id " + id + " doesn't exist");
 		bookingService.deleteBooking(id);
 	}
 	
+	// update booking
 	@PutMapping()
 	public @ResponseBody Booking updateBooking(@RequestBody Booking b) {
-		  return bookingService.addBooking(b);
+		Optional<Booking> book = bookingService.getBooking(b.getId());
+		if(!book.isPresent())
+			throw new ExceptionNotFound("Booking with id " + b.getId() + " doesn't exist");
+		
+		try {
+			verifyBookingContent(b);
+		}catch(Exception e) {
+			throw new ExceptionNotFound(e.getMessage());
+		}
+		User user = userService.addUser(b.getUser());
+		b.setUser(user);
+//		b.setUser(b.getUser());
+		return bookingService.addBooking(b);
 	}
 	
-	// change status of booking to CONFIRMED
+	// update status of booking to say, 'CONFIRMED'
 	// http://localhost:8080/api/bookings/2/CONFIRMED
 	@PutMapping("/{id}/{status}")
-	public @ResponseBody Booking updateBookingStatus(@PathVariable("id") int id, @PathVariable("status") BookingStatus status) {
-		Booking b = bookingService.getBooking(id).get();
-		b.setStatus(status);
-		bookingService.addBooking(b);
-		return b;
+	public @ResponseBody Booking updateBookingStatus(@PathVariable("id") int id, @PathVariable("status") BookingStatus status) {		
+		Optional<Booking> b = bookingService.getBooking(id);
+		if(!b.isPresent())
+			throw new ExceptionNotFound("Booking with id " + id + " doesn't exist");
+		
+		Booking booking = b.get();
+		booking.setStatus(status);
+		bookingService.addBooking(booking);
+		return booking;
+	}
+	
+	// verify content before adding a new booking
+	public void verifyBookingContent(Booking b) throws ExceptionNotFound {
+		Room room = b.getRoom();
+		Optional<Room> r = roomService.getRoom(room.getId());
+		if(!r.isPresent())
+			throw new ExceptionNotFound("Room doesn't exist");
+		
+		RoomLayout layout = b.getRoomLayout();
+		Optional<RoomLayout> rl = layoutService.getRoomLayout(layout.getId());
+		if(!rl.isPresent())
+			throw new ExceptionNotFound("Layout doesn't exist");
+		
+		List<EquipmentDetail> equipDetails = b.getEquipDetails();
+		for(EquipmentDetail ed: equipDetails) {
+			Equipment equipment = ed.getEquipment();
+			Optional<Equipment> e = equipmentService.getEquipment(equipment.getId());
+			if(!e.isPresent())
+				throw new ExceptionNotFound("Equipment doesn't exist");
+		}
+		
+		List<FoodBooking> foodBookings = b.getFoods();
+		for(FoodBooking fb: foodBookings) {
+			Food food = fb.getFood();
+			Optional<Food> f = foodService.getFood(food.getId());
+			if(!f.isPresent())
+				throw new ExceptionNotFound("Food doesn't exist");
+		}
+		
+		// layout exists for that room
+		// totalCost
+		// initial status of booking
+		
+		if(b.getSchedule().getBookedFor().compareTo(new Date()) < 0)
+			throw new ExceptionNotFound("Booking date cannot be an old date");
+		
+		
+		if(b.getAttendees() > r.get().getCapacity())
+			throw new ExceptionNotFound("Attendees cannot exceed Room's capacity");
+		
+			
 	}
 	
 }
