@@ -19,6 +19,15 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.adobe.prj.service.CustomLayoutSerializer;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import com.adobe.prj.service.CustomLayoutSerializer;
+
 
 @Table(name="room")
 @Entity
@@ -39,9 +48,13 @@ public class Room {
 	@Min(1)
 	private int capacity;
 	
+	@Min(1)
+	private int pricePerHour;
+	
 	private int bookings;
 	private String imageUrl;
 	private boolean status;
+	
 	
 	@ManyToMany(targetEntity = RoomLayout.class,cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH},fetch = FetchType.LAZY)
 	@JoinTable(
@@ -51,6 +64,9 @@ public class Room {
 					foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
 			        inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
 			)
+//	@JsonManagedReference
+//	@JsonBackReference
+	@JsonSerialize(using = CustomLayoutSerializer.class)
 	List<RoomLayout> roomLayouts = new ArrayList<>();
 	
 
@@ -120,6 +136,14 @@ public class Room {
 
 	public void setRoomLayouts(List<RoomLayout> roomLayouts) {
 		this.roomLayouts = roomLayouts;
+	}
+	
+	public int getPricePerHour() {
+		return pricePerHour;
+	}
+
+	public void setPricePerHour(int pricePerHour) {
+		this.pricePerHour = pricePerHour;
 	}
 
 }
