@@ -25,6 +25,7 @@ public class EquipmentController {
 	@Autowired
 	private EquipmentService equipmentService;
 	
+
 //	@GetMapping()
 //	public ResponseEntity<Equipment> getEquipments() {
 //		HttpHeaders responseHeaders = new HttpHeaders();
@@ -38,7 +39,7 @@ public class EquipmentController {
     public @ResponseBody List<Equipment> getFoods() {
         return equipmentService.getEquipments();
     }
-	
+
 	@GetMapping("/{id}")
 	public @ResponseBody Equipment getEquipment(@PathVariable("id") int id) {
 		return equipmentService.getEquipment(id);

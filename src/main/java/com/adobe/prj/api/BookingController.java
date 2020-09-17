@@ -53,6 +53,7 @@ public class BookingController {
 //		long milli = 123456789999l;
 //		Booking b = new Booking();
 //		b.setAttendees(10);
+
 //
 //		b.setRoom(roomService.getRoom(1));
 //		b.setTotalCost(2700);
@@ -63,6 +64,7 @@ public class BookingController {
 //
 //		b.setSchedule(bs);
 ////		b.setUser(userService.getUser("k@adobe.com"));
+
 //		
 //		EquipmentDetail ed = new EquipmentDetail();
 //		ed.setEquipment(equipmentService.getEquipment(1));
@@ -122,7 +124,11 @@ public class BookingController {
 		
 		User user = userService.addUser(b.getUser());
 		b.setUser(user);
+
+
 		return bookingService.addBooking(b);
+
+
 	}
 	
 	@DeleteMapping("/{id}")

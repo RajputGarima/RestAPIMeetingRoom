@@ -29,7 +29,10 @@ public class UserService {
 	
 	public User addUser(User b) {
 		User u = userDao.save(b);
+
 //		int userId = u.getUserId();
+
+
 //		System.out.println("user id is "+userId);
 		return u;
 	}

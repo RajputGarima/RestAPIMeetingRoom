@@ -11,6 +11,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.RoomLayout;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+//import com.adobe.prj.dao.AdminDao;
+//import com.adobe.prj.entity.Admin;
+
+
 @SpringBootApplication
 public class MeetingroomApplication implements CommandLineRunner{
 
@@ -30,7 +38,6 @@ public class MeetingroomApplication implements CommandLineRunner{
 		roomLayout.setTitle("Classroom");
 		roomLayoutDao.save(roomLayout);
 		}
-	
 	}
 	
 	@Bean
@@ -42,4 +49,5 @@ public class MeetingroomApplication implements CommandLineRunner{
 			}
 		};
 	}
+
 }

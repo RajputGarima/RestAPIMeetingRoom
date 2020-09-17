@@ -17,14 +17,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import com.adobe.prj.service.CustomRoomSerializer;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+import com.adobe.prj.service.CustomRoomSerializer;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Table(name="roomlayout")
 @Entity
@@ -38,11 +36,13 @@ public class RoomLayout {
 	@Column(name = "layout_id")
 	private int layoutId;
 	
+
 	@Column(unique = true)
 	@NotNull(message = "Room Layout Name cannot be NULL")
 	private String title;
 	
 	private String imageUrl;
+
 	                     
 	@ManyToMany(targetEntity = Room.class,fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
 	@JoinTable(

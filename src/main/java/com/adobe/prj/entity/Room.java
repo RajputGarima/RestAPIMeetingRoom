@@ -5,7 +5,10 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+
+
 import javax.persistence.ConstraintMode;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -16,6 +19,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -29,6 +34,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.adobe.prj.service.CustomLayoutSerializer;
 
 
+import javax.persistence.ConstraintMode;
+
+
+
+
 @Table(name="room")
 @Entity
 public class Room {
@@ -38,6 +48,7 @@ public class Room {
 	@Column(name = "room_id")
 	private int roomId;
 	
+
 	@Column(unique = true)
 	@NotNull(message = "Room Name cannot be NULL")
 	private String title;
@@ -53,6 +64,7 @@ public class Room {
 	
 	private int bookings;
 	private String imageUrl;
+
 	private boolean status;
 	
 	
