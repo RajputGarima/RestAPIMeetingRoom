@@ -189,7 +189,7 @@ public class BookingController {
 		}
 		
 		// layout exists for that room
-		// totalCost
+		// totalCost >= eqpcost + foodcost + roomcost
 		// initial status of booking
 		
 		if(b.getSchedule().getBookedFor().compareTo(new Date()) < 0)

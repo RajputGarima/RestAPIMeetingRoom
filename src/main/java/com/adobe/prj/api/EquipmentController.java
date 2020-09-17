@@ -34,13 +34,9 @@ public class EquipmentController {
 	// equipment with id = 'id'
 	@GetMapping("/{id}")
 	public @ResponseBody Equipment getEquipment(@PathVariable("id") int id) {
-		try {
-			Optional<Equipment> e = equipmentService.getEquipment(id);
-			if(!e.isPresent())
-				throw new ExceptionNotFound("Equipment with id " + id + " doesn't exist");
-		}catch(Exception e) {	
-			e.printStackTrace();
-		}
+		Optional<Equipment> e = equipmentService.getEquipment(id);
+		if(!e.isPresent())
+			throw new ExceptionNotFound("Equipment with id " + id + " doesn't exist");
 		return equipmentService.getEquipment(id).get();
 	}
 	
@@ -53,21 +49,20 @@ public class EquipmentController {
 	// delete an equipment
 	@DeleteMapping("/{id}")
     public @ResponseBody void deletEquipment(@PathVariable int id) {
-		try {
-			Optional<Equipment> e = equipmentService.getEquipment(id);
-			if(!e.isPresent())
-				throw new ExceptionNotFound("Equipment with id " + id + " doesn't exist");
-		}catch(Exception e) {	
-			e.printStackTrace();
-		}
-		Equipment e = equipmentService.getEquipment(id).get();
-        equipmentService.deleteEquipment(e);
+		Optional<Equipment> e = equipmentService.getEquipment(id);
+		if(!e.isPresent())
+			throw new ExceptionNotFound("Equipment with id " + id + " doesn't exist");
+		Equipment equipment = e.get();
+        equipmentService.deleteEquipment(equipment);
     }
 	
 	// update an equipment
 	@PutMapping()
-	public @ResponseBody Equipment updateEquipment(@RequestBody Equipment e) {
-		return equipmentService.addEquipment(e);
+	public @ResponseBody Equipment updateEquipment(@RequestBody Equipment eqp) {
+		Optional<Equipment> e = equipmentService.getEquipment(eqp.getId());
+		if(!e.isPresent())
+			throw new ExceptionNotFound("Equipment with id " + eqp.getId() + " doesn't exist");
+		return equipmentService.addEquipment(eqp);
 	}
 	
 
