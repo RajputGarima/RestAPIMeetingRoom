@@ -1,9 +1,12 @@
 package com.adobe.prj.api;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adobe.prj.dao.BookingDao;
 import com.adobe.prj.dao.RoomDao;
 import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.Room;
@@ -21,6 +25,7 @@ import com.adobe.prj.entity.User;
 import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.service.BookingService;
 import com.adobe.prj.service.UserService;
+import com.adobe.prj.util.BookingStatus;
 
 
 @RestController
@@ -44,6 +49,9 @@ public class BookingController {
 	
 	@Autowired
 	private RoomDao roomDao;
+	
+	@Autowired
+	private BookingDao bookingDao;
 
 	
 	@GetMapping()
@@ -108,7 +116,44 @@ public class BookingController {
 	
 	@GetMapping("/{id}")
 	public @ResponseBody Booking getBooking(@PathVariable("id") int id) {
-		return bookingService.getBooking(id);
+		try {
+			Optional<Booking> b = bookingService.getBooking(id);
+			if(!b.isPresent())
+				throw new ExceptionNotFound("Booking doesn't exist");
+		}catch(Exception e) {	
+			e.printStackTrace();
+		}	
+		return bookingService.getBooking(id).get();
+	}
+	
+	// top 3 upcoming bookings - booked_for
+	@GetMapping("/upcomingBookings")
+	public @ResponseBody List<Booking> getUpcomingBookings(){
+		return bookingService.getUpcomingBookings(LocalDate.now());
+	}
+	
+	// top 2 upcoming bookings on this 'date' - booked_for
+	@GetMapping("/upcomingBookings/{date}")
+	public @ResponseBody List<Booking> getBookingByDate(@PathVariable("date") String date){
+		return bookingService.getBookingByDate(date);
+	}
+	
+	// total bookings made so far
+	@GetMapping("/totalBookings")
+	public ResponseEntity<Long> getBookingsCount() {
+	    return new ResponseEntity<>(bookingService.getBookingsCount(), HttpStatus.OK);
+	}
+	
+	// total bookings scheduled for today - booked_for
+	@GetMapping("/totalBookingsByDate")
+	public ResponseEntity<Long> getBookingsCountByDate() {
+	    return new ResponseEntity<>(bookingService.getBookingsCountByDate(), HttpStatus.OK);
+	}
+	
+	// total bookings made today - booked_on
+	@GetMapping("/totalBookingsToday")
+	ResponseEntity<Long> getBookingsCountMadeToday() {
+	    return new ResponseEntity<>(bookingService.getBookingsCountMadeToday(), HttpStatus.OK);
 	}
 	
 	@PostMapping()
@@ -127,8 +172,6 @@ public class BookingController {
 
 
 		return bookingService.addBooking(b);
-
-
 	}
 	
 	@DeleteMapping("/{id}")
@@ -136,9 +179,19 @@ public class BookingController {
 		bookingService.deleteBooking(id);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping()
 	public @ResponseBody Booking updateBooking(@RequestBody Booking b) {
 		  return bookingService.addBooking(b);
+	}
+	
+	// change status of booking to CONFIRMED
+	// http://localhost:8080/api/bookings/2/CONFIRMED
+	@PutMapping("/{id}/{status}")
+	public @ResponseBody Booking updateBookingStatus(@PathVariable("id") int id, @PathVariable("status") BookingStatus status) {
+		Booking b = bookingService.getBooking(id).get();
+		b.setStatus(status);
+		bookingService.addBooking(b);
+		return b;
 	}
 	
 }

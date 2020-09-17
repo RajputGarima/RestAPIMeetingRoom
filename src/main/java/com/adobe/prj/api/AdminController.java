@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adobe.prj.entity.Admin;
 import com.adobe.prj.entity.AdminDto;
+import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.model.AuthenticationRequest;
 import com.adobe.prj.model.AuthenticationResponse;
 import com.adobe.prj.service.AdminService;
@@ -43,7 +42,7 @@ class AdminController {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 		} catch (BadCredentialsException e) {
-			throw new Exception("Incorrect username or password", e);
+			throw new ExceptionNotFound("Incorrect username or password");
 		}
 		
 //		System.out.println("in authenticate");
@@ -69,4 +68,5 @@ class AdminController {
 //			throw new Exception("INVALID_CREDENTIALS", e);
 //		}
 //	}
+	
 }

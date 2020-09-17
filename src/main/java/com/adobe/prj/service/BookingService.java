@@ -1,6 +1,8 @@
 package com.adobe.prj.service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +30,12 @@ public class BookingService {
 		return bookingDao.findAll();
 	}
 	
-	public Booking getBooking(int id) {
-		return bookingDao.findById(id).get(); 
+//	public Booking getBooking(int id) {
+//		return bookingDao.findById(id).get(); 
+//	}
+	
+	public Optional<Booking> getBooking(int id){
+		return bookingDao.findById(id);
 	}
 	
 	public Booking addBooking(Booking b) {
@@ -50,4 +56,24 @@ public class BookingService {
 		return bookingDao.getByUserId(id);
 	}
 	
+	public List<Booking> getUpcomingBookings(LocalDate d){
+		return bookingDao.getUpcomingBookings(d);
+	}
+
+	public List<Booking> getBookingByDate(String date) {
+		return bookingDao.getBookingByDate(date);
+	}
+	
+	public Long getBookingsCount() {
+		return new Long(bookingDao.count());
+	}
+	
+	public Long getBookingsCountByDate() {
+		return new Long(bookingDao.getBookingsCountByDate(LocalDate.now()));
+	}
+
+	public Long getBookingsCountMadeToday() {
+		return new Long(bookingDao.getBookingsCountMadeToday(LocalDate.now()));
+	}
+
 }

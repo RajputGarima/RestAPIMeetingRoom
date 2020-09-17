@@ -1,6 +1,5 @@
 package com.adobe.prj.util;
 
-import java.sql.Time;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
@@ -11,10 +10,13 @@ import javax.persistence.TemporalType;
 public class BookingSchedule {
 
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date bookedOn = new Date();
 	
+	@Temporal(TemporalType.DATE)
 	private Date bookedFor;
+	
+	private int timeSlots;
 	
 	public Date getBookedOn() {
 		return bookedOn;
@@ -32,33 +34,26 @@ public class BookingSchedule {
 		this.bookedFor = bookedFor;
 	}
 	
-	private Time startTime;
-	private Time endTime;
+//	private Time startTime;
+//	private Time endTime;
 	
 	public BookingSchedule() {
 		super();
 	}
 
-	public BookingSchedule(Date bookedOn, Date bookedFor, Time startTime, Time endTime) {
+	public BookingSchedule(Date bookedOn, Date bookedFor, int timeSlots) {
 		super();
 		this.bookedOn = bookedOn;
 		this.bookedFor = bookedFor;
-		this.startTime = startTime;
-		this.endTime = endTime;
+		this.timeSlots = timeSlots;
 	}
 
+	public int getTimeSlots() {
+		return timeSlots;
+	}
 
-	public Time getStartTime() {
-		return startTime;
+	public void setTimeSlots(int timeSlots) {
+		this.timeSlots = timeSlots;
 	}
-	public void setStartTime(Time startTime) {
-		this.startTime = startTime;
-	}
-	public Time getEndTime() {
-		return endTime;
-	}
-	public void setEndTime(Time endTime) {
-		this.endTime = endTime;
-	}	
 	
 }

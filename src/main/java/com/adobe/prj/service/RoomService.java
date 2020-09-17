@@ -1,5 +1,6 @@
 package com.adobe.prj.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,5 +97,13 @@ public class RoomService {
 		}else
 			return ResponseEntity.unprocessableEntity().body("Cannot find the record");
 		
+	}
+
+	public List<Integer> getTimeSlotsById(int id, String date) {
+		return bookingDao.getTimeSlotsById(id, date);
+	}
+
+	public Long getFutureBookingsById(int id) {
+		return bookingDao.getFutureBookingsCountByRoomId(id, LocalDate.now());
 	}
 }
