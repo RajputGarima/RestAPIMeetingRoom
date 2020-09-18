@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import com.adobe.prj.dao.RoomDao;
 import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
+import com.adobe.prj.exception.CustomException;
 
 @Service
 public class RoomLayoutService {
@@ -42,7 +44,21 @@ public class RoomLayoutService {
 			newRooms.add(R);
 		}
 		r.setRooms(newRooms);
-		return roomLayoutDao.save(r);
+		
+		RoomLayout roomLayout = null;
+		try {
+			roomLayout = roomLayoutDao.save(r);
+		}catch(DataIntegrityViolationException exp) {
+			// unique constraint
+		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
+		}
+		catch(javax.validation.ConstraintViolationException exp) {
+			// @Min, @NotNULL
+			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
+		}
+		return roomLayout;
+		
+
 	}
 	
 	@Transactional
@@ -57,7 +73,21 @@ public class RoomLayoutService {
 			newRooms.add(R);
 		}
 		oldr.setRooms(newRooms);
-		return roomLayoutDao.save(oldr);
+		
+		RoomLayout roomLayout = null;
+		try {
+			roomLayout = roomLayoutDao.save(oldr);
+		}catch(DataIntegrityViolationException exp) {
+			// unique constraint
+		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
+		}
+		catch(javax.validation.ConstraintViolationException exp) {
+			// @Min, @NotNULL
+			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
+		}
+		return roomLayout;
+		
+
 	}
 	@Transactional
     public ResponseEntity<Object> deleteRoomLayout(int id) {

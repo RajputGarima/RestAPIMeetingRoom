@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adobe.prj.entity.AdminDto;
+import com.adobe.prj.exception.CustomException;
 import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.model.AuthenticationRequest;
 import com.adobe.prj.model.AuthenticationResponse;
@@ -42,7 +43,7 @@ class AdminController {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 		} catch (BadCredentialsException e) {
-			throw new ExceptionNotFound("Incorrect username or password");
+			throw new CustomException("Incorrect username or password");
 		}
 		
 //		System.out.println("in authenticate");

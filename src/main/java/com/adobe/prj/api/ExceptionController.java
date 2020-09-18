@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.adobe.prj.exception.CustomException;
 import com.adobe.prj.exception.ExceptionMessage;
 import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.exception.ExceptionTokenExpired;
@@ -31,5 +32,13 @@ public class ExceptionController extends ResponseEntityExceptionHandler{
 	        request.getDescription(false));
 	    return new ResponseEntity<>(exceptionMessage, HttpStatus.NOT_FOUND);
 	  }
+	
+	@ExceptionHandler(CustomException.class)
+	  public final ResponseEntity<ExceptionMessage> handleUserNotFoundException(CustomException ex, WebRequest request) {
+		ExceptionMessage exceptionMessage = new ExceptionMessage(new Date(), ex.getMessage(),
+	        request.getDescription(false));
+	    return new ResponseEntity<>(exceptionMessage, HttpStatus.NOT_FOUND);
+	 }
+	
 
 }

@@ -24,22 +24,22 @@ public class MeetingroomApplication implements CommandLineRunner{
 		SpringApplication.run(MeetingroomApplication.class, args);
 	}
 	
-//	AdminDto admin= new AdminDto();
-//	
-//	@Autowired
-//	AdminService adminService;
-//	
-//	@Autowired
-//	AdminDao adminDao;
+	AdminDto admin= new AdminDto();
+	
+	@Autowired
+	AdminService adminService;
+	
+	@Autowired
+	AdminDao adminDao;
 	
 	@Override
 	public void run(String... args) throws Exception {
 		
 		
-//		admin.setEmail("a@adobe.com");
-//		admin.setPassword("a");
-//		Admin newadmin = adminDao.findByEmail(admin.getEmail());
-//		if(newadmin == null) adminService.save(admin);	
+		admin.setEmail("a@adobe.com");
+		admin.setPassword("a");
+		Admin newadmin = adminDao.findByEmail(admin.getEmail());
+		if(newadmin == null) adminService.save(admin);	
 		
 	}
 	

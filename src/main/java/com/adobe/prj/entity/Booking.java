@@ -22,10 +22,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.adobe.prj.util.BookingSchedule;
 import com.adobe.prj.util.BookingStatus;
-
 import com.adobe.prj.util.BookingStatus;
 
 
@@ -42,8 +44,11 @@ public class Booking{
 	@Embedded
 	private BookingSchedule schedule;
 	
+	@Min(1)
 	private int attendees;
 	private double totalCost;
+	
+	@NotNull(message = "Booking Status cannot be NULL")
 	private BookingStatus status;
 
 	
