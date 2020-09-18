@@ -80,7 +80,7 @@ public class BookingController {
 	}
 	
 	// top 3 upcoming bookings - booked_for
-	@GetMapping("/upcomingBookings")
+	@GetMapping("/latestBookings")
 	public @ResponseBody List<Booking> getUpcomingBookings(){
 		return bookingService.getUpcomingBookings(LocalDate.now());
 	}
