@@ -36,7 +36,7 @@ public class Booking{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int bookingId;
+	private int id;
 	
 
 	@Embedded
@@ -75,13 +75,14 @@ public class Booking{
 	public Booking() {
 		super();
 	}
-		
-	public int getBookingId() {
-		return bookingId;
+	
+
+	public int getId() {
+		return id;
 	}
 
-	public void setBookingId(int bookingId) {
-		this.bookingId = bookingId;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getAttendees() {

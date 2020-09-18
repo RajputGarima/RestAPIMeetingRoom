@@ -18,7 +18,7 @@ public class EquipmentDetail {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int detailId;
+	private int id;
 	
 	private int units;
 	private double price;
@@ -28,12 +28,12 @@ public class EquipmentDetail {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Equipment equipment;
 
-	public int getDetailId() {
-		return detailId;
+	public int getId() {
+		return id;
 	}
 
-	public void setDetailId(int detailId) {
-		this.detailId = detailId;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getUnits() {

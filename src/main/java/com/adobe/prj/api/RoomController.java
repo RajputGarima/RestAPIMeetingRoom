@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,13 +43,24 @@ public class RoomController {
 		Optional<Room> room = roomDao.findById(id);
 		if (!room.isPresent())
 			throw new ExceptionNotFound("Room doesn't exist");
-		return service.getRoom(id);
+
+		return service.getRoom(id).get();
+	}
+	
+	@GetMapping("/{id}/{date}")
+	public ResponseEntity<List<Integer>> getTimeSlotsById(@PathVariable("id") int id, @PathVariable("date") String date){
+		return new ResponseEntity<>(service.getTimeSlotsById(id, date), HttpStatus.OK);
+	}
+	
+	@GetMapping("/futureBookings/{id}")
+	public ResponseEntity<Long> getFutureBookingsById(@PathVariable("id") int id){
+		return new ResponseEntity<>(service.getFutureBookingsById(id), HttpStatus.OK);
 	}
 	
 	@PostMapping()
 	public @ResponseBody Room addRoom(@ValidJson(ROOMSCHEMA) Room r) {
 		  return service.addRoom(r);
-		}
+	}
 	
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Object> deleteRoom(@PathVariable("id") int id){

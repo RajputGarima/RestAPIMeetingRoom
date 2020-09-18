@@ -21,7 +21,7 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int userId;
+	private int id;
 	
 
 	@NotNull(message = "User Name cannot be NULL")
@@ -49,13 +49,14 @@ public class User {
 	public void setAddress(UserAddress address) {
 		this.address = address;
 	}
-
-	public int getUserId() {
-		return userId;
+	
+	
+	public int getId() {
+		return id;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public User() {

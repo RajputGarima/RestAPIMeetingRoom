@@ -1,6 +1,7 @@
 package com.adobe.prj.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ public class FoodService {
 		return foodDao.findAll();
 	}
 	
-	public Food getFood(int id) {
-		return foodDao.findById(id).get(); 
+	public Optional<Food> getFood(int id) {
+		return foodDao.findById(id); 
 	}
 	
 	public Food addFood(Food b) {

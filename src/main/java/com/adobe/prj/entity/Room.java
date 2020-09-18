@@ -46,7 +46,7 @@ public class Room {
 	@Id
 	@GeneratedValue( strategy=GenerationType.IDENTITY)
 	@Column(name = "room_id")
-	private int roomId;
+	private int id;
 	
 
 	@Column(unique = true)
@@ -86,12 +86,12 @@ public class Room {
 
 	}
 
-	public int getRoomId() {
-		return roomId;
+	public int getId() {
+		return id;
 	}
 
-	public void setRoomId(int roomId) {
-		this.roomId = roomId;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getTitle() {

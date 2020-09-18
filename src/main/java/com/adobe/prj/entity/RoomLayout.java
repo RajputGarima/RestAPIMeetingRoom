@@ -28,13 +28,13 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "layoutId")
+        property = "id")
 public class RoomLayout {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "layout_id")
-	private int layoutId;
+	private int id;
 	
 
 	@Column(unique = true)
@@ -56,13 +56,13 @@ public class RoomLayout {
 //	@JsonBackReference
 	@JsonSerialize(using = CustomRoomSerializer.class)
 	List<Room> rooms = new ArrayList<>();
-	
-	public int getLayoutId() {
-		return layoutId;
+
+	public int getId() {
+		return id;
 	}
 
-	public void setLayoutId(int layoutId) {
-		this.layoutId = layoutId;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getImageUrl() {

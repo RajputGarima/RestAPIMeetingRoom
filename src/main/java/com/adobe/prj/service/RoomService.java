@@ -1,8 +1,10 @@
 package com.adobe.prj.service;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -46,8 +48,8 @@ public class RoomService {
 		return roomDao.findAll();
 	}
 	
-	public Room getRoom(int id) {
-		return roomDao.findById(id).get();
+	public Optional<Room> getRoom(int id) {
+		return roomDao.findById(id);
 	}
 	
 	@Transactional
@@ -57,7 +59,7 @@ public class RoomService {
 		List<RoomLayout> newRoomLayouts = new ArrayList<>();
 		for(RoomLayout l : roomLayouts)
 		{
-			RoomLayout rl = roomLayoutDao.findById(l.getLayoutId()).get();
+			RoomLayout rl = roomLayoutDao.findById(l.getId()).get();
 			newRoomLayouts.add(rl);
 		}
 		if(newRoomLayouts.contains(roomLayoutDao.findByTitle(DEFAULT_LAYOUT))) {
@@ -73,6 +75,7 @@ public class RoomService {
 	@Transactional
 	public Room updateRoom(int id,Room newr){
 		Room oldr = roomDao.findById(id).get();
+		
 		oldr.setTitle(newr.getTitle());
 
 		oldr.setPricePerDay(newr.getPricePerDay());
@@ -87,11 +90,12 @@ public class RoomService {
 		List<RoomLayout> newRoomLayouts = new ArrayList<>();
 		for(RoomLayout l : roomLayouts)
 		{
-			RoomLayout rl = roomLayoutDao.findById(l.getLayoutId()).get();
+			RoomLayout rl = roomLayoutDao.findById(l.getId()).get();
 			newRoomLayouts.add(rl);
 		}
 
 		if(newRoomLayouts.contains(roomLayoutDao.findByTitle(DEFAULT_LAYOUT))) {
+
 			oldr.setRoomLayouts(newRoomLayouts);
 		}else {
 //			A message in the response body is to be added stating that
@@ -119,5 +123,13 @@ public class RoomService {
 		}else
 			return ResponseEntity.unprocessableEntity().body("Cannot find the record");
 		
+	}
+
+	public List<Integer> getTimeSlotsById(int id, String date) {
+		return bookingDao.getTimeSlotsById(id, date);
+	}
+
+	public Long getFutureBookingsById(int id) {
+		return bookingDao.getFutureBookingsCountByRoomId(id, LocalDate.now());
 	}
 }

@@ -1,6 +1,7 @@
 package com.adobe.prj.service;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +34,8 @@ public class BookingService {
 		return bookingDao.findAll();
 	}
 	
-	public Booking getBooking(int id) {
-		return bookingDao.findById(id).get(); 
+	public Optional<Booking> getBooking(int id){
+		return bookingDao.findById(id);
 	}
 	
 	public Booking addBooking(Booking b) {
@@ -42,7 +43,7 @@ public class BookingService {
 		Room r = b.getRoom();
 		RoomLayout l = b.getRoomLayout();
 
-		Optional<Room> room = roomDao.findById(r.getRoomId());
+		Optional<Room> room = roomDao.findById(r.getId());
 		if (!room.isPresent())
 			throw new ExceptionNotFound("Room doesn't exist");
 		
@@ -52,13 +53,13 @@ public class BookingService {
 //		=====================================================
 		
 //		Entities fetched from database
-		Room R = roomDao.findById(r.getRoomId()).get();
-		RoomLayout L = roomLayoutDao.findById(l.getLayoutId()).get();
-		int rlId = l.getLayoutId();
+		Room R = roomDao.findById(r.getId()).get();
+		RoomLayout L = roomLayoutDao.findById(l.getId()).get();
+		int rlId = l.getId();
 		List<RoomLayout> rl = R.getRoomLayouts();
 		
 		for(RoomLayout i : rl) {
-			int x = i.getLayoutId();
+			int x = i.getId();
 			if(x == rlId) {
 				b.setRoom(R);
 				b.setRoomLayout(L);
@@ -68,8 +69,12 @@ public class BookingService {
 				throw new RuntimeException("Layout not available for this booking"); 
 			}
 		}
-			return bookingDao.save(b);
-		
+//			return bookingDao.save(b);
+
+//		b.setRoom(roomDao.findById(r.getId()).get());
+//		b.setRoomLayout(roomLayoutDao.findById(l.getId()).get());
+		return bookingDao.save(b);
+
 	}
 		
 	public void deleteBooking(int id) {
@@ -81,4 +86,24 @@ public class BookingService {
 		return bookingDao.getByUserId(id);
 	}
 	
+	public List<Booking> getUpcomingBookings(LocalDate d){
+		return bookingDao.getUpcomingBookings(d);
+	}
+
+	public List<Booking> getBookingByDate(String date) {
+		return bookingDao.getBookingByDate(date);
+	}
+	
+	public Long getBookingsCount() {
+		return new Long(bookingDao.count());
+	}
+	
+	public Long getBookingsCountByDate() {
+		return new Long(bookingDao.getBookingsCountByDate(LocalDate.now()));
+	}
+
+	public Long getBookingsCountMadeToday() {
+		return new Long(bookingDao.getBookingsCountMadeToday(LocalDate.now()));
+	}
+
 }
