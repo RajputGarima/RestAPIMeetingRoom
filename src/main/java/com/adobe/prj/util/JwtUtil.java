@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.adobe.prj.exception.ExceptionTokenExpired;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -57,9 +59,6 @@ public class JwtUtil {
         		.setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(exp)
                 .signWith(SignatureAlgorithm.HS512, key).compact();
-    	
-
-//        return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, key).setExpiration(exp).compact();
     	
     }
 

@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.adobe.prj.exception.ExceptionMessage;
 import com.adobe.prj.exception.ExceptionNotFound;
+import com.adobe.prj.exception.ExceptionTokenExpired;
 
 @ControllerAdvice
 @RestController
@@ -19,6 +20,13 @@ public class ExceptionController extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(ExceptionNotFound.class)
 	  public final ResponseEntity<ExceptionMessage> handleUserNotFoundException(ExceptionNotFound ex, WebRequest request) {
+		ExceptionMessage exceptionMessage = new ExceptionMessage(new Date(), ex.getMessage(),
+	        request.getDescription(false));
+	    return new ResponseEntity<>(exceptionMessage, HttpStatus.NOT_FOUND);
+	  }
+	
+	@ExceptionHandler(ExceptionTokenExpired.class)
+	public final ResponseEntity<ExceptionMessage> handleTokenExpiredException(ExceptionTokenExpired ex, WebRequest request) {
 		ExceptionMessage exceptionMessage = new ExceptionMessage(new Date(), ex.getMessage(),
 	        request.getDescription(false));
 	    return new ResponseEntity<>(exceptionMessage, HttpStatus.NOT_FOUND);

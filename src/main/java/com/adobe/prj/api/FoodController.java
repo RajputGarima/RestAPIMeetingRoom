@@ -34,10 +34,12 @@ public class FoodController {
 	// fetch food with id = 'id'
 	@GetMapping("/{id}")
 	public @ResponseBody Food getBooking(@PathVariable("id") int id) {
-		Optional<Food> f = foodservice.getFood(id);
-		if(!f.isPresent())
-			throw new ExceptionNotFound("Food with id " + id + " doesn't exist");
-		return f.get();
+		try {
+			verifyFoodId(id);
+		}catch(Exception e) {
+			throw new ExceptionNotFound(e.getMessage());
+		}
+		return foodservice.getFood(id).get();
 	}
 	
 	// add new food
@@ -49,20 +51,29 @@ public class FoodController {
 	// delete a food
 	@DeleteMapping("/{id}")
 	public @ResponseBody void deleteFood(@PathVariable("id") int id) {
-		Optional<Food> f = foodservice.getFood(id);
-		if(!f.isPresent())
-			throw new ExceptionNotFound("Food with id " + id + " doesn't exist");
+		try {
+			verifyFoodId(id);
+		}catch(Exception e) {
+			throw new ExceptionNotFound(e.getMessage());
+		}
 		foodservice.deleteFood(id);
 	}
 	
 	// update a food
 	@PutMapping("/{id}")
 	public @ResponseBody Food updateFood(@RequestBody Food food) {
-		Optional<Food> f = foodservice.getFood(food.getId());
-		if(!f.isPresent())
-			throw new ExceptionNotFound("Food with id " + food.getId() + " doesn't exist");
-		  return foodservice.addFood(food);
+		try {
+			verifyFoodId(food.getId());
+		}catch(Exception e) {
+			throw new ExceptionNotFound(e.getMessage());
+		}
+		return foodservice.addFood(food);
 	}
 	
+	public void verifyFoodId(int id) {
+		Optional<Food> f = foodservice.getFood(id);
+		if(!f.isPresent())
+			throw new ExceptionNotFound("Food with id " + id + " doesn't exist");
+	}
 
 }

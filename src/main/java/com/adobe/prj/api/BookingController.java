@@ -1,5 +1,8 @@
 package com.adobe.prj.api;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -68,10 +71,12 @@ public class BookingController {
 	// booking with id = 'id'
 	@GetMapping("/{id}")
 	public @ResponseBody Booking getBooking(@PathVariable("id") int id) {
-		Optional<Booking> b = bookingService.getBooking(id);
-		if(!b.isPresent())
-			throw new ExceptionNotFound("Booking with id " + id + " doesn't exist");
-		return b.get();
+		try {
+			verifyBookingId(id);
+		}catch(Exception e) {
+			throw new ExceptionNotFound(e.getMessage());
+		}
+		return bookingService.getBooking(id).get();
 	}
 	
 	// top 3 upcoming bookings - booked_for
@@ -122,20 +127,19 @@ public class BookingController {
 	// delete booking with id = 'id'
 	@DeleteMapping("/{id}")
 	public @ResponseBody void deleteBooking(@PathVariable("id") int id) {
-		Optional<Booking> b = bookingService.getBooking(id);
-		if(!b.isPresent())
-			throw new ExceptionNotFound("Booking with id " + id + " doesn't exist");
+		try {
+			verifyBookingId(id);
+		}catch(Exception e) {
+			throw new ExceptionNotFound(e.getMessage());
+		}
 		bookingService.deleteBooking(id);
 	}
 	
 	// update booking
 	@PutMapping()
 	public @ResponseBody Booking updateBooking(@RequestBody Booking b) {
-		Optional<Booking> book = bookingService.getBooking(b.getId());
-		if(!book.isPresent())
-			throw new ExceptionNotFound("Booking with id " + b.getId() + " doesn't exist");
-		
 		try {
+			verifyBookingId(b.getId());
 			verifyBookingContent(b);
 		}catch(Exception e) {
 			throw new ExceptionNotFound(e.getMessage());
@@ -149,12 +153,14 @@ public class BookingController {
 	// update status of booking to say, 'CONFIRMED'
 	// http://localhost:8080/api/bookings/2/CONFIRMED
 	@PutMapping("/{id}/{status}")
-	public @ResponseBody Booking updateBookingStatus(@PathVariable("id") int id, @PathVariable("status") BookingStatus status) {		
-		Optional<Booking> b = bookingService.getBooking(id);
-		if(!b.isPresent())
-			throw new ExceptionNotFound("Booking with id " + id + " doesn't exist");
+	public @ResponseBody Booking updateBookingStatus(@PathVariable("id") int id, @PathVariable("status") BookingStatus status) {				
+		try {
+			verifyBookingId(id);
+		}catch(Exception e) {
+			throw new ExceptionNotFound(e.getMessage());
+		}
 		
-		Booking booking = b.get();
+		Booking booking = bookingService.getBooking(id).get();
 		booking.setStatus(status);
 		bookingService.addBooking(booking);
 		return booking;
@@ -192,14 +198,28 @@ public class BookingController {
 		// totalCost >= eqpcost + foodcost + roomcost
 		// initial status of booking
 		
-		if(b.getSchedule().getBookedFor().compareTo(new Date()) < 0)
-			throw new ExceptionNotFound("Booking date cannot be an old date");
+		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Date today = new Date();
+		Date todayWithZeroTime = null;
+		try {
+			todayWithZeroTime = formatter.parse(formatter.format(today));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		if(b.getSchedule().getBookedFor().compareTo(todayWithZeroTime) < 0)
+			throw new ExceptionNotFound("Booking date cannot be an old date ");
 		
 		
 		if(b.getAttendees() > r.get().getCapacity())
 			throw new ExceptionNotFound("Attendees cannot exceed Room's capacity");
 		
 			
+	}
+	
+	public void verifyBookingId(int id) {
+		Optional<Booking> b = bookingService.getBooking(id);
+		if(!b.isPresent())
+			throw new ExceptionNotFound("Booking with id " + id + " doesn't exist");	
 	}
 	
 }
