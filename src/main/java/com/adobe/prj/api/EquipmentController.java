@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adobe.prj.entity.Equipment;
 import com.adobe.prj.service.EquipmentService;
+import com.adobe.prj.validation.ValidJson;
+
+import static com.adobe.prj.validation.SchemaLocations.EQUIPMENTSCHEMA;
 
 @RestController
 @RequestMapping("api/equipments")
@@ -46,7 +49,7 @@ public class EquipmentController {
 	}
 	
 	@PostMapping()
-	public @ResponseBody Equipment addEquipment(@RequestBody Equipment e) {
+	public @ResponseBody Equipment addEquipment(@ValidJson(EQUIPMENTSCHEMA) Equipment e) {
 		return equipmentService.addEquipment(e);
 	}
 	
@@ -66,7 +69,7 @@ public class EquipmentController {
     }
 	
 	@PutMapping()
-	public @ResponseBody Equipment updateEquipment(@RequestBody Equipment e) {
+	public @ResponseBody Equipment updateEquipment(@ValidJson(EQUIPMENTSCHEMA) Equipment e) {
 //		Equipment e1 = equipmentService.getEquipment(e.getEquipId());
 		return equipmentService.addEquipment(e);
 	}

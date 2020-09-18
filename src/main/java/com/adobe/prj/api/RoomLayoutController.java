@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adobe.prj.entity.RoomLayout;
 import com.adobe.prj.service.RoomLayoutService;
+import com.adobe.prj.validation.ValidJson;
+import static com.adobe.prj.validation.SchemaLocations.LAYOUTSCHEMA;
 
 
 @RestController
@@ -35,7 +37,7 @@ public class RoomLayoutController {
 	}
 	
 	@PostMapping()
-	public @ResponseBody RoomLayout adsRoomLayout(@RequestBody RoomLayout r) {
+	public @ResponseBody RoomLayout adsRoomLayout(@ValidJson(LAYOUTSCHEMA) RoomLayout r) {
 		  return service.addRoomLayout(r);
 		}
 	@DeleteMapping("/delete/{id}")
@@ -44,7 +46,7 @@ public class RoomLayoutController {
 	}
 	
 	@PutMapping("/{id}")
-	public @ResponseBody RoomLayout updateRoomLayout(@PathVariable("id") int id, @RequestBody RoomLayout r) {
+	public @ResponseBody RoomLayout updateRoomLayout(@PathVariable("id") int id, @ValidJson(LAYOUTSCHEMA) RoomLayout r) {
 		return service.updateRoomLayout(id, r);
 	}
 }

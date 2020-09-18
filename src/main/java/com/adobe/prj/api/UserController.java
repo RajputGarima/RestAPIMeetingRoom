@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adobe.prj.entity.User;
 import com.adobe.prj.service.UserService;
+import com.adobe.prj.validation.ValidJson;
+
+import static com.adobe.prj.validation.SchemaLocations.USERSCHEMA;
 
 @RestController
 @RequestMapping("api/users")
@@ -34,7 +37,7 @@ public class UserController {
 	}
 	
 	@PostMapping()
-	public @ResponseBody User addUser(@RequestBody User u) {
+	public @ResponseBody User addUser(@ValidJson(USERSCHEMA) User u) {
 	  return userService.addUser(u);
 	}
 	
@@ -44,7 +47,7 @@ public class UserController {
 	}
 	
 	@PutMapping("/{id}")
-	public @ResponseBody User updateUser(@RequestBody User u) {
+	public @ResponseBody User updateUser(@ValidJson(USERSCHEMA) User u) {
 		  return userService.addUser(u);
 	}
 		

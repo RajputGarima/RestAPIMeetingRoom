@@ -1,12 +1,19 @@
 package com.adobe.prj.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.HibernateException;
+import org.hibernate.JDBCException;
+import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
+import org.springframework.jdbc.support.SQLErrorCodes;
 import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.BookingDao;
@@ -15,6 +22,8 @@ import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
+import com.adobe.prj.exception.ExceptionNotFound;
+import com.adobe.prj.validation.ValidJson;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -38,9 +47,7 @@ public class RoomService {
 	}
 	
 	public Room getRoom(int id) {
-		Room R  = roomDao.findById(id).get();
-		R.getRoomLayouts();
-		return R;
+		return roomDao.findById(id).get();
 	}
 	
 	@Transactional
@@ -59,6 +66,7 @@ public class RoomService {
 			newRoomLayouts.add(roomLayoutDao.findByTitle(DEFAULT_LAYOUT));
 			r.setRoomLayouts(newRoomLayouts);
 		}
+
 		return roomDao.save(r);
 	}
 	

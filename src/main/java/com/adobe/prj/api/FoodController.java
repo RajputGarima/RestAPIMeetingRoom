@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adobe.prj.entity.Food;
 import com.adobe.prj.service.FoodService;
+import com.adobe.prj.validation.ValidJson;
+
+import static com.adobe.prj.validation.SchemaLocations.FOODSCHEMA;
 
 @RestController
 @RequestMapping("api/foods")
@@ -34,7 +37,7 @@ public class FoodController {
 	}
 	
 	@PostMapping()
-	public @ResponseBody Food addFood(@RequestBody Food f) {
+	public @ResponseBody Food addFood(@ValidJson(FOODSCHEMA) Food f) {
 	  return foodservice.addFood(f);
 	}
 
@@ -44,7 +47,7 @@ public class FoodController {
 	}
 	
 	@PutMapping("/{id}")
-	public @ResponseBody Food updateFood(@RequestBody Food f) {
+	public @ResponseBody Food updateFood(@ValidJson(FOODSCHEMA) Food f) {
 		  return foodservice.addFood(f);
 	}
 	

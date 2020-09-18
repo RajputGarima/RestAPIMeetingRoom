@@ -21,7 +21,8 @@ import com.adobe.prj.entity.User;
 import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.service.BookingService;
 import com.adobe.prj.service.UserService;
-
+import com.adobe.prj.validation.ValidJson;
+import static com.adobe.prj.validation.SchemaLocations.BOOKINGSCHEMA;
 
 @RestController
 @RequestMapping("api/bookings")
@@ -112,19 +113,9 @@ public class BookingController {
 	}
 	
 	@PostMapping()
-	public @ResponseBody Booking addBooking(@RequestBody Booking b) {
-		Room r = b.getRoom();
-		
-//		Room R = roomDao.findById(r.getRoomId()).get();
-		Optional<Room> room = roomDao.findById(r.getRoomId());
-
-		if (!room.isPresent())
-			throw new ExceptionNotFound("Room doesn't exist");
-
-		
+	public @ResponseBody Booking addBooking(@ValidJson(BOOKINGSCHEMA) Booking b) {		
 		User user = userService.addUser(b.getUser());
 		b.setUser(user);
-
 
 		return bookingService.addBooking(b);
 
@@ -137,7 +128,7 @@ public class BookingController {
 	}
 	
 	@PutMapping("/{id}")
-	public @ResponseBody Booking updateBooking(@RequestBody Booking b) {
+	public @ResponseBody Booking updateBooking(@ValidJson(BOOKINGSCHEMA) Booking b) {
 		  return bookingService.addBooking(b);
 	}
 	
