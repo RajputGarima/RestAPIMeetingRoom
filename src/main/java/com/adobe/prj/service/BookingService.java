@@ -7,16 +7,25 @@ import java.util.Optional;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.dao.DataIntegrityViolationException;
+
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.BookingDao;
 import com.adobe.prj.dao.RoomDao;
 import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.Booking;
+import com.adobe.prj.entity.Food;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
+
+import com.adobe.prj.exception.CustomException;
+
 import com.adobe.prj.exception.ExceptionNotFound;
+
 
 @Service
 public class BookingService {
@@ -68,7 +77,15 @@ public class BookingService {
 
 //		b.setRoom(roomDao.findById(r.getId()).get());
 //		b.setRoomLayout(roomLayoutDao.findById(l.getId()).get());
-		return bookingDao.save(b);
+		Booking booking = null;
+		try {
+			booking = bookingDao.save(b);
+		}
+		catch(javax.validation.ConstraintViolationException exp) {
+			// @Min, @NotNULL
+			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
+		}
+		return booking;
 
 	}
 		
@@ -81,8 +98,8 @@ public class BookingService {
 		return bookingDao.getByUserId(id);
 	}
 	
-	public List<Booking> getUpcomingBookings(LocalDate d){
-		return bookingDao.getUpcomingBookings(d);
+	public List<Booking> getLatestBookings(){
+		return bookingDao.getLatestBookings();
 	}
 
 	public List<Booking> getBookingByDate(String date) {
@@ -100,5 +117,7 @@ public class BookingService {
 	public Long getBookingsCountMadeToday() {
 		return new Long(bookingDao.getBookingsCountMadeToday(LocalDate.now()));
 	}
+
+
 
 }

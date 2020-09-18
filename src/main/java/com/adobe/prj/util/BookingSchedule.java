@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
 public class BookingSchedule {
@@ -16,6 +17,7 @@ public class BookingSchedule {
 	@Temporal(TemporalType.DATE)
 	private Date bookedFor;
 	
+	@NotNull(message = "Time Slots cannot be NULL")
 	private int timeSlots;
 	
 	public Date getBookedOn() {

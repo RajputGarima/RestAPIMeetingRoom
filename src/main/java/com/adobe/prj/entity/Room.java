@@ -118,10 +118,6 @@ public class Room {
 		this.pricePerDay = pricePerDay;
 	}
 
-	public void setPricePerHour(double pricePerHour) {
-		this.pricePerHour = pricePerHour;
-	}
-
 	public int getCapacity() {
 		return capacity;
 	}
@@ -153,5 +149,14 @@ public class Room {
 	public void setRoomLayouts(List<RoomLayout> roomLayouts) {
 		this.roomLayouts = roomLayouts;
 	}
+
+	public double getPricePerHour() {
+		return pricePerHour;
+	}
+
+	public void setPricePerHour(double pricePerHour) {
+		this.pricePerHour = pricePerHour;
+	}
+
 
 }

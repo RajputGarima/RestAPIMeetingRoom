@@ -6,13 +6,13 @@ public class ExceptionMessage {
 	
 	private Date timestamp;
 	private String message;
-	private String details;
+	private String path;
 	  
-	public ExceptionMessage(Date timestamp, String message, String details) {
+	public ExceptionMessage(Date timestamp, String message, String path) {
 		super();
 		this.timestamp = timestamp;
 		this.message = message;
-		this.details = details;
+		this.path = path;
 	}
 
 	public Date getTimestamp() {
@@ -31,12 +31,12 @@ public class ExceptionMessage {
 		this.message = message;
 	}
 
-	public String getDetails() {
-		return details;
+	public String getPath() {
+		return path;
 	}
 
-	public void setDetails(String details) {
-		this.details = details;
-	}  
+	public void setPath(String path) {
+		this.path = path;
+	}
 	  
 }

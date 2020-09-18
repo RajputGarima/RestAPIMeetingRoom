@@ -8,6 +8,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
+import com.adobe.prj.dao.AdminDao;
+import com.adobe.prj.entity.Admin;
+import com.adobe.prj.entity.AdminDto;
+import com.adobe.prj.service.AdminService;
+import com.adobe.prj.service.BookingService;
 import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.RoomLayout;
 
@@ -15,7 +21,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-//import com.adobe.prj.dao.AdminDao;
+
+import com.adobe.prj.dao.AdminDao;
 //import com.adobe.prj.entity.Admin;
 
 
@@ -26,11 +33,30 @@ public class MeetingroomApplication implements CommandLineRunner{
 		SpringApplication.run(MeetingroomApplication.class, args);
 	}
 	
+
+	
+	
+	@Autowired
+	AdminService adminService;
+	
+	@Autowired
+	AdminDao adminDao;
+	
 	@Autowired
 	RoomLayoutDao roomLayoutDao;
 	
+
+	
 	@Override
 	public void run(String... args) throws Exception {
+		
+		AdminDto admin= new AdminDto();
+		admin.setEmail("a@adobe.com");
+		admin.setPassword("a");
+		Admin newadmin = adminDao.findByEmail(admin.getEmail());
+		if(newadmin == null) adminService.save(admin);	
+		
+
 //		Default Layout
 		if(roomLayoutDao.findByTitle("Classroom") == null) {
 			RoomLayout roomLayout = new RoomLayout();
@@ -38,6 +64,8 @@ public class MeetingroomApplication implements CommandLineRunner{
 			roomLayout.setTitle("Classroom");
 			roomLayoutDao.save(roomLayout);
 		}
+
+
 	}
 	
 	@Bean

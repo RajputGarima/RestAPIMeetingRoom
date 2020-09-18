@@ -10,10 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.adobe.prj.exception.CustomException;
 import com.adobe.prj.exception.ExceptionMessage;
 import com.adobe.prj.exception.ExceptionNotFound;
+
 import com.adobe.prj.exception.ExceptionTokenExpired;
 import com.adobe.prj.exception.JsonValidationFailedException;
+
+
+import com.adobe.prj.exception.ExceptionTokenExpired;
+
+import com.adobe.prj.exception.JsonValidationFailedException;
+
 
 @ControllerAdvice
 @RestController
@@ -26,6 +34,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler{
 	    return new ResponseEntity<>(exceptionMessage, HttpStatus.NOT_FOUND);
 	  }
 	
+
 	@ExceptionHandler(ExceptionTokenExpired.class)
 	public final ResponseEntity<ExceptionMessage> handleTokenExpiredException(ExceptionTokenExpired ex, WebRequest request) {
 		ExceptionMessage exceptionMessage = new ExceptionMessage(new Date(), ex.getMessage(),
@@ -39,5 +48,14 @@ public class ExceptionController extends ResponseEntityExceptionHandler{
 	        request.getDescription(false));
 	    return new ResponseEntity<>(exceptionMessage, HttpStatus.BAD_REQUEST);
 	  }
+
+	
+	@ExceptionHandler(CustomException.class)
+	  public final ResponseEntity<ExceptionMessage> handleUserNotFoundException(CustomException ex, WebRequest request) {
+		ExceptionMessage exceptionMessage = new ExceptionMessage(new Date(), ex.getMessage(),
+	        request.getDescription(false));
+	    return new ResponseEntity<>(exceptionMessage, HttpStatus.NOT_FOUND);
+	 }
+
 
 }
