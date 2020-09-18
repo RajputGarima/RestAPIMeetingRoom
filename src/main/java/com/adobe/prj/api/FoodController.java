@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.adobe.prj.entity.Food;
 import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.service.FoodService;
+import com.adobe.prj.validation.ValidJson;
+
+import static com.adobe.prj.validation.SchemaLocations.FOODSCHEMA;
 
 @RestController
 @RequestMapping("api/foods")
@@ -44,7 +47,7 @@ public class FoodController {
 	
 	// add new food
 	@PostMapping()
-	public @ResponseBody Food addFood(@RequestBody Food f) {
+	public @ResponseBody Food addFood(@ValidJson(FOODSCHEMA) Food f) {
 	  return foodservice.addFood(f);
 	}
 
@@ -61,13 +64,12 @@ public class FoodController {
 	
 	// update a food
 	@PutMapping("/{id}")
-	public @ResponseBody Food updateFood(@RequestBody Food food) {
-		try {
-			verifyFoodId(food.getId());
-		}catch(Exception e) {
-			throw new ExceptionNotFound(e.getMessage());
-		}
-		return foodservice.addFood(food);
+	public @ResponseBody Food updateFood(@ValidJson(FOODSCHEMA) Food food) {
+		Optional<Food> f = foodservice.getFood(food.getId());
+		if(!f.isPresent())
+			throw new ExceptionNotFound("Food with id " + food.getId() + " doesn't exist");
+		  return foodservice.addFood(food);
+
 	}
 	
 	public void verifyFoodId(int id) {

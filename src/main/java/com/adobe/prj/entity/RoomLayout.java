@@ -17,13 +17,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
-import javax.validation.constraints.NotNull;
-
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.adobe.prj.service.CustomRoomSerializer;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Table(name="roomlayout")
 @Entity
@@ -53,6 +52,9 @@ public class RoomLayout {
 					foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
 			        inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
 			)
+//	@JsonManagedReference
+//	@JsonBackReference
+	@JsonSerialize(using = CustomRoomSerializer.class)
 	List<Room> rooms = new ArrayList<>();
 
 	public int getId() {

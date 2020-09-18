@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.adobe.prj.entity.Equipment;
 import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.service.EquipmentService;
+import com.adobe.prj.validation.ValidJson;
+
+import static com.adobe.prj.validation.SchemaLocations.EQUIPMENTSCHEMA;
 
 @RestController
 @RequestMapping("api/equipments")
@@ -44,7 +47,7 @@ public class EquipmentController {
 	
 	// add a new equipment
 	@PostMapping()
-	public @ResponseBody Equipment addEquipment(@RequestBody Equipment e) {
+	public @ResponseBody Equipment addEquipment(@ValidJson(EQUIPMENTSCHEMA) Equipment e) {
 		return equipmentService.addEquipment(e);
 	}
 	
@@ -62,13 +65,12 @@ public class EquipmentController {
 	
 	// update an equipment
 	@PutMapping()
-	public @ResponseBody Equipment updateEquipment(@RequestBody Equipment e) {
-		try {
-			verifyEquipmentId(e.getId());
-		}catch(Exception exp) {
-			throw new ExceptionNotFound(exp.getMessage());
-		}
-		return equipmentService.addEquipment(e);
+	public @ResponseBody Equipment updateEquipment(@ValidJson(EQUIPMENTSCHEMA) Equipment eqp) {
+		Optional<Equipment> e = equipmentService.getEquipment(eqp.getId());
+		if(!e.isPresent())
+			throw new ExceptionNotFound("Equipment with id " + eqp.getId() + " doesn't exist");
+		return equipmentService.addEquipment(eqp);
+
 	}
 	
 	public void verifyEquipmentId(int id) {

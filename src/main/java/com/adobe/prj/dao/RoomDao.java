@@ -10,6 +10,6 @@ import com.adobe.prj.entity.Room;
 
 @Repository
 public interface RoomDao extends JpaRepository<Room, Integer>{
-
+	
 }
 

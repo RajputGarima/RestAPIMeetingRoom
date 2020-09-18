@@ -1,0 +1,194 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "required": [
+        "attendees",
+        "room",
+        "roomLayout",
+        "schedule",
+        "totalCost",
+        "user",
+        "foods",
+        "equipDetails",
+        "status"
+    ],
+    "properties": {
+        "attendees": {
+            "type": "integer"
+        },
+        "room": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "roomLayout": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "schedule": {
+            "type": "object",
+            "required": [
+                "bookedFor",
+                "timeSlots"
+            ],
+            "properties": {
+                "bookedFor": {
+                    "type": "string"
+                },
+                "timeSlots": {
+                    "type": "integer"
+                }
+            }
+        },
+        "totalCost": {
+            "type": "integer"
+        },
+        "user": {
+            "type": "object",
+            "required": [
+                "email",
+                "title",
+                "name",
+                "phoneNumber",
+                "notes",
+                "company",
+                "address",
+                "paymentMethod"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "company": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "object",
+                    "required": [
+                        "address",
+                        "city",
+                        "state",
+                        "zip",
+                        "country"
+                    ],
+                    "properties": {
+                        "address": {
+                            "type": "string"
+                        },
+                        "city": {
+                            "type": "string"
+                        },
+                        "state": {
+                            "type": "string"
+                        },
+                        "zip": {
+                            "type": "integer"
+                        },
+                        "country": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "paymentMethod": {
+                    "type": "string"
+                }
+            }
+        },
+        "foods": {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "required": [
+                            "food",
+                            "quantity",
+                            "amount"
+                        ],
+                        "properties": {
+                            "food": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "quantity": {
+                                "type": "integer"
+                            },
+                            "amount": {
+                                "type": "number"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "equipDetails": {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "required": [
+                            "equipment",
+                            "units",
+                            "price"
+                        ],
+                        "properties": {
+                            "equipment": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "units": {
+                                "type": "integer"
+                            },
+                            "price": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "status": {
+            "type": []
+        }
+    }
+}
