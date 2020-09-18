@@ -1,0 +1,35 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "required": [
+        "title",
+        "imageUrl",
+        "rooms"
+    ],
+    "properties": {
+        "title": {
+            "type": "string"
+        },
+        "imageUrl": {
+            "type": "string"
+        },
+        "rooms": {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "required": [
+                            "roomId"
+                        ],
+                        "properties": {
+                            "roomId": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

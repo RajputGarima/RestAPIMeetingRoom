@@ -17,6 +17,8 @@ import com.adobe.prj.entity.RoomLayout;
 
 @Service
 public class RoomLayoutService {
+	
+	public static final String DEFAULT_LAYOUT = "Classroom";
 
 	@Autowired
 	private RoomLayoutDao roomLayoutDao;
@@ -61,6 +63,10 @@ public class RoomLayoutService {
 	}
 	@Transactional
     public ResponseEntity<Object> deleteRoomLayout(int id) {
+		RoomLayout rl = roomLayoutDao.findById(id).get();
+		if(rl.equals(roomLayoutDao.findByTitle(DEFAULT_LAYOUT))) {
+			return ResponseEntity.unprocessableEntity().body("Default layout cannot be deleted");
+		}
         if(roomLayoutDao.findById(id).isPresent()) {
             roomLayoutDao.deleteById(id);
             if(roomLayoutDao.findById(id).isPresent())

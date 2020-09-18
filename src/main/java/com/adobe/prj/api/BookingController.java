@@ -37,6 +37,8 @@ import com.adobe.prj.service.RoomLayoutService;
 import com.adobe.prj.service.RoomService;
 import com.adobe.prj.service.UserService;
 import com.adobe.prj.util.BookingStatus;
+import com.adobe.prj.validation.ValidJson;
+import static com.adobe.prj.validation.SchemaLocations.BOOKINGSCHEMA;
 
 
 @RestController
@@ -111,13 +113,12 @@ public class BookingController {
 	
 	// add new booking
 	@PostMapping()
-	public @ResponseBody Booking addBooking(@RequestBody Booking b) {	
+	public @ResponseBody Booking addBooking(@ValidJson(BOOKINGSCHEMA) Booking b) {		
 		try {
 			verifyBookingContent(b);
 		}catch(Exception e) {
 			throw new ExceptionNotFound(e.getMessage());
 		}
-	
 		User user = userService.addUser(b.getUser());
 		b.setUser(user);
 
@@ -137,7 +138,7 @@ public class BookingController {
 	
 	// update booking
 	@PutMapping()
-	public @ResponseBody Booking updateBooking(@RequestBody Booking b) {
+	public @ResponseBody Booking updateBooking(@ValidJson(BOOKINGSCHEMA) Booking b) {
 		try {
 			verifyBookingId(b.getId());
 			verifyBookingContent(b);
@@ -212,8 +213,7 @@ public class BookingController {
 		
 		if(b.getAttendees() > r.get().getCapacity())
 			throw new ExceptionNotFound("Attendees cannot exceed Room's capacity");
-		
-			
+	
 	}
 	
 	public void verifyBookingId(int id) {

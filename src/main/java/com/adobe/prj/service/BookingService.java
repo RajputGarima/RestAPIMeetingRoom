@@ -1,10 +1,13 @@
 package com.adobe.prj.service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.BookingDao;
@@ -13,6 +16,7 @@ import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
+import com.adobe.prj.exception.ExceptionNotFound;
 
 @Service
 public class BookingService {
@@ -35,12 +39,42 @@ public class BookingService {
 	}
 	
 	public Booking addBooking(Booking b) {
+//		Entities extracted from booking
 		Room r = b.getRoom();
 		RoomLayout l = b.getRoomLayout();
+
+		Optional<Room> room = roomDao.findById(r.getId());
+		if (!room.isPresent())
+			throw new ExceptionNotFound("Room doesn't exist");
 		
-		b.setRoom(roomDao.findById(r.getId()).get());
-		b.setRoomLayout(roomLayoutDao.findById(l.getId()).get());
+//============================================================
+
+
+//		=====================================================
+		
+//		Entities fetched from database
+		Room R = roomDao.findById(r.getId()).get();
+		RoomLayout L = roomLayoutDao.findById(l.getId()).get();
+		int rlId = l.getId();
+		List<RoomLayout> rl = R.getRoomLayouts();
+		
+		for(RoomLayout i : rl) {
+			int x = i.getId();
+			if(x == rlId) {
+				b.setRoom(R);
+				b.setRoomLayout(L);
+				break;
+			}
+			else {
+				throw new RuntimeException("Layout not available for this booking"); 
+			}
+		}
+//			return bookingDao.save(b);
+
+//		b.setRoom(roomDao.findById(r.getId()).get());
+//		b.setRoomLayout(roomLayoutDao.findById(l.getId()).get());
 		return bookingDao.save(b);
+
 	}
 		
 	public void deleteBooking(int id) {

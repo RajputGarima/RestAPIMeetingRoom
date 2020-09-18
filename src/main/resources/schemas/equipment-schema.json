@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "required": [
+        "title",
+        "multiUnits",
+        "price",
+        "hourlyAllowed"
+    ],
+    "properties": {
+        "title": {
+            "type": "string"
+        },
+        "multiUnits": {
+            "type": "boolean"
+        },
+        "price": {
+            "type": "integer"
+        },
+        "hourlyAllowed": {
+            "type": "boolean"
+        }
+    }
+}
