@@ -47,11 +47,6 @@ public class BookingService {
 		if (!room.isPresent())
 			throw new ExceptionNotFound("Room doesn't exist");
 		
-//============================================================
-
-
-//		=====================================================
-		
 //		Entities fetched from database
 		Room R = roomDao.findById(r.getId()).get();
 		RoomLayout L = roomLayoutDao.findById(l.getId()).get();
@@ -66,7 +61,7 @@ public class BookingService {
 				break;
 			}
 			else {
-				throw new RuntimeException("Layout not available for this booking"); 
+				throw new ExceptionNotFound("Selected layout is not applicable to the selected room"); 
 			}
 		}
 //			return bookingDao.save(b);

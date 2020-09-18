@@ -30,14 +30,14 @@ public class ExceptionController extends ResponseEntityExceptionHandler{
 	public final ResponseEntity<ExceptionMessage> handleTokenExpiredException(ExceptionTokenExpired ex, WebRequest request) {
 		ExceptionMessage exceptionMessage = new ExceptionMessage(new Date(), ex.getMessage(),
 		        request.getDescription(false));
-		    return new ResponseEntity<>(exceptionMessage, HttpStatus.NOT_FOUND);
+		    return new ResponseEntity<>(exceptionMessage, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@ExceptionHandler(JsonValidationFailedException.class)
 	  public final ResponseEntity<ExceptionMessage> onJsonValidationFailedException(JsonValidationFailedException ex, WebRequest request) {
 		ExceptionMessage exceptionMessage = new ExceptionMessage(new Date(), ex.getMessage(),
 	        request.getDescription(false));
-	    return new ResponseEntity<>(exceptionMessage, HttpStatus.NOT_FOUND);
+	    return new ResponseEntity<>(exceptionMessage, HttpStatus.BAD_REQUEST);
 	  }
 
 }

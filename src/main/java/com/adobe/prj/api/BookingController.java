@@ -169,6 +169,7 @@ public class BookingController {
 	
 	// verify content before adding a new booking
 	public void verifyBookingContent(Booking b) throws ExceptionNotFound {
+		double cost = 0;
 		Room room = b.getRoom();
 		Optional<Room> r = roomService.getRoom(room.getId());
 		if(!r.isPresent())
@@ -185,6 +186,9 @@ public class BookingController {
 			Optional<Equipment> e = equipmentService.getEquipment(equipment.getId());
 			if(!e.isPresent())
 				throw new ExceptionNotFound("Equipment doesn't exist");
+			if(ed.getUnits() * e.get().getPrice() != ed.getPrice())
+				throw new ExceptionNotFound("Given & Expected price for equipment_id " + equipment.getId() + " don't match." + "Expected price = " + ed.getUnits() * e.get().getPrice() +  ". Given price = "  + ed.getPrice() );
+			cost += ed.getPrice();
 		}
 		
 		List<FoodBooking> foodBookings = b.getFoods();
@@ -193,11 +197,12 @@ public class BookingController {
 			Optional<Food> f = foodService.getFood(food.getId());
 			if(!f.isPresent())
 				throw new ExceptionNotFound("Food doesn't exist");
+			if(fb.getQuantity() * f.get().getFoodPrice() != fb.getAmount())
+				throw new ExceptionNotFound("Given & Expected price for food_id " + food.getId() + " don't match." + "Expected price = " + fb.getQuantity() * f.get().getFoodPrice() +  ". Given price = "  + fb.getAmount() );
+			cost += fb.getAmount();
 		}
 		
-		// layout exists for that room
 		// totalCost >= eqpcost + foodcost + roomcost
-		// initial status of booking
 		
 		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		Date today = new Date();

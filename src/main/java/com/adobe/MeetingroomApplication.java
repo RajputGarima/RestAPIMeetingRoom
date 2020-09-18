@@ -32,11 +32,11 @@ public class MeetingroomApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 //		Default Layout
-		if(roomLayoutDao.findByTitle("Classroom").equals(null)) {
-		RoomLayout roomLayout = new RoomLayout();
-		roomLayout.setImageUrl("classroom_image");
-		roomLayout.setTitle("Classroom");
-		roomLayoutDao.save(roomLayout);
+		if(roomLayoutDao.findByTitle("Classroom") == null) {
+			RoomLayout roomLayout = new RoomLayout();
+			roomLayout.setImageUrl("classroom_image");
+			roomLayout.setTitle("Classroom");
+			roomLayoutDao.save(roomLayout);
 		}
 	}
 	
