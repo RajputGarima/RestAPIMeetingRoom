@@ -54,13 +54,13 @@ public class Room {
 	private String title;
 	
 	@Min(1)
-	private int pricePerDay;
+	private double pricePerDay;
 	
 	@Min(1)
 	private int capacity;
 	
 	@Min(1)
-	private int pricePerHour;
+	private double pricePerHour;
 	
 	private int bookings;
 	private String imageUrl;
@@ -110,11 +110,11 @@ public class Room {
 		this.imageUrl = imageUrl;
 	}
 
-	public int getPricePerDay() {
+	public double getPricePerDay() {
 		return pricePerDay;
 	}
 
-	public void setPricePerDay(int pricePerDay) {
+	public void setPricePerDay(double pricePerDay) {
 		this.pricePerDay = pricePerDay;
 	}
 
@@ -150,11 +150,11 @@ public class Room {
 		this.roomLayouts = roomLayouts;
 	}
 	
-	public int getPricePerHour() {
+	public double getPricePerHour() {
 		return pricePerHour;
 	}
 
-	public void setPricePerHour(int pricePerHour) {
+	public void setPricePerHour(double pricePerHour) {
 		this.pricePerHour = pricePerHour;
 	}
 

@@ -10,7 +10,7 @@
             "type": "string"
         },
         "foodPrice": {
-            "type": "integer"
+            "type": "number"
         }
     }
 }

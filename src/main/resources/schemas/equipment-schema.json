@@ -15,7 +15,7 @@
             "type": "boolean"
         },
         "price": {
-            "type": "integer"
+            "type": "number"
         },
         "hourlyAllowed": {
             "type": "boolean"

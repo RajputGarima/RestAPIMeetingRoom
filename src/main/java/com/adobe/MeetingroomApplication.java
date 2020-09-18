@@ -13,7 +13,7 @@ import com.adobe.prj.dao.AdminDao;
 import com.adobe.prj.entity.Admin;
 import com.adobe.prj.entity.AdminDto;
 import com.adobe.prj.service.AdminService;
-
+import com.adobe.prj.service.BookingService;
 import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.RoomLayout;
 
@@ -34,7 +34,7 @@ public class MeetingroomApplication implements CommandLineRunner{
 	}
 	
 
-	AdminDto admin= new AdminDto();
+	
 	
 	@Autowired
 	AdminService adminService;
@@ -45,10 +45,12 @@ public class MeetingroomApplication implements CommandLineRunner{
 	@Autowired
 	RoomLayoutDao roomLayoutDao;
 	
+
+	
 	@Override
 	public void run(String... args) throws Exception {
 		
-		
+		AdminDto admin= new AdminDto();
 		admin.setEmail("a@adobe.com");
 		admin.setPassword("a");
 		Admin newadmin = adminDao.findByEmail(admin.getEmail());
@@ -56,12 +58,13 @@ public class MeetingroomApplication implements CommandLineRunner{
 		
 
 //		Default Layout
-		if(roomLayoutDao.findByTitle("Classroom").equals(null)) {
+		if(roomLayoutDao.findByTitle("Classroom")==null) {
 		RoomLayout roomLayout = new RoomLayout();
 		roomLayout.setImageUrl("classroom_image");
 		roomLayout.setTitle("Classroom");
 		roomLayoutDao.save(roomLayout);
 		}
+
 
 	}
 	

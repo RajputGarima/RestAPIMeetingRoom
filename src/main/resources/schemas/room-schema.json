@@ -15,13 +15,13 @@
             "type": "string"
         },
         "pricePerDay": {
-            "type": "integer"
+            "type": "number"
         },
         "capacity": {
             "type": "integer"
         },
         "pricePerHour": {
-            "type": "integer"
+            "type": "number"
         },
         "bookings": {
             "type": "integer"
@@ -42,7 +42,7 @@
                             "layoutId"
                         ],
                         "properties": {
-                            "layoutId": {
+                            "id": {
                                 "type": "integer"
                             }
                         }
