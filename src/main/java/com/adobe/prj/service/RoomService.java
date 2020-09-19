@@ -107,16 +107,9 @@ public class RoomService {
 
 			oldr.setRoomLayouts(newRoomLayouts);
 
-//			newr.setRoomLayouts(newRoomLayouts);
-//		}
-			
-				
-
-//		return roomDao.save(newr);
-
 		}else {
-//			A message in the response body is to be added stating that
-//			default layout cannot be removed
+			//	A message in the response body is to be added stating that
+			//	default layout cannot be removed
 			newRoomLayouts.add(roomLayoutDao.findByTitle(DEFAULT_LAYOUT));
 			oldr.setRoomLayouts(newRoomLayouts);
 		}
@@ -132,7 +125,6 @@ public class RoomService {
 			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
 		}
 		return room;
-
 	}
 	
 	@Transactional
@@ -146,14 +138,15 @@ public class RoomService {
 				b.setRoomLayout(null);
 				b.setStatus(BookingStatus.CANCELLED);
 			}	
-			// 
 			roomDao.deleteById(id);
             if (roomDao.findById(id).isPresent()) {
                 return ResponseEntity.unprocessableEntity().body("Failed to delete the record");
-            } else return ResponseEntity.ok().body("Successfully deleted the record");
-		}else
-			return ResponseEntity.unprocessableEntity().body("Cannot find the record");
-		
+            } 
+            else 
+            	return ResponseEntity.ok().body("Successfully deleted the record");
+		}
+		else
+			return ResponseEntity.unprocessableEntity().body("Cannot find the record");	
 	}
 
 	public List<Integer> getTimeSlotsById(int id, String date) {

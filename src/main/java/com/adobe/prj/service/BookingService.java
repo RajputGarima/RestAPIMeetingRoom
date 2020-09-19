@@ -1,30 +1,19 @@
 package com.adobe.prj.service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.dao.DataIntegrityViolationException;
-
-import org.springframework.http.ResponseEntity;
-
 import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.BookingDao;
 import com.adobe.prj.dao.RoomDao;
-import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.Booking;
-import com.adobe.prj.entity.Food;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
 
 import com.adobe.prj.exception.CustomException;
-
-import com.adobe.prj.exception.ExceptionNotFound;
 
 
 @Service
@@ -35,10 +24,7 @@ public class BookingService {
 	
 	@Autowired
 	private RoomDao roomDao;
-	
-	@Autowired
-	private RoomLayoutDao roomLayoutDao;
-	
+
 	public List<Booking> getBookings(){
 		return bookingDao.findAll();
 	}
@@ -48,13 +34,13 @@ public class BookingService {
 	}
 	
 	public Booking addBooking(Booking b) {
-//		Entities extracted from booking
+		//	Entities extracted from booking
 		Room r = b.getRoom();
 		RoomLayout l = b.getRoomLayout();
 
 		Optional<Room> room = roomDao.findById(r.getId());
 		
-//		Entities fetched from database
+		//	Entities fetched from database
 		Room R = room.get();
 		int rlId = l.getId();
 		List<RoomLayout> rl = R.getRoomLayouts();
@@ -69,10 +55,7 @@ public class BookingService {
 		}
 		if(flag)
 			throw new CustomException("Selected layout is not applicable to the selected room");
-//			return bookingDao.save(b);
 
-//		b.setRoom(roomDao.findById(r.getId()).get());
-//		b.setRoomLayout(roomLayoutDao.findById(l.getId()).get());
 		Booking booking = null;
 		try {
 			booking = bookingDao.save(b);
@@ -82,7 +65,6 @@ public class BookingService {
 			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
 		}
 		return booking;
-
 	}
 		
 	public void deleteBooking(int id) {
@@ -113,7 +95,5 @@ public class BookingService {
 	public Long getBookingsCountMadeToday() {
 		return new Long(bookingDao.getBookingsCountMadeToday(LocalDate.now()));
 	}
-
-
-
+	
 }

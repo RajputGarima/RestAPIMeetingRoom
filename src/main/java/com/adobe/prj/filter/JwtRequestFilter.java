@@ -16,14 +16,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.adobe.prj.exception.CustomException;
-import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.exception.ExceptionTokenExpired;
 import com.adobe.prj.service.AdminService;
 import com.adobe.prj.util.JwtUtil;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.security.SignatureException;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {

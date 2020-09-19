@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 import com.adobe.prj.entity.Booking;
 
-
 public interface BookingDao extends JpaRepository<Booking, Integer>{
 	
 	@Query(value = "select * from booking where user_fk= :pr", nativeQuery = true) 

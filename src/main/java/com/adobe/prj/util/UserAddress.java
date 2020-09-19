@@ -5,14 +5,10 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class UserAddress {
 	
-	private String address;
-	
+	private String address;	
 	private String city;
-
 	private String state;
-	
 	private int zip;
-	
 	private String country;
 	
 	public String getAddress() {
