@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,6 +41,9 @@ public class BookingService {
 	@Autowired
 	private RoomLayoutDao roomLayoutDao;
 	
+	@Autowired 
+	private RoomService roomService;
+	
 	public List<Booking> getBookings(){
 		return bookingDao.findAll();
 	}
@@ -47,6 +52,7 @@ public class BookingService {
 		return bookingDao.findById(id);
 	}
 	
+	@Transactional
 	public Booking addBooking(Booking b) {
 //		Entities extracted from booking
 		Room r = b.getRoom();
@@ -81,13 +87,27 @@ public class BookingService {
 			// @Min, @NotNULL
 			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
 		}
+		// updating no of bookings for the booked room 
+		Room newroom = booking.getRoom();
+		newroom = roomService.getRoom(newroom.getId()).get();
+		newroom.setBookings(roomService.getFutureBookingsById(newroom.getId()));
+		roomService.updateRoom(newroom.getId(),newroom);
+		
 		return booking;
 
 	}
 		
 	public void deleteBooking(int id) {
 		Booking b = bookingDao.findById(id).get(); 
+		
+		Room newroom = b.getRoom();
+		
 		bookingDao.delete(b);
+		
+		//updating no of bookings for the booked room
+		newroom = roomService.getRoom(newroom.getId()).get();
+		newroom.setBookings(roomService.getFutureBookingsById(newroom.getId()));
+		roomService.updateRoom(newroom.getId(),newroom);
 	}
 	
 	public List<Booking> getByUserId(int id){

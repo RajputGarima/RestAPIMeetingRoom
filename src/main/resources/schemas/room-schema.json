@@ -6,7 +6,6 @@
         "pricePerDay",
         "capacity",
         "pricePerHour",
-        "bookings",
         "imageUrl",
         "status",
         "bookingType"

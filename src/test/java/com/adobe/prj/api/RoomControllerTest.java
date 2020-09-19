@@ -14,6 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import com.adobe.prj.service.AdminService;
 import com.adobe.prj.service.RoomLayoutService;
 import com.adobe.prj.service.RoomService;
 import com.adobe.prj.util.JwtUtil;
+import com.adobe.prj.util.RoomBookingType;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(RoomController.class)
@@ -59,18 +62,23 @@ public class RoomControllerTest {
     			Arrays.asList(new RoomLayout(1,"Classroom","api/image")
     					);
     	
+    	RoomBookingType bookingType = new RoomBookingType(true,false,true);
+    	
     	List<Room> r= 
-      			 Arrays.asList(new Room(1,"Small Conference Room",5000,10,1000,5,"api/image",true,roomLayoutsDefault));
+      			 Arrays.asList(new Room(1,"Large Conference Room",9000,20,3500,6,"api/image",true,"large room",bookingType,roomLayoutsDefault));
     	
     	//new RoomLayout(id, title, imageUrl, rooms)
     	List<RoomLayout> roomLayouts= 
     			Arrays.asList(new RoomLayout(1,"Classroom","api/image"),
     					new RoomLayout(2,"Round","api/image1",r));
+    	
+    	
+    	
     	   	
-    	//new Room(id, title, pricePerDay, capacity, pricePerHour, bookings, imageUrl, status, roomLayouts)
+    	//new Room(id, title, pricePerDay, capacity, pricePerHour, bookings, imageUrl, status, description, bookingType, roomLayouts)
         List<Room> rooms = 
-                Arrays.asList(new Room(1,"Small Conference Room",5000,10,1000,5,"api/image",true,roomLayouts),
-                		new Room(2,"Medium Conference Room",8000,10,2000,15,"api/image",false,roomLayoutsDefault));
+                Arrays.asList(new Room(1,"Small Conference Room",5000,10,1000,5,"api/image",true,"small room",bookingType,roomLayouts),
+                		new Room(2,"Medium Conference Room",7000,15,2000,10,"api/image",false,"medium room",bookingType,roomLayoutsDefault));
 //                		new Room(3,"Large Conference Room",5000,10,1000,20,"api/image",true,roomlayouts));
         // mocking
         when(service.getRooms()).thenReturn(rooms);
@@ -87,24 +95,34 @@ public class RoomControllerTest {
                 .andExpect(jsonPath("$[0].bookings", is(5)))
                 .andExpect(jsonPath("$[0].imageUrl", is("api/image")))
                 .andExpect(jsonPath("$[0].status", is(true)))
+                .andExpect(jsonPath("$[0].description", is("small room")))
+                .andExpect(jsonPath("$[0].bookingType.hourly", is(true)))
+                .andExpect(jsonPath("$[0].bookingType.halfDay", is(false)))
+                .andExpect(jsonPath("$[0].bookingType.fullDay", is(true)))
                 .andExpect(jsonPath("$[0].roomLayouts[0].id", is(1)))
                 .andExpect(jsonPath("$[0].roomLayouts[0].title", is("Classroom")))
                 .andExpect(jsonPath("$[0].roomLayouts[0].imageUrl", is("api/image")))
-                .andExpect(jsonPath("$[0].roomLayouts[1].id", is(2)))
+        		.andExpect(jsonPath("$[0].roomLayouts[1].id", is(2)))
                 .andExpect(jsonPath("$[0].roomLayouts[1].title", is("Round")))
                 .andExpect(jsonPath("$[0].roomLayouts[1].imageUrl", is("api/image1")))
+//                .andExpect(jsonPath("$[0].roomLayouts[0].rooms", is(null)));
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[1].title", is("Medium Conference Room")))
-        		.andExpect(jsonPath("$[1].pricePerDay", is(8000.0)))
-        		.andExpect(jsonPath("$[1].capacity", is(10)))
+        		.andExpect(jsonPath("$[1].pricePerDay", is(7000.0)))
+        		.andExpect(jsonPath("$[1].capacity", is(15)))
         		.andExpect(jsonPath("$[1].pricePerHour", is(2000.0)))
-        		.andExpect(jsonPath("$[1].bookings", is(15)))
+        		.andExpect(jsonPath("$[1].bookings", is(10)))
         		.andExpect(jsonPath("$[1].imageUrl", is("api/image")))
         		.andExpect(jsonPath("$[1].status", is(false)))
+                .andExpect(jsonPath("$[1].description", is("medium room")))
+                .andExpect(jsonPath("$[1].bookingType.hourly", is(true)))
+                .andExpect(jsonPath("$[1].bookingType.halfDay", is(false)))
+                .andExpect(jsonPath("$[1].bookingType.fullDay", is(true)))
         		.andExpect(jsonPath("$[1].roomLayouts[0].id", is(1)))
         		.andExpect(jsonPath("$[1].roomLayouts[0].title", is("Classroom")))
-        		.andExpect(jsonPath("$[1].roomLayouts[0].imageUrl", is("api/image")));
+        		.andExpect(jsonPath("$[1].roomLayouts[0].imageUrl", is("api/image"))); 
 
+   
         
         // @formatter:on
         verify(service, times(1)).getRooms();
