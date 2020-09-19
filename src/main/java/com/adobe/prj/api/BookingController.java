@@ -222,16 +222,6 @@ public class BookingController {
 			cost += fb.getAmount();
 		}
 		
-		// totalCost >= eqpcost + foodcost + roomcost
-		
-		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-		Date today = new Date();
-		Date todayWithZeroTime = null;
-		try {
-			todayWithZeroTime = formatter.parse(formatter.format(today));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
 		if(b.getSchedule().getBookedFor().compareTo(LocalDate.now()) < 0)
 			throw new ExceptionNotFound("Booking date cannot be an old date");
 

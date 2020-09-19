@@ -1,6 +1,5 @@
 package com.adobe.prj.service;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,32 +7,22 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.hibernate.HibernateException;
-import org.hibernate.JDBCException;
-import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
-import org.springframework.jdbc.support.SQLErrorCodes;
 import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.BookingDao;
 import com.adobe.prj.dao.RoomDao;
 import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.Booking;
-import com.adobe.prj.entity.Food;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
 
 import com.adobe.prj.exception.CustomException;
 
-import com.adobe.prj.exception.ExceptionNotFound;
+import com.adobe.prj.util.BookingStatus;
 import com.adobe.prj.util.UpdateStatus;
-import com.adobe.prj.validation.ValidJson;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 
@@ -149,11 +138,13 @@ public class RoomService {
 	@Transactional
 	public ResponseEntity<Object> deleteRoom(int id){
 		if(roomDao.findById(id).isPresent()) {			
-			// to delete all the bookings made for this room
+			// cancel all the bookings made for this room, set room_fk, layout_fk = null
 			List<Booking> bookings = bookingDao.getByRoomId(id);
 			
 			for(Booking b: bookings) {
-				bookingDao.delete(b);
+				b.setRoom(null);
+				b.setRoomLayout(null);
+				b.setStatus(BookingStatus.CANCELLED);
 			}	
 			// 
 			roomDao.deleteById(id);
