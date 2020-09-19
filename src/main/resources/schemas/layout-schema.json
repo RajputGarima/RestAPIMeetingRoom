@@ -3,9 +3,8 @@
     "type": "object",
     "required": [
         "title",
-        "imageUrl",
-        "rooms"
-    ],
+        "imageUrl"
+   ],
     "properties": {
         "title": {
             "type": "string"

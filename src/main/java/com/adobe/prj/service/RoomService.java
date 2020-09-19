@@ -30,6 +30,7 @@ import com.adobe.prj.entity.RoomLayout;
 import com.adobe.prj.exception.CustomException;
 
 import com.adobe.prj.exception.ExceptionNotFound;
+import com.adobe.prj.util.BookingStatus;
 import com.adobe.prj.validation.ValidJson;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -151,11 +152,13 @@ public class RoomService {
 	@Transactional
 	public ResponseEntity<Object> deleteRoom(int id){
 		if(roomDao.findById(id).isPresent()) {			
-			// to delete all the bookings made for this room
+			// cancel all the bookings made for this room, set room_fk, layout_fk = null
 			List<Booking> bookings = bookingDao.getByRoomId(id);
 			
 			for(Booking b: bookings) {
-				bookingDao.delete(b);
+				b.setRoom(null);
+				b.setRoomLayout(null);
+				b.setStatus(BookingStatus.CANCELLED);
 			}	
 			// 
 			roomDao.deleteById(id);

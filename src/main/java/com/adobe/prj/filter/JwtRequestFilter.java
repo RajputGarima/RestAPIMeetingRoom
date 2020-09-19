@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.adobe.prj.exception.CustomException;
 import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.exception.ExceptionTokenExpired;
 import com.adobe.prj.service.AdminService;
@@ -58,17 +59,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	        }
         }
         catch(ExpiredJwtException e) {     	
-        	throw new ExceptionTokenExpired(e.getLocalizedMessage());
-        	
+        	throw new ExceptionTokenExpired(e.getLocalizedMessage());    	
         }
     	catch(io.jsonwebtoken.SignatureException e) {
-    		throw new ExceptionNotFound(e.getLocalizedMessage());
+    		throw new CustomException(e.getLocalizedMessage());
     	}
     	catch(MalformedJwtException e) {
-    		throw new ExceptionNotFound(e.getLocalizedMessage());
+    		throw new CustomException(e.getLocalizedMessage());
     	}
     	catch(IllegalArgumentException e) {
-    		throw new ExceptionNotFound("JWT claim string is empty");
+    		throw new CustomException("JWT claim string is empty");
     	}
         chain.doFilter(request, response);
     }
