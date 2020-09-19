@@ -1,27 +1,29 @@
 package com.adobe.prj.exception;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class ExceptionMessage {
 	
-	private Date timestamp;
+	private LocalDate timestamp;
 	private String message;
 	private String path;
 	  
-	public ExceptionMessage(Date timestamp, String message, String path) {
+	public ExceptionMessage(LocalDate timestamp, String message, String path) {
 		super();
 		this.timestamp = timestamp;
 		this.message = message;
 		this.path = path;
 	}
 
-	public Date getTimestamp() {
+	public LocalDate getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Date timestamp) {
+	public void setTimestamp(LocalDate timestamp) {
 		this.timestamp = timestamp;
 	}
+
+
 
 	public String getMessage() {
 		return message;

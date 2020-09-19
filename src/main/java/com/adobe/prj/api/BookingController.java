@@ -1,5 +1,7 @@
 package com.adobe.prj.api;
 
+import static com.adobe.prj.validation.SchemaLocations.BOOKINGSCHEMA;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +39,6 @@ import com.adobe.prj.service.RoomService;
 import com.adobe.prj.service.UserService;
 import com.adobe.prj.util.BookingStatus;
 import com.adobe.prj.validation.ValidJson;
-import static com.adobe.prj.validation.SchemaLocations.BOOKINGSCHEMA;
 
 
 @RestController
@@ -213,10 +213,9 @@ public class BookingController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		if(b.getSchedule().getBookedFor().compareTo(todayWithZeroTime) < 0)
-			throw new ExceptionNotFound("Booking date cannot be an old date ");
-		
-		
+		if(b.getSchedule().getBookedFor().compareTo(LocalDate.now()) < 0)
+			throw new ExceptionNotFound("Booking date cannot be an old date");
+
 		if(b.getAttendees() > r.get().getCapacity())
 			throw new ExceptionNotFound("Attendees cannot exceed Room's capacity");
 	
