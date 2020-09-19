@@ -19,11 +19,6 @@ import com.adobe.prj.exception.ExceptionTokenExpired;
 import com.adobe.prj.exception.JsonValidationFailedException;
 
 
-import com.adobe.prj.exception.ExceptionTokenExpired;
-
-import com.adobe.prj.exception.JsonValidationFailedException;
-
-
 @ControllerAdvice
 @RestController
 public class ExceptionController extends ResponseEntityExceptionHandler{

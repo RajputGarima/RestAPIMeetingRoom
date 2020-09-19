@@ -8,7 +8,8 @@
         "pricePerHour",
         "bookings",
         "imageUrl",
-        "status"
+        "status",
+        "bookingType"
     ],
     "properties": {
         "title": {
@@ -31,6 +32,25 @@
         },
         "status": {
             "type": "boolean"
+        },
+        "bookingType": {
+            "type": "object",
+            "required": [
+                "hourly",
+                "halfDay",
+                "fullDay"
+            ],
+            "properties": {
+                "hourly": {
+                    "type": "boolean"
+                },
+                "halfDay": {
+                    "type": "boolean"
+                },
+                "fullDay": {
+                    "type": "boolean"
+                }
+            }
         },
         "roomLayouts": {
             "type": "array",

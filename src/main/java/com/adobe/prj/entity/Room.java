@@ -8,7 +8,7 @@ import javax.persistence.Column;
 
 
 import javax.persistence.ConstraintMode;
-
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -25,6 +25,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.adobe.prj.service.CustomLayoutSerializer;
+import com.adobe.prj.util.RoomBookingType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
@@ -64,8 +65,11 @@ public class Room {
 	
 	private int bookings;
 	private String imageUrl;
-
 	private boolean status;
+	private String description;
+	
+	@Embedded
+	private RoomBookingType bookingType;
 	
 	
 	@ManyToMany(targetEntity = RoomLayout.class,cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH},fetch = FetchType.LAZY)
@@ -176,5 +180,20 @@ public class Room {
 		this.pricePerHour = pricePerHour;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public RoomBookingType getBookingType() {
+		return bookingType;
+	}
+
+	public void setBookingType(RoomBookingType bookingType) {
+		this.bookingType = bookingType;
+	}
 
 }

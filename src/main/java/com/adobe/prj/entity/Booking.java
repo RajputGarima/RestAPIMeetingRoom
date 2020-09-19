@@ -28,7 +28,7 @@ import javax.validation.constraints.NotNull;
 
 import com.adobe.prj.util.BookingSchedule;
 import com.adobe.prj.util.BookingStatus;
-import com.adobe.prj.util.BookingStatus;
+import com.adobe.prj.util.BookingType;
 
 
 
@@ -50,7 +50,7 @@ public class Booking{
 	
 	@NotNull(message = "Booking Status cannot be NULL")
 	private BookingStatus status;
-
+	private BookingType bookingType;
 	
 	@ManyToOne
 	@JoinColumn(name="room_fk")
@@ -163,6 +163,16 @@ public class Booking{
 	public void setStatus(BookingStatus status) {
 		this.status = status;
 
+	}
+
+	@Enumerated(EnumType.ORDINAL)
+	public BookingType getBookingType() {
+		return bookingType;
+	}
+
+
+	public void setBookingType(BookingType bookingType) {
+		this.bookingType = bookingType;
 	}	
 	
 }
