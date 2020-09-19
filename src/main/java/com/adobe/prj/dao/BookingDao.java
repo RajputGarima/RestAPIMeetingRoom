@@ -36,5 +36,6 @@ public interface BookingDao extends JpaRepository<Booking, Integer>{
 	@Query(value = "select count(*) from booking where room_fk = :id and booked_for >= :date and status = 1", nativeQuery = true)
 	public Long getFutureBookingsCountByRoomId(@Param("id") int id, @Param("date") LocalDate date);
 	
-
+	@Query(value = "select * from booking where layout_fk= :pr", nativeQuery = true)
+	public List<Booking> getByLayoutId(@Param("pr") int id);
 }

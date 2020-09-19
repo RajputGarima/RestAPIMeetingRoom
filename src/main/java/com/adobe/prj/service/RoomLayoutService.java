@@ -11,8 +11,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.adobe.prj.dao.BookingDao;
 import com.adobe.prj.dao.RoomDao;
 import com.adobe.prj.dao.RoomLayoutDao;
+import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
 import com.adobe.prj.exception.CustomException;
@@ -27,6 +29,9 @@ public class RoomLayoutService {
 	
 	@Autowired
 	private RoomDao roomDao;
+	
+	@Autowired
+	private BookingDao bookingDao;
 	
 	public List<RoomLayout> getRoomLayouts(){
 		return roomLayoutDao.findAll();
@@ -98,6 +103,14 @@ public class RoomLayoutService {
 			return ResponseEntity.unprocessableEntity().body("Default layout cannot be deleted");
 		}
         if(roomLayoutDao.findById(id).isPresent()) {
+        	
+    		List<Booking> bookings = new ArrayList<>();
+    		bookings = bookingDao.getByLayoutId(id);
+    		RoomLayout defaultLayout = roomLayoutDao.findByTitle(DEFAULT_LAYOUT);
+    		for(Booking b:bookings) {
+    			b.setRoomLayout(defaultLayout);
+    				bookingDao.save(b);
+    		}
             roomLayoutDao.deleteById(id);
             if(roomLayoutDao.findById(id).isPresent())
                 return ResponseEntity.unprocessableEntity().body("Failed to Delete the record");
