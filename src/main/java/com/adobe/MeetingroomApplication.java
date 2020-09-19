@@ -41,7 +41,9 @@ public class MeetingroomApplication implements CommandLineRunner{
 	
 	@Override
 	public void run(String... args) throws Exception {
+
 		//initialization of admin and roomlayout in InitialzeApp class(util)
+
 	}
 	
 	@Bean

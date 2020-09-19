@@ -65,12 +65,13 @@ public class EquipmentController {
 	
 	// update an equipment
 	@PutMapping()
-	public @ResponseBody Equipment updateEquipment(@ValidJson(EQUIPMENTSCHEMA) Equipment eqp) {
-		Optional<Equipment> e = equipmentService.getEquipment(eqp.getId());
-		if(!e.isPresent())
-			throw new ExceptionNotFound("Equipment with id " + eqp.getId() + " doesn't exist");
-		return equipmentService.addEquipment(eqp);
-
+	public @ResponseBody Equipment updateEquipment(@ValidJson(EQUIPMENTSCHEMA) Equipment e) {
+		try {
+			verifyEquipmentId(e.getId());
+		}catch(Exception exp) {
+			throw new ExceptionNotFound(exp.getMessage());
+		}
+		return equipmentService.addEquipment(e);
 	}
 	
 	public void verifyEquipmentId(int id) {

@@ -32,10 +32,6 @@ public class EquipmentService {
 			eqp = equipmentDao.save(e);
 		}catch(DataIntegrityViolationException exp) {
 			// unique constraint
-//			 Throwable cause = exp.getCause();
-//		        if (cause instanceof SQLException) {
-//		            throw new ExceptionNotFound("constraint violatoin " + cause.getMessage());
-//		        }	
 		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
 		}
 		catch(javax.validation.ConstraintViolationException exp) {

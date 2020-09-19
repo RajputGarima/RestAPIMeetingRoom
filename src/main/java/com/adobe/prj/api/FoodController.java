@@ -65,11 +65,12 @@ public class FoodController {
 	// update a food
 	@PutMapping("/{id}")
 	public @ResponseBody Food updateFood(@ValidJson(FOODSCHEMA) Food food) {
-		Optional<Food> f = foodservice.getFood(food.getId());
-		if(!f.isPresent())
-			throw new ExceptionNotFound("Food with id " + food.getId() + " doesn't exist");
-		  return foodservice.addFood(food);
-
+		try {
+			verifyFoodId(food.getId());
+		}catch(Exception e) {
+			throw new ExceptionNotFound(e.getMessage());
+		}
+		return foodservice.addFood(food);
 	}
 	
 	public void verifyFoodId(int id) {

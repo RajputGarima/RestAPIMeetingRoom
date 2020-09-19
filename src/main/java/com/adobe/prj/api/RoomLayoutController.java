@@ -79,7 +79,7 @@ public class RoomLayoutController {
 		for(Room room : rooms) {
 			Optional<Room> r = roomService.getRoom(room.getId());
 			if(!r.isPresent())
-				throw new ExceptionNotFound("Room doesn't exist");
+				throw new ExceptionNotFound("Room doesn't exist ");
 		}
 	
 	}

@@ -18,11 +18,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.adobe.prj.service.CustomRoomSerializer;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Table(name="roomlayout")
 @Entity
@@ -56,6 +54,29 @@ public class RoomLayout {
 //	@JsonBackReference
 	@JsonSerialize(using = CustomRoomSerializer.class)
 	List<Room> rooms = new ArrayList<>();
+	
+	
+
+	public RoomLayout() {
+
+	}
+
+	public RoomLayout(int id, @NotNull(message = "Room Layout Name cannot be NULL") String title, String imageUrl,
+			List<Room> rooms) {
+		this.id = id;
+		this.title = title;
+		this.imageUrl = imageUrl;
+		this.rooms = rooms;
+	}
+	
+	
+
+	public RoomLayout(int id, @NotNull(message = "Room Layout Name cannot be NULL") String title, String imageUrl) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.imageUrl = imageUrl;
+	}
 
 	public int getId() {
 		return id;
