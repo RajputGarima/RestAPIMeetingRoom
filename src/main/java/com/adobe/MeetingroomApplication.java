@@ -1,5 +1,6 @@
 package com.adobe;
 
+import org.omg.CORBA.INITIALIZE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +15,9 @@ import com.adobe.prj.entity.Admin;
 import com.adobe.prj.entity.AdminDto;
 import com.adobe.prj.service.AdminService;
 import com.adobe.prj.service.BookingService;
+import com.adobe.prj.service.RoomLayoutService;
+import com.adobe.prj.service.RoomService;
+import com.adobe.prj.util.InitializeApp;
 import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.RoomLayout;
 
@@ -35,37 +39,9 @@ public class MeetingroomApplication implements CommandLineRunner{
 	
 
 	
-	
-	@Autowired
-	AdminService adminService;
-	
-	@Autowired
-	AdminDao adminDao;
-	
-	@Autowired
-	RoomLayoutDao roomLayoutDao;
-	
-
-	
 	@Override
 	public void run(String... args) throws Exception {
-		
-		AdminDto admin= new AdminDto();
-		admin.setEmail("a@adobe.com");
-		admin.setPassword("a");
-		Admin newadmin = adminDao.findByEmail(admin.getEmail());
-		if(newadmin == null) adminService.save(admin);	
-		
-
-//		Default Layout
-		if(roomLayoutDao.findByTitle("Classroom")==null) {
-		RoomLayout roomLayout = new RoomLayout();
-		roomLayout.setImageUrl("classroom_image");
-		roomLayout.setTitle("Classroom");
-		roomLayoutDao.save(roomLayout);
-		}
-
-
+		//initialization of admin and roomlayout in InitialzeApp class(util)
 	}
 	
 	@Bean

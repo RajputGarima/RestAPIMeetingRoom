@@ -85,6 +85,24 @@ public class Room {
 	public Room() {
 
 	}
+	
+	
+
+	public Room(int id, @NotNull(message = "Room Name cannot be NULL") String title, @Min(1) double pricePerDay,
+			@Min(1) int capacity, @Min(1) double pricePerHour, int bookings, String imageUrl, boolean status,
+			List<RoomLayout> roomLayouts) {
+		this.id = id;
+		this.title = title;
+		this.pricePerDay = pricePerDay;
+		this.capacity = capacity;
+		this.pricePerHour = pricePerHour;
+		this.bookings = bookings;
+		this.imageUrl = imageUrl;
+		this.status = status;
+		this.roomLayouts = roomLayouts;
+	}
+	
+
 
 	public int getId() {
 		return id;
