@@ -59,10 +59,10 @@ public class MeetingroomApplication implements CommandLineRunner{
 
 //		Default Layout
 		if(roomLayoutDao.findByTitle("Classroom") == null) {
-		RoomLayout roomLayout = new RoomLayout();
-		roomLayout.setImageUrl("classroom_image");
-		roomLayout.setTitle("Classroom");
-		roomLayoutDao.save(roomLayout);
+			RoomLayout roomLayout = new RoomLayout();
+			roomLayout.setImageUrl("classroom_image");
+			roomLayout.setTitle("Classroom");
+			roomLayoutDao.save(roomLayout);
 		}
 
 

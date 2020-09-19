@@ -153,7 +153,7 @@ public class Room {
 	public void setRoomLayouts(List<RoomLayout> roomLayouts) {
 		this.roomLayouts = roomLayouts;
 	}
-	
+
 	public double getPricePerHour() {
 		return pricePerHour;
 	}

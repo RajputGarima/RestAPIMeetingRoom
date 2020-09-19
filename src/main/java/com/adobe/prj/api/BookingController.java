@@ -1,5 +1,7 @@
 package com.adobe.prj.api;
 
+import static com.adobe.prj.validation.SchemaLocations.BOOKINGSCHEMA;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +40,6 @@ import com.adobe.prj.service.UserService;
 import com.adobe.prj.util.BookingStatus;
 import com.adobe.prj.util.BookingType;
 import com.adobe.prj.validation.ValidJson;
-import static com.adobe.prj.validation.SchemaLocations.BOOKINGSCHEMA;
 
 
 @RestController
@@ -81,7 +81,8 @@ public class BookingController {
 		}
 		return bookingService.getBooking(id).get();
 	}
-	
+
+
 	// top 3 latest bookings (last 3 bookings made)
 	@GetMapping("/latestBookings")
 	public @ResponseBody List<Booking> getLatestBookings(){
@@ -139,13 +140,7 @@ public class BookingController {
 	
 	// update booking
 	@PutMapping()
-
 	public @ResponseBody Booking updateBooking(@ValidJson(BOOKINGSCHEMA) Booking b) {
-		Optional<Booking> book = bookingService.getBooking(b.getId());
-		if(!book.isPresent())
-			throw new ExceptionNotFound("Booking with id " + b.getId() + " doesn't exist");
-		
-
 		try {
 			verifyBookingId(b.getId());
 			verifyBookingContent(b);
@@ -177,6 +172,7 @@ public class BookingController {
 	// verify content before adding a new booking
 	public void verifyBookingContent(Booking b) throws ExceptionNotFound {
 
+		double cost = 0;
 		Room room = b.getRoom();
 		Optional<Room> r = roomService.getRoom(room.getId());
 		if(!r.isPresent())
@@ -210,6 +206,9 @@ public class BookingController {
 			Optional<Equipment> e = equipmentService.getEquipment(equipment.getId());
 			if(!e.isPresent())
 				throw new ExceptionNotFound("Equipment doesn't exist");
+			if(ed.getUnits() * e.get().getPrice() != ed.getPrice())
+				throw new ExceptionNotFound("Given & Expected price for equipment_id " + equipment.getId() + " don't match." + "Expected price = " + ed.getUnits() * e.get().getPrice() +  ". Given price = "  + ed.getPrice() );
+			cost += ed.getPrice();
 		}
 		
 		List<FoodBooking> foodBookings = b.getFoods();
@@ -218,11 +217,12 @@ public class BookingController {
 			Optional<Food> f = foodService.getFood(food.getId());
 			if(!f.isPresent())
 				throw new ExceptionNotFound("Food doesn't exist");
+			if(fb.getQuantity() * f.get().getFoodPrice() != fb.getAmount())
+				throw new ExceptionNotFound("Given & Expected price for food_id " + food.getId() + " don't match." + "Expected price = " + fb.getQuantity() * f.get().getFoodPrice() +  ". Given price = "  + fb.getAmount() );
+			cost += fb.getAmount();
 		}
 		
-		// layout exists for that room
 		// totalCost >= eqpcost + foodcost + roomcost
-		// initial status of booking
 		
 		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		Date today = new Date();
@@ -232,10 +232,9 @@ public class BookingController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		if(b.getSchedule().getBookedFor().compareTo(todayWithZeroTime) < 0)
-			throw new ExceptionNotFound("Booking date cannot be an old date ");
-		
-		
+		if(b.getSchedule().getBookedFor().compareTo(LocalDate.now()) < 0)
+			throw new ExceptionNotFound("Booking date cannot be an old date");
+
 		if(b.getAttendees() > r.get().getCapacity())
 			throw new ExceptionNotFound("Attendees cannot exceed Room's capacity");
 	
