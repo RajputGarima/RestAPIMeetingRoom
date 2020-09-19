@@ -88,10 +88,14 @@ public class RoomService {
 		oldr.setTitle(newr.getTitle());
 
 		oldr.setPricePerDay(newr.getPricePerDay());
+		
+		oldr.setPricePerHour(newr.getPricePerHour());
+		
+		oldr.setDescription(newr.getDescription());
+		
+		oldr.setBookingType(newr.getBookingType());
 
 		oldr.setCapacity(newr.getCapacity());
-
-		oldr.setBookings(newr.getBookings());
 
 		oldr.setImageUrl(newr.getImageUrl());
 
@@ -115,6 +119,7 @@ public class RoomService {
 		}
 		Room room = null;
 		try {
+			System.out.println(oldr.toString());
 			room = roomDao.save(oldr);
 		}catch(DataIntegrityViolationException exp) {
 			// unique constraint

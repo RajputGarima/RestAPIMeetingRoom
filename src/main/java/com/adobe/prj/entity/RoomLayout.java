@@ -54,6 +54,21 @@ public class RoomLayout {
 	@JsonSerialize(using = CustomRoomSerializer.class)
 	List<Room> rooms = new ArrayList<>();
 
+	public RoomLayout(int id, @NotNull(message = "Room Layout Name cannot be NULL") String title, String imageUrl,
+			List<Room> rooms) {
+		this.id = id;
+		this.title = title;
+		this.imageUrl = imageUrl;
+		this.rooms = rooms;
+	}
+		
+	public RoomLayout(int id, @NotNull(message = "Room Layout Name cannot be NULL") String title, String imageUrl) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.imageUrl = imageUrl;
+	}
+
 	public RoomLayout() {
 		super();
 	}

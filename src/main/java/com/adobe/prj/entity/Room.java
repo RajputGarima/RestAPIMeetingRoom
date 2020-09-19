@@ -22,11 +22,15 @@ import javax.validation.constraints.NotNull;
 
 import com.adobe.prj.service.CustomLayoutSerializer;
 import com.adobe.prj.util.RoomBookingType;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
 @Table(name="room")
 @Entity
+@JsonIgnoreProperties(value = {"bookings"}, allowGetters = true)
 public class Room {
 	
 	@Id
@@ -47,7 +51,10 @@ public class Room {
 	@Min(1)
 	private double pricePerHour;
 	
-	private int bookings;
+	@Column(columnDefinition = "integer default 0")
+	@JsonProperty("bookings")
+	private long bookings;
+	
 	private String imageUrl;
 	private boolean status;
 	private String description;
@@ -72,7 +79,24 @@ public class Room {
 	public Room() {
 		super();
 	}
-
+	
+	public Room(int id, @NotNull(message = "Room Name cannot be NULL") String title, @Min(1) double pricePerDay,
+			@Min(1) int capacity, @Min(1) double pricePerHour, long bookings, String imageUrl, boolean status,
+			String description, RoomBookingType bookingType, List<RoomLayout> roomLayouts) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.pricePerDay = pricePerDay;
+		this.capacity = capacity;
+		this.pricePerHour = pricePerHour;
+		this.bookings = bookings;
+		this.imageUrl = imageUrl;
+		this.status = status;
+		this.description = description;
+		this.bookingType = bookingType;
+		this.roomLayouts = roomLayouts;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -113,11 +137,11 @@ public class Room {
 		this.capacity = capacity;
 	}
 
-	public int getBookings() {
+	public long getBookings() {
 		return bookings;
 	}
-
-	public void setBookings(int bookings) {
+	
+	public void setBookings(long bookings) {
 		this.bookings = bookings;
 	}
 

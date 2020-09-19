@@ -95,7 +95,7 @@ public class RoomController {
 		return service.updateRoom(id, r);
 	}
 	
-	// update status of a room
+	// update status of a room: ACTIVE/INACTIVE
 	@PutMapping("/{id}/{status}")
 	public @ResponseBody UpdateStatus updateRoomStatus(@PathVariable("id") int id, @PathVariable("status") String status) {				
 		Optional<Room> room = service.getRoom(id);
