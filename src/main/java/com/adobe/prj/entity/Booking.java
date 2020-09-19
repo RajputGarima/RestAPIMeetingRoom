@@ -25,7 +25,7 @@ import javax.persistence.Table;
 
 import com.adobe.prj.util.BookingSchedule;
 import com.adobe.prj.util.BookingStatus;
-
+import com.adobe.prj.util.BookingType;
 import com.adobe.prj.util.BookingStatus;
 
 
@@ -45,7 +45,7 @@ public class Booking{
 	private int attendees;
 	private double totalCost;
 	private BookingStatus status;
-
+	private BookingType bookingType;
 	
 	@ManyToOne
 	@JoinColumn(name="room_fk")
@@ -158,6 +158,16 @@ public class Booking{
 	public void setStatus(BookingStatus status) {
 		this.status = status;
 
+	}
+
+	@Enumerated(EnumType.ORDINAL)
+	public BookingType getBookingType() {
+		return bookingType;
+	}
+
+
+	public void setBookingType(BookingType bookingType) {
+		this.bookingType = bookingType;
 	}	
 	
 }

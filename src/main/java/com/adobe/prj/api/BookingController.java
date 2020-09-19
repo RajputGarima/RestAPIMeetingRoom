@@ -34,6 +34,7 @@ import com.adobe.prj.service.RoomLayoutService;
 import com.adobe.prj.service.RoomService;
 import com.adobe.prj.service.UserService;
 import com.adobe.prj.util.BookingStatus;
+import com.adobe.prj.util.BookingType;
 import com.adobe.prj.validation.ValidJson;
 import static com.adobe.prj.validation.SchemaLocations.BOOKINGSCHEMA;
 
@@ -163,11 +164,29 @@ public class BookingController {
 	
 	// verify content before adding a new booking
 	public void verifyBookingContent(Booking b) throws ExceptionNotFound {
+
 		Room room = b.getRoom();
 		Optional<Room> r = roomService.getRoom(room.getId());
 		if(!r.isPresent())
 			throw new ExceptionNotFound("Room doesn't exist");
-		
+//	Checking the booking type
+		Room rr = r.get();
+		if(b.getBookingType() == BookingType.HOURLY) {
+			if(!rr.getBookingType().isHourly()) {
+				throw new ExceptionNotFound("Hourly booking for room id " + rr.getId() + " is not allowed" );
+			}
+			
+		}else if(b.getBookingType() == BookingType.HALFDAY) {
+			if(!rr.getBookingType().isHalfDay()) {
+				throw new ExceptionNotFound("Half Day booking for room id " + rr.getId() + " is not allowed" );
+			}
+			
+		}else if(b.getBookingType() == BookingType.FULLDAY) {
+			if(!rr.getBookingType().isFullDay()) {
+				throw new ExceptionNotFound("Full Day booking for room id " + rr.getId() + " is not allowed" );
+			}
+		}
+
 		RoomLayout layout = b.getRoomLayout();
 		Optional<RoomLayout> rl = layoutService.getRoomLayout(layout.getId());
 		if(!rl.isPresent())

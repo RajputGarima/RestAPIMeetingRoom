@@ -20,7 +20,7 @@
                     {
                         "type": "object",
                         "required": [
-                            "roomId"
+                            "id"
                         ],
                         "properties": {
                             "roomId": {
