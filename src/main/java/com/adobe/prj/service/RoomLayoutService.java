@@ -101,7 +101,9 @@ public class RoomLayoutService {
             roomLayoutDao.deleteById(id);
             if(roomLayoutDao.findById(id).isPresent())
                 return ResponseEntity.unprocessableEntity().body("Failed to Delete the record");
-            else return ResponseEntity.ok().body("Successfully deleted the record");
-        } else return ResponseEntity.badRequest().body("Cannot find the record");
+            else {
+            	return ResponseEntity.ok().body("Successfully deleted the record");
+            }	
+            } else return ResponseEntity.badRequest().body("Cannot find the record");
     }
 }

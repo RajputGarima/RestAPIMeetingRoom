@@ -29,6 +29,8 @@ import com.adobe.prj.entity.User;
 import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.service.RoomLayoutService;
 import com.adobe.prj.service.RoomService;
+import com.adobe.prj.util.BookingStatus;
+import com.adobe.prj.util.UpdateStatus;
 import com.adobe.prj.validation.ValidJson;
 import static com.adobe.prj.validation.SchemaLocations.ROOMSCHEMA;;
 
@@ -97,6 +99,14 @@ public class RoomController {
 			throw new ExceptionNotFound(e.getMessage());
 		}
 		return service.updateRoom(id, r);
+	}
+	
+	@PutMapping("/{id}/{status}")
+	public @ResponseBody UpdateStatus updateRoomStatus(@PathVariable("id") int id, @PathVariable("status") String status) {				
+		Optional<Room> room = service.getRoom(id);
+		if (!room.isPresent())
+			throw new ExceptionNotFound("Room with id " + id + " doesn't exist");
+		return service.updateRoomStatus(room.get(),status);
 	}
 	
 	public void verifyRoomContent(Room r) throws ExceptionNotFound {

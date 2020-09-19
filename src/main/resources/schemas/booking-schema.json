@@ -10,7 +10,8 @@
         "user",
         "foods",
         "equipDetails",
-        "status"
+        "status",
+        "bookingType"
     ],
     "properties": {
         "attendees": {
