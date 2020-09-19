@@ -177,7 +177,8 @@ public class BookingController {
 		Optional<Room> r = roomService.getRoom(room.getId());
 		if(!r.isPresent())
 			throw new ExceptionNotFound("Room doesn't exist");
-//	Checking the booking type
+		
+		//	Checking the booking type
 		Room rr = r.get();
 		if(b.getBookingType() == BookingType.HOURLY) {
 			if(!rr.getBookingType().isHourly()) {
@@ -221,6 +222,20 @@ public class BookingController {
 				throw new ExceptionNotFound("Given & Expected price for food_id " + food.getId() + " don't match." + "Expected price = " + fb.getQuantity() * f.get().getFoodPrice() +  ". Given price = "  + fb.getAmount() );
 			cost += fb.getAmount();
 		}
+		
+		switch(b.getBookingType()) {
+			case FULLDAY:
+				cost += r.get().getPricePerDay();
+				break;
+			case HALFDAY:
+				cost += r.get().getPricePerDay() / 2;
+				break;
+			case HOURLY:
+				cost += r.get().getPricePerHour() * 15;
+		}
+		
+		if(b.getTotalCost() < cost)
+			throw new ExceptionNotFound("Total cost cannot be less than Room + Equipments + Refreshments cost");
 		
 		if(b.getSchedule().getBookedFor().compareTo(LocalDate.now()) < 0)
 			throw new ExceptionNotFound("Booking date cannot be an old date");

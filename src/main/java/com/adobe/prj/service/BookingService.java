@@ -74,7 +74,7 @@ public class BookingService {
 			}
 		}
 		if(flag)
-			throw new ExceptionNotFound("Selected layout is not applicable to the selected room");
+			throw new CustomException("Selected layout is not applicable to the selected room");
 //			return bookingDao.save(b);
 
 //		b.setRoom(roomDao.findById(r.getId()).get());
