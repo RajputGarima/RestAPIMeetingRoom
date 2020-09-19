@@ -30,6 +30,7 @@ import com.adobe.prj.entity.RoomLayout;
 import com.adobe.prj.exception.CustomException;
 
 import com.adobe.prj.exception.ExceptionNotFound;
+import com.adobe.prj.util.UpdateStatus;
 import com.adobe.prj.validation.ValidJson;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -68,9 +69,6 @@ public class RoomService {
 			RoomLayout rl = roomLayoutDao.findById(l.getId()).get();
 			newRoomLayouts.add(rl);
 		}
-
-		
-		
 
 		if(newRoomLayouts.contains(roomLayoutDao.findByTitle(DEFAULT_LAYOUT))) {
 			r.setRoomLayouts(newRoomLayouts);
@@ -174,4 +172,28 @@ public class RoomService {
 	public Long getFutureBookingsById(int id) {
 		return bookingDao.getFutureBookingsCountByRoomId(id, LocalDate.now());
 	}
+	
+	public UpdateStatus updateRoomStatus(Room r, String status) {
+		UpdateStatus u = new UpdateStatus();
+		if(status.matches("ACTIVE")) {
+			try {
+				r.setStatus(true);
+				u.setStatus(true);
+				roomDao.save(r);
+			}catch(Exception exp) {
+			        throw new CustomException("Couldn't update Status");
+			}
+		}else if(status.matches("INACTIVE")) {
+			try {
+				r.setStatus(false);
+				u.setStatus(false);
+				roomDao.save(r);
+			}catch(Exception exp) {
+			        throw new CustomException("Couldn't update Status");
+			}
+		}
+		u.setId(r.getId());
+		return u;
+	}
+	
 }
