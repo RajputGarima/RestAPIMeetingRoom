@@ -37,9 +37,11 @@ public class EquipmentController {
 	// equipment with id = 'id'
 	@GetMapping("/{id}")
 	public @ResponseBody Equipment getEquipment(@PathVariable("id") int id) {
-		Optional<Equipment> e = equipmentService.getEquipment(id);
-		if(!e.isPresent())
-			throw new ExceptionNotFound("Equipment with id " + id + " doesn't exist");
+		try {
+			verifyEquipmentId(id);
+		}catch(Exception e) {
+			throw new ExceptionNotFound(e.getMessage());
+		}
 		return equipmentService.getEquipment(id).get();
 	}
 	
@@ -52,10 +54,12 @@ public class EquipmentController {
 	// delete an equipment
 	@DeleteMapping("/{id}")
     public @ResponseBody void deletEquipment(@PathVariable int id) {
-		Optional<Equipment> e = equipmentService.getEquipment(id);
-		if(!e.isPresent())
-			throw new ExceptionNotFound("Equipment with id " + id + " doesn't exist");
-		Equipment equipment = e.get();
+		try {
+			verifyEquipmentId(id);
+		}catch(Exception e) {
+			throw new ExceptionNotFound(e.getMessage());
+		}
+		Equipment equipment = equipmentService.getEquipment(id).get();
         equipmentService.deleteEquipment(equipment);
     }
 	
@@ -66,7 +70,13 @@ public class EquipmentController {
 		if(!e.isPresent())
 			throw new ExceptionNotFound("Equipment with id " + eqp.getId() + " doesn't exist");
 		return equipmentService.addEquipment(eqp);
+
 	}
 	
+	public void verifyEquipmentId(int id) {
+		Optional<Equipment> e = equipmentService.getEquipment(id);
+		if(!e.isPresent())
+			throw new ExceptionNotFound("Equipment with id " + id + " doesn't exist");
+	}
 
 }

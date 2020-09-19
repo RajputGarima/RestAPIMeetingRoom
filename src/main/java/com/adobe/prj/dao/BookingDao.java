@@ -18,8 +18,8 @@ public interface BookingDao extends JpaRepository<Booking, Integer>{
 	@Query(value = "select * from booking where room_fk= :pr", nativeQuery = true)
 	public List<Booking> getByRoomId(@Param("pr") int id);
 	
-	@Query(value = "select * from booking where booked_for >= :pr order by booked_for limit 3", nativeQuery = true)
-	public List<Booking> getUpcomingBookings(@Param("pr") LocalDate date);
+	@Query(value = "select * from booking order by id desc limit 3", nativeQuery = true)
+	public List<Booking> getLatestBookings();
 
 	@Query(value = "select * from booking where booked_for = :pr order by booked_for limit 2", nativeQuery = true)
 	public List<Booking> getBookingByDate(@Param("pr") String date);
@@ -33,7 +33,8 @@ public interface BookingDao extends JpaRepository<Booking, Integer>{
 	@Query(value = "select time_slots from booking where room_fk = :id and booked_for = :date", nativeQuery = true)
 	List<Integer> getTimeSlotsById(@Param("id") int id, @Param("date") String date);
 
-	@Query(value = "select count(*) from booking where room_fk = :id and booked_for >= :date", nativeQuery = true)
+	@Query(value = "select count(*) from booking where room_fk = :id and booked_for >= :date and status = 1", nativeQuery = true)
 	public Long getFutureBookingsCountByRoomId(@Param("id") int id, @Param("date") LocalDate date);
+	
 
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.EquipmentDao;
 import com.adobe.prj.entity.Equipment;
+import com.adobe.prj.exception.CustomException;
 import com.adobe.prj.exception.ExceptionNotFound;
 
 @Service
@@ -35,11 +36,11 @@ public class EquipmentService {
 //		        if (cause instanceof SQLException) {
 //		            throw new ExceptionNotFound("constraint violatoin " + cause.getMessage());
 //		        }	
-		        throw new ExceptionNotFound("integrity violation SQL " + exp.getMostSpecificCause());
+		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
 		}
 		catch(javax.validation.ConstraintViolationException exp) {
 			// @Min, @NotNULL
-			throw new ExceptionNotFound("constraint violation - name -  " + exp.getConstraintViolations() );
+			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
 		}
 		return eqp;
 	}

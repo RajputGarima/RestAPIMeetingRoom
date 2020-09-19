@@ -54,7 +54,7 @@
             }
         },
         "totalCost": {
-            "type": "integer"
+            "type": "number"
         },
         "user": {
             "type": "object",
@@ -180,7 +180,7 @@
                                 "type": "integer"
                             },
                             "price": {
-                                "type": "integer"
+                                "type": "number"
                             }
                         }
                     }

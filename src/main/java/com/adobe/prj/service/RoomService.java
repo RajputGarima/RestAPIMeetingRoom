@@ -13,6 +13,7 @@ import org.hibernate.JDBCException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLErrorCodes;
@@ -22,12 +23,17 @@ import com.adobe.prj.dao.BookingDao;
 import com.adobe.prj.dao.RoomDao;
 import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.Booking;
+import com.adobe.prj.entity.Food;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
+
+import com.adobe.prj.exception.CustomException;
+
 import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.validation.ValidJson;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 @Service
@@ -62,6 +68,10 @@ public class RoomService {
 			RoomLayout rl = roomLayoutDao.findById(l.getId()).get();
 			newRoomLayouts.add(rl);
 		}
+
+		
+		
+
 		if(newRoomLayouts.contains(roomLayoutDao.findByTitle(DEFAULT_LAYOUT))) {
 			r.setRoomLayouts(newRoomLayouts);
 		}else {
@@ -69,7 +79,19 @@ public class RoomService {
 			r.setRoomLayouts(newRoomLayouts);
 		}
 
-		return roomDao.save(r);
+		Room room = null;
+		try {
+			room = roomDao.save(r);
+		}catch(DataIntegrityViolationException exp) {
+			// unique constraint
+		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
+		}
+		catch(javax.validation.ConstraintViolationException exp) {
+			// @Min, @NotNULL
+			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
+		}
+		return room;
+
 	}
 	
 	@Transactional
@@ -97,13 +119,33 @@ public class RoomService {
 		if(newRoomLayouts.contains(roomLayoutDao.findByTitle(DEFAULT_LAYOUT))) {
 
 			oldr.setRoomLayouts(newRoomLayouts);
+
+//			newr.setRoomLayouts(newRoomLayouts);
+//		}
+			
+				
+
+//		return roomDao.save(newr);
+
 		}else {
 //			A message in the response body is to be added stating that
 //			default layout cannot be removed
 			newRoomLayouts.add(roomLayoutDao.findByTitle(DEFAULT_LAYOUT));
 			oldr.setRoomLayouts(newRoomLayouts);
 		}
-		return roomDao.save(oldr);
+		Room room = null;
+		try {
+			room = roomDao.save(oldr);
+		}catch(DataIntegrityViolationException exp) {
+			// unique constraint
+		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
+		}
+		catch(javax.validation.ConstraintViolationException exp) {
+			// @Min, @NotNULL
+			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
+		}
+		return room;
+
 	}
 	
 	@Transactional

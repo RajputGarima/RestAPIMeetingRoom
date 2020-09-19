@@ -3,12 +3,14 @@ package com.adobe.prj.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.BookingDao;
 import com.adobe.prj.dao.UserDao;
 import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.User;
+import com.adobe.prj.exception.CustomException;
 
 @Service
 public class UserService {
@@ -28,8 +30,17 @@ public class UserService {
 	}
 	
 	public User addUser(User b) {
-		User u = userDao.save(b);
-
+		User u = null;
+		try {
+			u = userDao.save(b);
+		}catch(DataIntegrityViolationException exp) {
+			// unique constraint
+		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
+		}
+		catch(javax.validation.ConstraintViolationException exp) {
+			// @Min, @NotNULL
+			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
+		}
 //		int userId = u.getUserId();
 
 

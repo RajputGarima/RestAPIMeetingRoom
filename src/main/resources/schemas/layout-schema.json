@@ -23,7 +23,7 @@
                             "id"
                         ],
                         "properties": {
-                            "roomId": {
+                            "id": {
                                 "type": "integer"
                             }
                         }

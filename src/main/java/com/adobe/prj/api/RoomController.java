@@ -56,11 +56,13 @@ public class RoomController {
 		return room.get();
 	}
 	
+	//booking timeslots for the the room id on the given date(booked_for)
 	@GetMapping("/{id}/{date}")
 	public ResponseEntity<List<Integer>> getTimeSlotsById(@PathVariable("id") int id, @PathVariable("date") String date){
 		return new ResponseEntity<>(service.getTimeSlotsById(id, date), HttpStatus.OK);
 	}
 	
+	//number of confirmed future bookings for the room id
 	@GetMapping("/futureBookings/{id}")
 	public ResponseEntity<Long> getFutureBookingsById(@PathVariable("id") int id){
 		return new ResponseEntity<>(service.getFutureBookingsById(id), HttpStatus.OK);
