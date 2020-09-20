@@ -184,5 +184,9 @@ public class RoomService {
 		u.setId(r.getId());
 		return u;
 	}
+
+	public List<Room> getRoomsForUser() {
+		return roomDao.getRoomsForUser();
+	}
 	
 }

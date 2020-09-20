@@ -251,8 +251,7 @@ public class BookingController {
 				break;
 			case HOURLY:
 				cost += r.get().getPricePerHour() * BookingValidation.setBits(str);
-		}
-		
+		}		
 		if(b.getTotalCost() < cost)
 			throw new ExceptionNotFound("Total cost cannot be less than Room + Equipments + Refreshments cost");
 	}
