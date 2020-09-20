@@ -114,5 +114,6 @@ public class BookingService {
 	public Long getBookingsCountMadeToday() {
 		return new Long(bookingDao.getBookingsCountMadeToday(LocalDate.now()));
 	}
+
 	
 }
