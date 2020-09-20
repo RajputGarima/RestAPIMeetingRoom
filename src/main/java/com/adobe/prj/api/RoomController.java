@@ -60,7 +60,7 @@ public class RoomController {
 	
 	//booking timeSlots for the the room id on the given date(booked_for)
 	@GetMapping("/{id}/{date}")
-	public ResponseEntity<List<Integer>> getTimeSlotsById(@PathVariable("id") int id, @PathVariable("date") String date){
+	public ResponseEntity<List<String>> getTimeSlotsById(@PathVariable("id") int id, @PathVariable("date") String date){
 		return new ResponseEntity<>(service.getTimeSlotsById(id, date), HttpStatus.OK);
 	}
 	

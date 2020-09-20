@@ -150,7 +150,7 @@ public class RoomService {
 			return ResponseEntity.unprocessableEntity().body("Cannot find the record");	
 	}
 
-	public List<Integer> getTimeSlotsById(int id, String date) {
+	public List<String> getTimeSlotsById(int id, String date) {
 		return bookingDao.getTimeSlotsById(id, date);
 	}
 

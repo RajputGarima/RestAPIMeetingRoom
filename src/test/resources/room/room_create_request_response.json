@@ -1,0 +1,44 @@
+[
+  {
+    "request": {
+      "title": "Small Conference Room",
+      "pricePerDay": 5000,
+      "capacity": 10,
+      "pricePerHour": 1000,
+      "bookings": 10,
+      "imageUrl": "api/image",
+      "status": false,
+      "description": "Small Conference Room",
+      "bookingType": {
+            "hourly": true,
+            "halfDay": false,
+            "fullDay": true
+      },
+      "roomLayouts": []
+  	},
+    "response": {
+      "title": "Small Conference Room",
+      "pricePerDay": 5000,
+      "capacity": 10,
+      "pricePerHour": 1000,
+      "bookings": 10,
+      "imageUrl": "api/image",
+      "status": false,
+      "description": "Small Conference Room",
+      "bookingType": {
+            "hourly": true,
+            "halfDay": false,
+            "fullDay": true
+      },
+      "roomLayouts": [
+         {
+            "id": 1,
+            "title": "Classroom",
+            "imageUrl": "classroom_image",
+            "rooms": null
+        }
+      ]
+    }
+
+  }
+]
