@@ -50,7 +50,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable()
 				.authorizeRequests().antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll().
-						antMatchers(HttpMethod.GET, ROOM_URL).permitAll().
+						antMatchers(HttpMethod.GET, USER_ROOM_URL).permitAll().
 						antMatchers(HttpMethod.GET, EQUIP_URL).permitAll().
 						antMatchers(HttpMethod.GET, FOOD_URL ).permitAll().
 						antMatchers(HttpMethod.GET, LAYOUT_URL ).permitAll().

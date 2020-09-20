@@ -2,7 +2,6 @@ package com.adobe.prj.api;
 
 import static com.adobe.prj.validation.SchemaLocations.BOOKINGSCHEMA;
 
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +36,7 @@ import com.adobe.prj.service.UserService;
 import com.adobe.prj.util.BookingStatus;
 import com.adobe.prj.util.BookingType;
 import com.adobe.prj.validation.ValidJson;
+import com.adobe.prj.validation.BookingValidation;
 
 
 @RestController
@@ -60,8 +60,7 @@ public class BookingController {
 	
 	@Autowired
 	private FoodService foodService;
-	
-	
+
 	// fetch all bookings
 	@GetMapping()
     public @ResponseBody List<Booking> getBookings() {
@@ -115,7 +114,7 @@ public class BookingController {
 		try {
 			verifyBookingContent(b);
 		}catch(Exception e) {
-			throw new ExceptionNotFound(e.getMessage());
+			throw new ExceptionNotFound(e.getLocalizedMessage());
 		}
 		User user = userService.addUser(b.getUser());
 		b.setUser(user);
@@ -163,15 +162,35 @@ public class BookingController {
 		return booking;
 	}
 	
+	// verify booking Id
+	public void verifyBookingId(int id) {
+		Optional<Booking> b = bookingService.getBooking(id);
+		if(!b.isPresent())
+			throw new ExceptionNotFound("Booking with id " + id + " doesn't exist");	
+	}
+	
 	// verify content before adding a new booking
-	public void verifyBookingContent(Booking b) throws ExceptionNotFound {
-		
+	public void verifyBookingContent(Booking b){
 		// room check
 		double cost = 0;
 		Room room = b.getRoom();
 		Optional<Room> r = roomService.getRoom(room.getId());
 		if(!r.isPresent())
 			throw new ExceptionNotFound("Room doesn't exist");
+		
+		// layout check
+		RoomLayout layout = b.getRoomLayout();
+		Optional<RoomLayout> rl = layoutService.getRoomLayout(layout.getId());
+		if(!rl.isPresent())
+			throw new ExceptionNotFound("Layout doesn't exist");
+		
+		// booking date check
+		if(b.getSchedule().getBookedFor().compareTo(LocalDate.now()) < 0)
+			throw new ExceptionNotFound("Booking date cannot be an old date");
+
+		// no of attendees check
+		if(b.getAttendees() > r.get().getCapacity())
+			throw new ExceptionNotFound("Attendees cannot exceed Room's capacity");
 		
 		//	booking type check
 		Room rr = r.get();
@@ -190,12 +209,13 @@ public class BookingController {
 				throw new ExceptionNotFound("Full Day booking for room id " + rr.getId() + " is not allowed" );
 			}
 		}
-
-		// layout check
-		RoomLayout layout = b.getRoomLayout();
-		Optional<RoomLayout> rl = layoutService.getRoomLayout(layout.getId());
-		if(!rl.isPresent())
-			throw new ExceptionNotFound("Layout doesn't exist");
+		
+		// time slots check
+		String str = b.getSchedule().getTimeSlots();
+		if(str.length() != 15)
+			throw new ExceptionNotFound("Incorrect time slots length");
+		if(!BookingValidation.isBinaryString(str))
+			throw new ExceptionNotFound("Incorrect format for time slots");
 		
 		// equipments & their cost check
 		List<EquipmentDetail> equipDetails = b.getEquipDetails();
@@ -230,26 +250,10 @@ public class BookingController {
 				cost += r.get().getPricePerDay() / 2;
 				break;
 			case HOURLY:
-				cost += r.get().getPricePerHour() * 15;
-		}
-		
+				cost += r.get().getPricePerHour() * BookingValidation.setBits(str);
+		}		
 		if(b.getTotalCost() < cost)
 			throw new ExceptionNotFound("Total cost cannot be less than Room + Equipments + Refreshments cost");
-		
-		// booking date check
-		if(b.getSchedule().getBookedFor().compareTo(LocalDate.now()) < 0)
-			throw new ExceptionNotFound("Booking date cannot be an old date");
-
-		// no of attendees check
-		if(b.getAttendees() > r.get().getCapacity())
-			throw new ExceptionNotFound("Attendees cannot exceed Room's capacity");
-	
-	}
-	
-	public void verifyBookingId(int id) {
-		Optional<Booking> b = bookingService.getBooking(id);
-		if(!b.isPresent())
-			throw new ExceptionNotFound("Booking with id " + id + " doesn't exist");	
 	}
 	
 }

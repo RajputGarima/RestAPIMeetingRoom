@@ -40,6 +40,13 @@ public class RoomController {
 		return service.getRooms();
 	}
 	
+	//get rooms for user
+	//api/rooms/user
+	@GetMapping("/user")
+	public @ResponseBody List<Room> getRoomsForUser() {
+		return service.getRoomsForUser();
+	}
+	
 	// room with id = 'id'
 	@GetMapping("/{id}")
 	public @ResponseBody Room getRoom(@PathVariable("id") int id) {	

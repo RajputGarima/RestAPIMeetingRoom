@@ -11,5 +11,6 @@ public class SecurityConstants {
     public static final String FOOD_URL = "/api/foods";
     public static final String LAYOUT_URL = "/api/roomlayouts";
     public static final String BOOK_URL = "/api/bookings";
+    public static final String USER_ROOM_URL = "/api/rooms/user";
  
 }

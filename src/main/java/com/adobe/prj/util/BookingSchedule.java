@@ -13,14 +13,10 @@ public class BookingSchedule {
 	private LocalDate bookedFor;
 	
 	@NotNull(message = "Time Slots cannot be NULL")
-	private int timeSlots;
+	private String timeSlots;
 	
 	public BookingSchedule() {
 		super();
-	}
-
-	public int getTimeSlots() {
-		return timeSlots;
 	}
 
 	public LocalDate getBookedOn() {
@@ -39,7 +35,11 @@ public class BookingSchedule {
 		this.bookedFor = bookedFor;
 	}
 
-	public void setTimeSlots(int timeSlots) {
+	public String getTimeSlots() {
+		return timeSlots;
+	}
+
+	public void setTimeSlots(String timeSlots) {
 		this.timeSlots = timeSlots;
 	}
 	
