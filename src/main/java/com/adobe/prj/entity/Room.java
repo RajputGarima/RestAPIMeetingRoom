@@ -42,13 +42,13 @@ public class Room {
 	@NotNull(message = "Room Name cannot be NULL")
 	private String title;
 	
-	@Min(1)
+	@Min(0)
 	private double pricePerDay;
 	
 	@Min(1)
 	private int capacity;
 	
-	@Min(1)
+	@Min(0)
 	private double pricePerHour;
 	
 	@Column(columnDefinition = "integer default 0")
