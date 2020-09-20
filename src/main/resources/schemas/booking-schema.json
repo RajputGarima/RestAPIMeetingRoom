@@ -50,7 +50,7 @@
                     "type": "string"
                 },
                 "timeSlots": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },
