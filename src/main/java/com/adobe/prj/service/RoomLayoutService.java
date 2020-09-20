@@ -64,8 +64,6 @@ public class RoomLayoutService {
 			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
 		}
 		return roomLayout;
-		
-
 	}
 	
 	@Transactional
@@ -93,9 +91,8 @@ public class RoomLayoutService {
 			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
 		}
 		return roomLayout;
-		
-
 	}
+	
 	@Transactional
     public ResponseEntity<Object> deleteRoomLayout(int id) {
 		RoomLayout rl = roomLayoutDao.findById(id).get();
@@ -114,9 +111,11 @@ public class RoomLayoutService {
             roomLayoutDao.deleteById(id);
             if(roomLayoutDao.findById(id).isPresent())
                 return ResponseEntity.unprocessableEntity().body("Failed to Delete the record");
-            else {
+            else
             	return ResponseEntity.ok().body("Successfully deleted the record");
-            }	
-            } else return ResponseEntity.badRequest().body("Cannot find the record");
+        }
+        else 
+        	return ResponseEntity.badRequest().body("Cannot find the record");
     }
+	
 }

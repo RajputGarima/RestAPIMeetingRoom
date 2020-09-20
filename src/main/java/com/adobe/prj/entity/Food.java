@@ -12,13 +12,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-
-
-
 @Table(name="food")
 @Entity
 public class Food {
@@ -27,7 +20,6 @@ public class Food {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-
 	@Column(unique = true)
 	@NotNull(message = "Food Name cannot be NULL")
 	private String foodName;
@@ -35,9 +27,8 @@ public class Food {
 	@Min(1)
 	private double foodPrice;
 	
-	
 	public Food() {
-
+		super();
 	}
 
 	public int getId() {
@@ -63,6 +54,5 @@ public class Food {
 	public void setFoodPrice(double foodPrice) {
 		this.foodPrice = foodPrice;
 	}
-	
 	
 }

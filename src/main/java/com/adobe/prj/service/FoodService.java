@@ -8,10 +8,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.FoodDao;
-import com.adobe.prj.entity.Equipment;
 import com.adobe.prj.entity.Food;
 import com.adobe.prj.exception.CustomException;
-import com.adobe.prj.exception.ExceptionNotFound;
+
 
 @Service
 public class FoodService {

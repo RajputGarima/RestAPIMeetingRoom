@@ -2,11 +2,8 @@ package com.adobe.prj.api;
 
 import static com.adobe.prj.validation.SchemaLocations.BOOKINGSCHEMA;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +67,7 @@ public class BookingController {
     public @ResponseBody List<Booking> getBookings() {
         return bookingService.getBookings();
     }
-	
+		
 	// booking with id = 'id'
 	@GetMapping("/{id}")
 	public @ResponseBody Booking getBooking(@PathVariable("id") int id) {
@@ -81,9 +78,8 @@ public class BookingController {
 		}
 		return bookingService.getBooking(id).get();
 	}
-
-
-	// top 3 latest bookings (last 3 bookings made)
+	
+	// top 3 recent bookings (last 3 bookings made)
 	@GetMapping("/latestBookings")
 	public @ResponseBody List<Booking> getLatestBookings(){
 		return bookingService.getLatestBookings();
@@ -149,12 +145,10 @@ public class BookingController {
 		}
 		User user = userService.addUser(b.getUser());
 		b.setUser(user);
-//		b.setUser(b.getUser());
 		return bookingService.addBooking(b);
 	}
 	
-	// update status of booking to say, 'CONFIRMED'
-	// http://localhost:8080/api/bookings/2/CONFIRMED
+	// update status of booking: PENDING/CONFIRMED/CANCELLED
 	@PutMapping("/{id}/{status}")
 	public @ResponseBody Booking updateBookingStatus(@PathVariable("id") int id, @PathVariable("status") BookingStatus status) {				
 		try {
@@ -171,14 +165,15 @@ public class BookingController {
 	
 	// verify content before adding a new booking
 	public void verifyBookingContent(Booking b) throws ExceptionNotFound {
-
+		
+		// room check
 		double cost = 0;
 		Room room = b.getRoom();
 		Optional<Room> r = roomService.getRoom(room.getId());
 		if(!r.isPresent())
 			throw new ExceptionNotFound("Room doesn't exist");
 		
-		//	Checking the booking type
+		//	booking type check
 		Room rr = r.get();
 		if(b.getBookingType() == BookingType.HOURLY) {
 			if(!rr.getBookingType().isHourly()) {
@@ -196,11 +191,13 @@ public class BookingController {
 			}
 		}
 
+		// layout check
 		RoomLayout layout = b.getRoomLayout();
 		Optional<RoomLayout> rl = layoutService.getRoomLayout(layout.getId());
 		if(!rl.isPresent())
 			throw new ExceptionNotFound("Layout doesn't exist");
 		
+		// equipments & their cost check
 		List<EquipmentDetail> equipDetails = b.getEquipDetails();
 		for(EquipmentDetail ed: equipDetails) {
 			Equipment equipment = ed.getEquipment();
@@ -212,6 +209,7 @@ public class BookingController {
 			cost += ed.getPrice();
 		}
 		
+		// food & their cost check
 		List<FoodBooking> foodBookings = b.getFoods();
 		for(FoodBooking fb: foodBookings) {
 			Food food = fb.getFood();
@@ -223,6 +221,7 @@ public class BookingController {
 			cost += fb.getAmount();
 		}
 		
+		// room cost check
 		switch(b.getBookingType()) {
 			case FULLDAY:
 				cost += r.get().getPricePerDay();
@@ -237,9 +236,11 @@ public class BookingController {
 		if(b.getTotalCost() < cost)
 			throw new ExceptionNotFound("Total cost cannot be less than Room + Equipments + Refreshments cost");
 		
+		// booking date check
 		if(b.getSchedule().getBookedFor().compareTo(LocalDate.now()) < 0)
 			throw new ExceptionNotFound("Booking date cannot be an old date");
 
+		// no of attendees check
 		if(b.getAttendees() > r.get().getCapacity())
 			throw new ExceptionNotFound("Attendees cannot exceed Room's capacity");
 	

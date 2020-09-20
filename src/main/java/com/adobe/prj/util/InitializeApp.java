@@ -27,15 +27,14 @@ public class InitializeApp {
 	@PostConstruct
 	public void init() {
 		
-		//
+		// Adding the first admin
 		AdminDto admin= new AdminDto();
 		admin.setEmail("a@adobe.com");
 		admin.setPassword("a");
 		Admin newadmin = adminDao.findByEmail(admin.getEmail());
-		if(newadmin == null) adminService.save(admin);	
-		
+		if(newadmin == null) adminService.save(admin);			
 
-//		Default Layout
+		//	Default Layout
 		if(roomLayoutDao.findByTitle("Classroom")==null) {
 		RoomLayout roomLayout = new RoomLayout();
 		roomLayout.setImageUrl("classroom_image");

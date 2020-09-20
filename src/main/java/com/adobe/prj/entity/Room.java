@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-
-
 import javax.persistence.ConstraintMode;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -19,27 +17,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.adobe.prj.service.CustomLayoutSerializer;
 import com.adobe.prj.util.RoomBookingType;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import com.adobe.prj.service.CustomLayoutSerializer;
-
-
-import javax.persistence.ConstraintMode;
-
-
 
 
 @Table(name="room")
@@ -52,7 +38,6 @@ public class Room {
 	@Column(name = "room_id")
 	private int id;
 	
-
 	@Column(unique = true)
 	@NotNull(message = "Room Name cannot be NULL")
 	private String title;
@@ -77,26 +62,24 @@ public class Room {
 	@Embedded
 	private RoomBookingType bookingType;
 	
-	
-	@ManyToMany(targetEntity = RoomLayout.class,cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH},fetch = FetchType.LAZY)
+	@ManyToMany(targetEntity = RoomLayout.class,
+			cascade = {CascadeType.PERSIST, 
+					CascadeType.DETACH,CascadeType.MERGE,
+					CascadeType.REFRESH},fetch = FetchType.LAZY)
 	@JoinTable(
 			name = "room_rlayout",
 			joinColumns = { @JoinColumn(name = "room_id",nullable = false,updatable = false)},
 			inverseJoinColumns = { @JoinColumn(name = "layout_id",nullable = false,updatable = false)},
-					foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
-			        inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
+			foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+			inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
 			)
-//	@JsonManagedReference
-//	@JsonBackReference
 	@JsonSerialize(using = CustomLayoutSerializer.class)
 	List<RoomLayout> roomLayouts = new ArrayList<>();
 	
-
 	public Room() {
-
+		super();
 	}
 	
-
 	public Room(int id, @NotNull(message = "Room Name cannot be NULL") String title, @Min(1) double pricePerDay,
 			@Min(1) int capacity, @Min(1) double pricePerHour, long bookings, String imageUrl, boolean status,
 			String description, RoomBookingType bookingType, List<RoomLayout> roomLayouts) {
@@ -113,30 +96,6 @@ public class Room {
 		this.bookingType = bookingType;
 		this.roomLayouts = roomLayouts;
 	}
-
-
-
-
-
-
-
-	
-
-	public Room(@NotNull(message = "Room Name cannot be NULL") String title, @Min(1) double pricePerDay,
-			@Min(1) int capacity, @Min(0) double pricePerHour, int bookings, String imageUrl, boolean status,
-			String description, RoomBookingType bookingType, List<RoomLayout> roomLayouts) {
-		this.title = title;
-		this.pricePerDay = pricePerDay;
-		this.capacity = capacity;
-		this.pricePerHour = pricePerHour;
-		this.bookings = bookings;
-		this.imageUrl = imageUrl;
-		this.status = status;
-		this.description = description;
-		this.bookingType = bookingType;
-		this.roomLayouts = roomLayouts;
-	}
-
 
 
 	public int getId() {
@@ -226,6 +185,5 @@ public class Room {
 	public void setBookingType(RoomBookingType bookingType) {
 		this.bookingType = bookingType;
 	}
-
 
 }

@@ -8,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import javax.validation.constraints.NotNull;
-
 
 import com.adobe.prj.util.UserAddress;
 
@@ -18,12 +16,10 @@ import com.adobe.prj.util.UserAddress;
 @Entity
 public class User {
 	
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-
 	@NotNull(message = "User Name cannot be NULL")
 	private String name;
 	
@@ -40,7 +36,10 @@ public class User {
 	
 	@Embedded
 	private UserAddress address;		
-
+	
+	public User() {
+		super();
+	}
 	
 	public UserAddress getAddress() {
 		return address;
@@ -48,8 +47,7 @@ public class User {
 
 	public void setAddress(UserAddress address) {
 		this.address = address;
-	}
-	
+	}	
 	
 	public int getId() {
 		return id;
@@ -57,16 +55,11 @@ public class User {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public User() {
-		
-	}
+	}	
 	
 	public String getTitle() {
 		return title;
 	}
-
 
 	public void setTitle(String title) {
 		this.title = title;
@@ -87,7 +80,6 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public String getPhoneNumber() {
 		return phoneNumber;
@@ -113,7 +105,6 @@ public class User {
 		this.company = company;
 	}
 
-
 	public String getPaymentMethod() {
 		return paymentMethod;
 	}
@@ -122,5 +113,4 @@ public class User {
 		this.paymentMethod = paymentMethod;
 	}
 	
-
 }

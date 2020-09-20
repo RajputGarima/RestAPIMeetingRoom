@@ -16,19 +16,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.adobe.prj.exception.ExceptionTokenExpired;
 
-import io.jsonwebtoken.ExpiredJwtException;
-
-//import com.adobe.prj.filter.JwtRequestFilter;
 import static com.adobe.prj.constants.SecurityConstants.*;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	
 	@Autowired
 	private UserDetailsService myUserDetailsService;
+	
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
 
@@ -57,7 +55,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						antMatchers(HttpMethod.GET, FOOD_URL ).permitAll().
 						antMatchers(HttpMethod.GET, LAYOUT_URL ).permitAll().
 						antMatchers(HttpMethod.POST, BOOK_URL ).permitAll().
-//						antMatchers(HttpMethod.POST, EQUIP_URL).permitAll().
 						antMatchers("/api/register").permitAll().
 						anyRequest().authenticated().and().
 						exceptionHandling().and().sessionManagement() 

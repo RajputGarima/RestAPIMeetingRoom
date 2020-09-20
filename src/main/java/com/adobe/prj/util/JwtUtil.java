@@ -1,24 +1,19 @@
 package com.adobe.prj.util;
 
-
 import static com.adobe.prj.constants.SecurityConstants.*;
 
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import com.adobe.prj.exception.ExceptionTokenExpired;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+
 
 @Service
 public class JwtUtil {
@@ -58,8 +53,7 @@ public class JwtUtil {
         return Jwts.builder().setClaims(claims).setSubject(subject)
         		.setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(exp)
-                .signWith(SignatureAlgorithm.HS512, key).compact();
-    	
+                .signWith(SignatureAlgorithm.HS512, key).compact();   	
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
