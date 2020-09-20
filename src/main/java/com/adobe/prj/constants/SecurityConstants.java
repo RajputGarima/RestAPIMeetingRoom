@@ -1,11 +1,5 @@
 package com.adobe.prj.constants;
 
-
-
-import java.security.Key;
-
-import io.jsonwebtoken.security.Keys;
-
 public class SecurityConstants {
     public static final String SIGN_UP_URL = "/api/authenticate";
 //    public static final String KEY = "q3t6w9z$C&F)J@NcQfTjWnZr4u7x!A%D*G-KaPdSgUkXp2s5v8y/B?E(H+MbQeTh";

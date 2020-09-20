@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.adobe.prj.service.CustomRoomSerializer;
 
+
 @Table(name="roomlayout")
 @Entity
 @JsonIdentityInfo(
@@ -34,32 +35,24 @@ public class RoomLayout {
 	@Column(name = "layout_id")
 	private int id;
 	
-
 	@Column(unique = true)
 	@NotNull(message = "Room Layout Name cannot be NULL")
 	private String title;
 	
 	private String imageUrl;
-
-	                     
-	@ManyToMany(targetEntity = Room.class,fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+                     
+	@ManyToMany(targetEntity = Room.class,
+			fetch = FetchType.LAZY,
+			cascade = {CascadeType.PERSIST, CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
 	@JoinTable(
 			name = "room_rlayout",
 			inverseJoinColumns = { @JoinColumn(name = "room_id",nullable = false,updatable = false)},
 			joinColumns = { @JoinColumn(name = "layout_id",nullable = false,updatable = false)},
-					foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
-			        inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
+			foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+			inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
 			)
-//	@JsonManagedReference
-//	@JsonBackReference
 	@JsonSerialize(using = CustomRoomSerializer.class)
 	List<Room> rooms = new ArrayList<>();
-	
-	
-
-	public RoomLayout() {
-
-	}
 
 	public RoomLayout(int id, @NotNull(message = "Room Layout Name cannot be NULL") String title, String imageUrl,
 			List<Room> rooms) {
@@ -68,14 +61,16 @@ public class RoomLayout {
 		this.imageUrl = imageUrl;
 		this.rooms = rooms;
 	}
-	
-	
-
+		
 	public RoomLayout(int id, @NotNull(message = "Room Layout Name cannot be NULL") String title, String imageUrl) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.imageUrl = imageUrl;
+	}
+
+	public RoomLayout() {
+		super();
 	}
 
 	public int getId() {
@@ -109,8 +104,6 @@ public class RoomLayout {
 	public void setRooms(List<Room> rooms) {
 		this.rooms = rooms;
 	}
-	
-	
 
 }
  

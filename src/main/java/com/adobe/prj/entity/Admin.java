@@ -21,6 +21,17 @@ public class Admin {
 	@JsonIgnore
 	private String password;
 
+	public Admin() {
+		super();
+	}
+
+	public Admin(int adminId, String email, String password) {
+		super();
+		this.adminId = adminId;
+		this.email = email;
+		this.password = password;
+	}
+	
 	public int getAdminId() {
 		return adminId;
 	}
@@ -45,5 +56,4 @@ public class Admin {
 		this.password = password;
 	}
 	
-
 }

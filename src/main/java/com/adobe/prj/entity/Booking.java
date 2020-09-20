@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
@@ -23,13 +22,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.adobe.prj.util.BookingSchedule;
 import com.adobe.prj.util.BookingStatus;
 import com.adobe.prj.util.BookingType;
-
 
 
 @Table(name="booking")
@@ -38,18 +35,18 @@ public class Booking{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	
+	private int id;	
 
-	@Embedded
-	private BookingSchedule schedule;
-	
 	@Min(1)
 	private int attendees;
 	private double totalCost;
 	
+	@Embedded
+	private BookingSchedule schedule;	
+	
 	@NotNull(message = "Booking Status cannot be NULL")
 	private BookingStatus status;
+	
 	private BookingType bookingType;
 	
 	@ManyToOne
@@ -63,17 +60,18 @@ public class Booking{
 	@ManyToOne
 	@JoinColumn(name="layout_fk")
 	private RoomLayout roomLayout;
-	
 
 	@OneToMany(
 	        cascade = CascadeType.ALL,
 	        orphanRemoval = true, 
-	        fetch= FetchType.EAGER)
+	        fetch = FetchType.EAGER)
 	@JoinColumn(name="booking_fk")
-	private List<FoodBooking> foods = new ArrayList<>();
+	private List<FoodBooking> foods = new ArrayList<FoodBooking>();
 	
-	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(
+			cascade = CascadeType.ALL, 
+			orphanRemoval = true, 
+			fetch = FetchType.LAZY)
 	@JoinColumn(name="booking_fk")
 	List<EquipmentDetail> equipDetails = new ArrayList<EquipmentDetail>();
 
@@ -81,7 +79,6 @@ public class Booking{
 		super();
 	}
 	
-
 	public int getId() {
 		return id;
 	}
@@ -152,7 +149,6 @@ public class Booking{
 	
 	public void setSchedule(BookingSchedule schedule) {
 		this.schedule = schedule;
-
 	}
 
 	@Enumerated(EnumType.ORDINAL)
@@ -162,14 +158,12 @@ public class Booking{
 
 	public void setStatus(BookingStatus status) {
 		this.status = status;
-
 	}
 
 	@Enumerated(EnumType.ORDINAL)
 	public BookingType getBookingType() {
 		return bookingType;
 	}
-
 
 	public void setBookingType(BookingType bookingType) {
 		this.bookingType = bookingType;

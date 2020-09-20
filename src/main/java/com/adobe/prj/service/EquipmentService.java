@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.adobe.prj.dao.EquipmentDao;
 import com.adobe.prj.entity.Equipment;
 import com.adobe.prj.exception.CustomException;
-import com.adobe.prj.exception.ExceptionNotFound;
+
 
 @Service
 public class EquipmentService {

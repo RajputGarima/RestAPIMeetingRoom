@@ -1,7 +1,6 @@
 package com.adobe.prj.api;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,14 +27,13 @@ public class ExceptionController extends ResponseEntityExceptionHandler{
 		ExceptionMessage exceptionMessage = new ExceptionMessage(LocalDate.now(), ex.getMessage(),
 	        request.getDescription(false));
 	    return new ResponseEntity<>(exceptionMessage, HttpStatus.NOT_FOUND);
-	  }
-	
+	}
 
 	@ExceptionHandler(ExceptionTokenExpired.class)
 	public final ResponseEntity<ExceptionMessage> handleTokenExpiredException(ExceptionTokenExpired ex, WebRequest request) {
 		ExceptionMessage exceptionMessage = new ExceptionMessage(LocalDate.now(), ex.getMessage(),
 		        request.getDescription(false));
-		    return new ResponseEntity<>(exceptionMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+		    return new ResponseEntity<>(exceptionMessage, HttpStatus.FORBIDDEN);
 	}
 
 	@ExceptionHandler(JsonValidationFailedException.class)
@@ -43,15 +41,12 @@ public class ExceptionController extends ResponseEntityExceptionHandler{
 		ExceptionMessage exceptionMessage = new ExceptionMessage(LocalDate.now(), ex.getMessage(),
 	        request.getDescription(false));
 	    return new ResponseEntity<>(exceptionMessage, HttpStatus.BAD_REQUEST);
-	  }
-
+	}
 	
 	@ExceptionHandler(CustomException.class)
 	  public final ResponseEntity<ExceptionMessage> handleUserNotFoundException(CustomException ex, WebRequest request) {
 		ExceptionMessage exceptionMessage = new ExceptionMessage(LocalDate.now(), ex.getMessage(),
 	        request.getDescription(false));
-	    return new ResponseEntity<>(exceptionMessage, HttpStatus.NOT_FOUND);
+	    return new ResponseEntity<>(exceptionMessage, HttpStatus.INTERNAL_SERVER_ERROR);
 	 }
-
-
 }
