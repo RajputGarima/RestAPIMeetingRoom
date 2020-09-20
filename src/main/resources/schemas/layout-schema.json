@@ -4,7 +4,9 @@
     "required": [
         "title",
         "imageUrl"
+
    ],
+
     "properties": {
         "title": {
             "type": "string"
