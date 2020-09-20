@@ -231,7 +231,7 @@ public class BookingController {
 				cost += r.get().getPricePerDay() / 2;
 				break;
 			case HOURLY:
-				cost += r.get().getPricePerHour() * 15;
+				cost += r.get().getPricePerHour();
 		}
 		
 		if(b.getTotalCost() < cost)
