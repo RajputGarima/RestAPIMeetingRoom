@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import static com.adobe.prj.constants.SecurityConstants.*;
 
-import javax.annotation.security.PermitAll;
 
 @Configuration
 @EnableWebSecurity
@@ -58,6 +57,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						antMatchers(HttpMethod.GET, LAYOUT_URL ).permitAll().
 						antMatchers(HttpMethod.POST, BOOK_URL ).permitAll().
 						antMatchers(HttpMethod.GET, UPCOMING_BOOK_URL).permitAll().
+						antMatchers(HttpMethod.POST, USER_URL).permitAll().
 						antMatchers("/api/register").permitAll().
 						anyRequest().authenticated().and().
 						exceptionHandling().and().sessionManagement() 
