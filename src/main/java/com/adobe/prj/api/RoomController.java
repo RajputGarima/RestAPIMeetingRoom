@@ -14,11 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adobe.prj.dao.RoomDao;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
 import com.adobe.prj.exception.ExceptionNotFound;
@@ -106,6 +104,7 @@ public class RoomController {
 		return service.updateRoom(id, r);
 	}
 	
+	// update status: ACTIVE/INACTIVE
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> updateRoomStatus(@RequestBody RoomStatus status,@PathVariable("id") Integer id) {				
 		System.out.println("STATUS "+status.isActive());

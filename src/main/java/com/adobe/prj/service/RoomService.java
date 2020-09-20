@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.apache.tomcat.jni.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +18,8 @@ import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
-
 import com.adobe.prj.exception.CustomException;
-
 import com.adobe.prj.util.BookingStatus;
-import com.adobe.prj.util.RoomStatus;
-
 
 
 @Service

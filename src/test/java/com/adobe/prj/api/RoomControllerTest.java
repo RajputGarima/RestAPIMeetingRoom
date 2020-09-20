@@ -7,14 +7,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.text.StyleContext.SmallAttributeSet;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +22,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.adobe.prj.dao.AdminDao;
-import com.adobe.prj.dao.RoomLayoutDao;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
 import com.adobe.prj.service.AdminService;
