@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.apache.tomcat.jni.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import com.adobe.prj.entity.RoomLayout;
 import com.adobe.prj.exception.CustomException;
 
 import com.adobe.prj.util.BookingStatus;
-import com.adobe.prj.util.UpdateStatus;
+import com.adobe.prj.util.RoomStatus;
 
 
 
@@ -162,27 +163,25 @@ public class RoomService {
 		return bookingDao.getFutureBookingsCountByRoomId(id, LocalDate.now());
 	}
 	
-	public UpdateStatus updateRoomStatus(Room r, String status) {
-		UpdateStatus u = new UpdateStatus();
-		if(status.matches("ACTIVE")) {
+	public ResponseEntity<?> updateRoomStatus(Room r, boolean status) {
+		System.out.println("STATUS "+status);
+		if(status) {
 			try {
+				System.out.println("ROOM ID "+ r.getId());
 				r.setStatus(true);
-				u.setStatus(true);
 				roomDao.save(r);
 			}catch(Exception exp) {
 			        throw new CustomException("Couldn't update Status");
 			}
-		}else if(status.matches("INACTIVE")) {
+		}else {
 			try {
 				r.setStatus(false);
-				u.setStatus(false);
 				roomDao.save(r);
 			}catch(Exception exp) {
 			        throw new CustomException("Couldn't update Status");
 			}
 		}
-		u.setId(r.getId());
-		return u;
+		return ResponseEntity.ok("Status updated");
 	}
 
 	public List<Room> getRoomsForUser() {

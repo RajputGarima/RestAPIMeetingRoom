@@ -25,7 +25,7 @@ public class MeetingroomApplication implements CommandLineRunner{
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE");
+				registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE","PATCH");
 			}
 		};
 	}

@@ -8,19 +8,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adobe.prj.dao.RoomDao;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
 import com.adobe.prj.exception.ExceptionNotFound;
 import com.adobe.prj.service.RoomLayoutService;
 import com.adobe.prj.service.RoomService;
-import com.adobe.prj.util.UpdateStatus;
+import com.adobe.prj.util.RoomStatus;
 import com.adobe.prj.validation.ValidJson;
 import static com.adobe.prj.validation.SchemaLocations.ROOMSCHEMA;;
 
@@ -102,13 +106,13 @@ public class RoomController {
 		return service.updateRoom(id, r);
 	}
 	
-	// update status of a room: ACTIVE/INACTIVE
-	@PutMapping("/{id}/{status}")
-	public @ResponseBody UpdateStatus updateRoomStatus(@PathVariable("id") int id, @PathVariable("status") String status) {				
+	@PatchMapping("/{id}")
+	public ResponseEntity<?> updateRoomStatus(@RequestBody RoomStatus status,@PathVariable("id") Integer id) {				
+		System.out.println("STATUS "+status.isActive());
 		Optional<Room> room = service.getRoom(id);
 		if (!room.isPresent())
 			throw new ExceptionNotFound("Room with id " + id + " doesn't exist");
-		return service.updateRoomStatus(room.get(),status);
+		return service.updateRoomStatus(room.get(),status.isActive());
 	}
 	
 	public void verifyRoomContent(Room r) throws ExceptionNotFound {	

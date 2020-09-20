@@ -96,7 +96,8 @@ public class Room {
 		this.bookingType = bookingType;
 		this.roomLayouts = roomLayouts;
 	}
-	
+
+
 	public int getId() {
 		return id;
 	}

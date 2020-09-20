@@ -11,6 +11,9 @@
         "bookingType"
     ],
     "properties": {
+    	"description":{
+    		"type": "string"
+    	},
         "title": {
             "type": "string"
         },
