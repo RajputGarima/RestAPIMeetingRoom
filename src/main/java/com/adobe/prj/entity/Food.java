@@ -24,7 +24,7 @@ public class Food {
 	@NotNull(message = "Food Name cannot be NULL")
 	private String foodName;
 	
-	@Min(1)
+	@Min(0)
 	private double foodPrice;
 	
 	public Food() {
