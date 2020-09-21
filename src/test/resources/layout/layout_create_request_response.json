@@ -1,0 +1,15 @@
+[
+  {
+    "request": {
+      "title": "Classroom new",
+      "imageUrl": "api/image",
+      "rooms": []
+  	},
+    "response": {
+      "title": "Classroom new",
+      "imageUrl": "api/image",
+      "rooms": []
+    }
+
+  }
+]

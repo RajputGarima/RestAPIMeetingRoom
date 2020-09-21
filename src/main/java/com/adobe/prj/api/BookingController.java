@@ -11,9 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +37,7 @@ import com.adobe.prj.service.RoomService;
 import com.adobe.prj.service.UserService;
 import com.adobe.prj.util.BookingStatus;
 import com.adobe.prj.util.BookingType;
+import com.adobe.prj.util.RoomStatus;
 import com.adobe.prj.validation.ValidJson;
 import com.adobe.prj.validation.BookingValidation;
 
@@ -110,7 +113,7 @@ public class BookingController {
 	
 	// add new booking
 	@PostMapping()
-	public @ResponseBody Booking addBooking(@ValidJson(BOOKINGSCHEMA) Booking b) {		
+	public @ResponseBody Booking addBooking(@RequestBody Booking b) {		
 		try {
 			verifyBookingContent(b);
 		}catch(Exception e) {
@@ -148,8 +151,21 @@ public class BookingController {
 	}
 	
 	// update status of booking: PENDING/CONFIRMED/CANCELLED
-	@PutMapping("/{id}/{status}")
-	public @ResponseBody Booking updateBookingStatus(@PathVariable("id") int id, @PathVariable("status") BookingStatus status) {				
+//	@PutMapping("/{id}/{status}")
+//	public @ResponseBody Booking updateBookingStatus(@PathVariable("id") int id, @PathVariable("status") BookingStatus status) {				
+//		try {
+//			verifyBookingId(id);
+//		}catch(Exception e) {
+//			throw new ExceptionNotFound(e.getMessage());
+//		}
+//		
+//		Booking booking = bookingService.getBooking(id).get();
+//		booking.setStatus(status);
+//		bookingService.addBooking(booking);
+//		return booking;
+//	}
+	@PatchMapping("/{id}")
+	public ResponseEntity<?> updateBookingStatus(@RequestBody BookingStatus status,@PathVariable("id") Integer id) {				
 		try {
 			verifyBookingId(id);
 		}catch(Exception e) {
@@ -159,8 +175,8 @@ public class BookingController {
 		Booking booking = bookingService.getBooking(id).get();
 		booking.setStatus(status);
 		bookingService.addBooking(booking);
-		return booking;
-	}
+		return ResponseEntity.ok("Status updated");
+	}	
 	
 	// verify booking Id
 	public void verifyBookingId(int id) {

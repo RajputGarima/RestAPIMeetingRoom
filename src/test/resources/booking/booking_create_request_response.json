@@ -1,0 +1,77 @@
+[
+	{
+		"request" : {   
+	    "attendees":5,
+	    "room": { "id": 1},
+	    "roomLayout":{"id" : 1},
+	    "schedule": {
+	    	"bookedFor": "2020-09-25",
+	        "timeSlots": "101010101010101"
+		   },
+	    "totalCost": 17500,	
+	    "user":{ 
+	    	"email": "a@adobe.com",
+	        "title": "Ms.",
+	        "name": "a",
+	        "phoneNumber": "7523874538",
+	        "notes": "first booking",
+	        "company": "adobe",
+	        "address": 
+	        {
+	            "address": "bhopal",
+	            "city": "bhopal",
+	            "state": "mp",
+	            "zip": 462021,
+	            "country": "India"
+	        },
+	        "paymentMethod": "cash"
+	    },
+	    "foods":[],
+	    "equipDetails":[ ],
+	    "status": "INACTIVE",
+	    "bookingType": "HOURLY"
+	  },
+	  "response" :   {
+    "schedule": {
+        "bookedOn": [
+            2020,
+            9,
+            21
+        ],
+        "bookedFor": "2020-09-25",
+        "timeSlots": "101010101010101"
+    },
+    "attendees": 5,
+    "totalCost": 17500.0,
+    "status": "INACTIVE",
+    "bookingType": "HOURLY",
+    "room": { "id" : 1
+    },
+    "user": {
+        "id": 1,
+        "name": "a",
+        "email": "a@adobe.com",
+        "phoneNumber": "7523874538",
+        "title": "Ms.",
+        "notes": "first booking",
+        "company": "adobe",
+        "paymentMethod": "cash",
+        "address": {
+            "address": "bhopal",
+            "city": "bhopal",
+            "state": "mp",
+            "zip": 462021,
+            "country": "India"
+        }
+    },
+    "roomLayout" : {},
+    "foods": [],
+    "equipDetails": []
+}
+  }
+]
+
+
+
+
+  

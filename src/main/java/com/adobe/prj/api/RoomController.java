@@ -112,7 +112,7 @@ public class RoomController {
 		if (!room.isPresent())
 			throw new ExceptionNotFound("Room with id " + id + " doesn't exist");
 		return service.updateRoomStatus(room.get(),status.isActive());
-	}
+	}	
 	
 	public void verifyRoomContent(Room r) throws ExceptionNotFound {	
 		List<RoomLayout>layouts = r.getRoomLayouts();

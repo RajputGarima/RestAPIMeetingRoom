@@ -1,132 +1,263 @@
 package com.adobe.prj.api;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
-import javax.swing.text.StyleContext.SmallAttributeSet;
-
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.skyscreamer.jsonassert.Customization;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
+import org.skyscreamer.jsonassert.ValueMatcher;
+import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JacksonJsonParser;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
-import org.springframework.security.web.FilterChainProxy;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.adobe.prj.dao.AdminDao;
-import com.adobe.prj.dao.RoomLayoutDao;
-import com.adobe.prj.entity.Room;
+import com.adobe.RequestResponseTuple;
+import com.adobe.prj.entity.AdminDto;
 import com.adobe.prj.entity.RoomLayout;
-import com.adobe.prj.service.AdminService;
+import com.adobe.prj.model.AuthenticationRequest;
 import com.adobe.prj.service.RoomLayoutService;
 import com.adobe.prj.service.RoomService;
-import com.adobe.prj.util.JwtUtil;
+import com.adobe.prj.util.RoomBookingType;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
+
+@SpringBootTest
+@AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
-@WebMvcTest(RoomLayoutController.class)
+@ActiveProfiles("test")
+@Transactional
 public class RoomLayoutControllerTest {
-	
-	@Autowired
-	private WebApplicationContext wac;
-	
-	@Autowired
-    private FilterChainProxy springSecurityFilterChain;
-	
-	@MockBean
-	private RoomLayoutService service;
-	
-	@MockBean
-	private RoomService roomService;
-	
-	@MockBean
-	private AdminService adminService;
-	
-	@MockBean
-    private JwtUtil jwtUtil;
-	
 
     @Autowired
     private MockMvc mockMvc;
     
+    
+    static ObjectMapper mapper = new ObjectMapper();
+
+    static {
+      mapper.findAndRegisterModules();
+    }
+    
+    static final String email="test@email.com";
+    static final String pass="pass";
+
     @Before
-    public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac)
-          .addFilter(springSecurityFilterChain).build();
+    public void setup() throws Exception {
+       registerUser();
+    }
+     
+    @Test
+    public void addRoomLayoutTest() throws Exception {
+    	
+    	 List<RequestResponseTuple<RoomLayout, RoomLayout>> tuples =
+    		        mapper.readValue(
+    		            new File("src/test/resources/layout/layout_create_request_response.json"),
+    		            new TypeReference<List<RequestResponseTuple<RoomLayout, RoomLayout>>>() {});
+    	
+    	 String jwt=getJwtToken();
+    	 
+    	    for (RequestResponseTuple<RoomLayout, RoomLayout> tuple : tuples) {
+
+    	        String response =
+    	            mockMvc
+    	                .perform(
+    	                    post("/api/roomlayouts")
+    	                        .contentType(MediaType.APPLICATION_JSON)
+    	                        .content(mapper.writeValueAsString(tuple.getRequest()))
+    	                        .header("Authorization", "Bearer " + jwt))
+    	                .andExpect(status().is2xxSuccessful())
+    	                .andReturn()
+    	                .getResponse()
+    	                .getContentAsString();
+
+    	        JSONAssert.assertEquals(
+    	            mapper.writeValueAsString(tuple.getResponse()),
+    	            response,
+    	            new CustomComparator(
+    	                JSONCompareMode.STRICT,
+    	                Customization.customization(
+    	                    "id",
+    	                    new ValueMatcher() {
+    	                  	  @Override
+    	                  	  public boolean equal(Object o1, Object o2) {
+    	                        return true;
+    	                      }
+    	                    })));
+    	      }
     }
     
     
     @Test
-    public void getRoomLayoutsTest() throws Exception {
-    	List<Room> rooms = new ArrayList<>();
-    	
-    	List<RoomLayout> roomLayouts = Arrays.asList(new RoomLayout(1,"Classroom","api/image"),
-    										new RoomLayout(2,"Round","api/image1",rooms));
-    
-        // mocking
-        when(service.getRoomLayouts()).thenReturn(roomLayouts);
+    public void getRoomLayoutTest() throws Exception {
 
-        // @formatter:off
-        mockMvc.perform(get("/api/roomlayouts"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].title", is("Classroom")))
-                .andExpect(jsonPath("$[0].imageUrl", is("api/image")))
-                .andExpect(jsonPath("$[0].rooms", hasSize(0)))
-                .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].title", is("Round")))
-        		.andExpect(jsonPath("$[1].imageUrl", is("api/image1")))
-        		.andExpect(jsonPath("$[1].rooms", hasSize(0))); 
+    	addRoomLayoutTest();
+      String jwt= getJwtToken();
 
-        
-        // @formatter:on
-        verify(service, times(1)).getRoomLayouts();
-        verifyNoMoreInteractions(service);
+     String response= mockMvc
+              .perform(
+                      get("/api/roomlayouts")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .header("Authorization", "Bearer " + jwt))
+              .andExpect(status().is2xxSuccessful())
+              .andReturn()
+              .getResponse()
+              .getContentAsString();
+
+      List<RoomLayout> roomlayouts=mapper.readValue(response, new TypeReference<List<RoomLayout>>() {
+      });
+
+//      Assert.assertEquals(2,roomlayouts.size());
+
+      for (RoomLayout layout : roomlayouts) {
+    	  int id = layout.getId()+4;
+    	  
+        String responseRoomLayout= mockMvc
+                .perform(
+                        get("/api/roomlayouts/"+1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer " + jwt))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Assert.assertNotNull(mapper.readValue(responseRoomLayout, RoomLayout.class));
+
+
+      }
     }
     
-	@Test
-	public void addRoomLayoutTest() throws Exception {
-		List<Room> rooms = new ArrayList<>();
-		RoomLayout l1 = new RoomLayout(0,"Classroom","api/image",rooms);
-		RoomLayout l2 = new RoomLayout(1,"Classroom","api/image",rooms);
-		ObjectMapper mapper = new ObjectMapper();
-		String json = mapper.writeValueAsString(l1); // get JSON for Product p
-		
-		// mocking if Product type is passed to service he should return a PK 10
-		when(service.addRoomLayout(Mockito.any(RoomLayout.class))).thenReturn(l2);
-		
-			mockMvc.perform(post("/api/roomlayouts")
-					.content(json)
-					.contentType(MediaType.APPLICATION_JSON))
-					.andExpect(status().isOk());
-			verify(service, times(1)).addRoomLayout(Mockito.any(RoomLayout.class));
-	}
+    @Test
+    public void deleteRoomLayoutTest() throws Exception {
+
+    	addRoomLayoutTest();
+    String jwt= getJwtToken();
+
+      String response= mockMvc
+              .perform(
+                      get("/api/roomlayouts")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .header("Authorization", "Bearer " + jwt))
+              .andExpect(status().is2xxSuccessful())
+              .andReturn()
+              .getResponse()
+              .getContentAsString();
+
+      List<RoomLayout> roomlayouts=mapper.readValue(response, new TypeReference<List<RoomLayout>>() {
+      });
+
+
+        mockMvc
+                .perform(
+                        delete("/api/roomlayouts/delete/"+roomlayouts.get(1).getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer " + jwt))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+    }
+    
+    @Test
+    public void updateRoomLayoutTest() throws Exception {
+
+    	addRoomLayoutTest();
+      String jwt= getJwtToken();
+
+      String response= mockMvc
+              .perform(
+                      get("/api/roomlayouts")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .header("Authorization", "Bearer " + jwt))
+              .andExpect(status().is2xxSuccessful())
+              .andReturn()
+              .getResponse()
+              .getContentAsString();
+
+      List<RoomLayout> roomlayouts=mapper.readValue(response, new TypeReference<List<RoomLayout>>() {
+      });
+
+
+      roomlayouts.get(0).setImageUrl("api/image1");
+      
+      String putResponseString=mockMvc
+              .perform(
+                      put("/api/roomlayouts/"+roomlayouts.get(0).getId())
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(mapper.writeValueAsString(roomlayouts.get(0)))
+                              .header("Authorization", "Bearer " + jwt)
+              )
+              .andExpect(status().is2xxSuccessful())
+              .andReturn()
+              .getResponse()
+              .getContentAsString();
+
+      RoomLayout putResponse=mapper.readValue(putResponseString,RoomLayout.class);
+      Assert.assertEquals("api/image1",putResponse.getImageUrl());
+
+    }
+    
+    
+    private void registerUser() throws Exception {
+        AdminDto adminDto = new AdminDto();
+        adminDto.setEmail(email);
+        adminDto.setPassword(pass);
+        String registerRes =
+            mockMvc
+                .perform(
+                    post("/api/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(adminDto)))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+    }
+    
+    private String getJwtToken() throws Exception {
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+        authenticationRequest.setUsername("test@email.com");
+        authenticationRequest.setPassword("pass");
+
+        String res =
+            mockMvc
+                .perform(
+                    post("/api/authenticate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(authenticationRequest)))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        return mapper.readValue(res, new TypeReference<Map<String, String>>() {}).get("jwt");
+      }
+	
+
 }
