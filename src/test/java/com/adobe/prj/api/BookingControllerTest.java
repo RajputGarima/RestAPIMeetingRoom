@@ -124,29 +124,6 @@ public class BookingControllerTest {
  	                .getContentAsString();
  	    }
  	    
-
-	    
-	    List<RequestResponseTuple<Equipment, Equipment>> tuplesE =
-	            mapper.readValue(
-	                new File("src/test/resources/equipment/equipment_create_request_response.json"),
-	                new TypeReference<List<RequestResponseTuple<Equipment, Equipment>>>() {});
-
-
-
-	        for (RequestResponseTuple<Equipment, Equipment> tupleE : tuplesE) {
-
-	          String responseE =
-	              mockMvc
-	                  .perform(
-	                      post("/api/equipments")
-	                          .contentType(MediaType.APPLICATION_JSON)
-	                          .content(mapper.writeValueAsString(tupleE.getRequest()))
-	                          .header("Authorization", "Bearer " + jwt))
-	                  .andExpect(status().is2xxSuccessful())
-	                  .andReturn()
-	                  .getResponse()
-	                  .getContentAsString();
-	        }
     	 List<RequestResponseTuple<Booking, Booking>> tuples =
     		        mapper.readValue(
     		            new File("src/test/resources/booking/booking_create_request_response.json"),
@@ -171,55 +148,52 @@ public class BookingControllerTest {
     }
     
     
-//    @Test
-//    public void getRoomLayoutTest() throws Exception {
-//
-//    	addRoomLayoutTest();
-//      String jwt= getJwtToken();
-//
-//     String response= mockMvc
-//              .perform(
-//                      get("/api/roomlayouts")
-//                              .contentType(MediaType.APPLICATION_JSON)
-//                              .header("Authorization", "Bearer " + jwt))
-//              .andExpect(status().is2xxSuccessful())
-//              .andReturn()
-//              .getResponse()
-//              .getContentAsString();
-//
-//      List<RoomLayout> roomlayouts=mapper.readValue(response, new TypeReference<List<RoomLayout>>() {
-//      });
-//
-////      Assert.assertEquals(2,roomlayouts.size());
-//
-//      for (RoomLayout layout : roomlayouts) {
-//    	  int id = layout.getId()+4;
-//    	  
-//        String responseRoomLayout= mockMvc
-//                .perform(
-//                        get("/api/roomlayouts/"+1)
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                                .header("Authorization", "Bearer " + jwt))
-//                .andExpect(status().is2xxSuccessful())
-//                .andReturn()
-//                .getResponse()
-//                .getContentAsString();
-//
-//        Assert.assertNotNull(mapper.readValue(responseRoomLayout, RoomLayout.class));
-//
-//
-//      }
-//    }
+    @Test
+    public void getBookingsTest() throws Exception {
+
+      String jwt= getJwtToken();
+
+     String response= mockMvc
+              .perform(
+                      get("/api/bookings")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .header("Authorization", "Bearer " + jwt))
+              .andExpect(status().is2xxSuccessful())
+              .andReturn()
+              .getResponse()
+              .getContentAsString();
+
+      List<Booking> bookings=mapper.readValue(response, new TypeReference<List<Booking>>() {
+      });
+
+
+      for (Booking booking : bookings) {
+    	  int id = booking.getId();
+    	  
+        String responseBooking= mockMvc
+                .perform(
+                        get("/api/bookings/"+id)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer " + jwt))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Assert.assertNotNull(mapper.readValue(responseBooking, Booking.class));
+
+
+      }
+    }
     
 //    @Test
-//    public void deleteRoomLayoutTest() throws Exception {
-//
-//    	addRoomLayoutTest();
+//    public void deleteBookingTest() throws Exception {
+//    	addBookingTest();
 //    String jwt= getJwtToken();
 //
 //      String response= mockMvc
 //              .perform(
-//                      get("/api/roomlayouts")
+//                      get("/api/bookings")
 //                              .contentType(MediaType.APPLICATION_JSON)
 //                              .header("Authorization", "Bearer " + jwt))
 //              .andExpect(status().is2xxSuccessful())
@@ -227,13 +201,18 @@ public class BookingControllerTest {
 //              .getResponse()
 //              .getContentAsString();
 //
-//      List<RoomLayout> roomlayouts=mapper.readValue(response, new TypeReference<List<RoomLayout>>() {
+//      List<Booking> bookings=mapper.readValue(response, new TypeReference<List<Booking>>() {
 //      });
-//
+//      for(Booking b:bookings) {
+//    	  System.out.println(b.getId());
+//    	  System.out.println(b.getRoom().getId());
+//    	  System.out.println(b.getRoomLayout().getId());
+//    	  System.out.println(b.getRoomLayout().getTitle());
+//      }
 //
 //        mockMvc
 //                .perform(
-//                        delete("/api/roomlayouts/delete/"+roomlayouts.get(1).getId())
+//                        delete("/api/bookings/"+bookings.get(0).getId())
 //                                .contentType(MediaType.APPLICATION_JSON)
 //                                .header("Authorization", "Bearer " + jwt))
 //                .andExpect(status().is2xxSuccessful())
@@ -242,45 +221,8 @@ public class BookingControllerTest {
 //                .getContentAsString();
 //
 //    }
-    
-//    @Test
-//    public void updateRoomLayoutTest() throws Exception {
-//
-//    	addRoomLayoutTest();
-//      String jwt= getJwtToken();
-//
-//      String response= mockMvc
-//              .perform(
-//                      get("/api/roomlayouts")
-//                              .contentType(MediaType.APPLICATION_JSON)
-//                              .header("Authorization", "Bearer " + jwt))
-//              .andExpect(status().is2xxSuccessful())
-//              .andReturn()
-//              .getResponse()
-//              .getContentAsString();
-//
-//      List<RoomLayout> roomlayouts=mapper.readValue(response, new TypeReference<List<RoomLayout>>() {
-//      });
-//
-//
-//      roomlayouts.get(0).setImageUrl("api/image1");
-//      
-//      String putResponseString=mockMvc
-//              .perform(
-//                      put("/api/roomlayouts/"+roomlayouts.get(0).getId())
-//                              .contentType(MediaType.APPLICATION_JSON)
-//                              .content(mapper.writeValueAsString(roomlayouts.get(0)))
-//                              .header("Authorization", "Bearer " + jwt)
-//              )
-//              .andExpect(status().is2xxSuccessful())
-//              .andReturn()
-//              .getResponse()
-//              .getContentAsString();
-//
-//      RoomLayout putResponse=mapper.readValue(putResponseString,RoomLayout.class);
-//      Assert.assertEquals("api/image1",putResponse.getImageUrl());
-//
-//    }
+//    
+
     
     
     private void registerUser() throws Exception {
