@@ -23,7 +23,7 @@ public class Equipment {
 	@NotNull(message = "Equipment Name cannot be NULL")
 	private String title;
 	
-	@Min(1)
+	@Min(0)
 	private double price;
 	
 	private boolean multiUnits;
