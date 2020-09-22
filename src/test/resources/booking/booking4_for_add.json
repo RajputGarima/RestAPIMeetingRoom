@@ -28,7 +28,7 @@
 	    },
 	    "foods":[],
 	    "equipDetails":[ ],
-	    "status": "INACTIVE",
+	    "status": "PENDING",
 	    "bookingType": "HOURLY"
 	  },
 	  "response" :   {
@@ -38,7 +38,7 @@
     },
     "attendees": 5,
     "totalCost": 17500.0,
-    "status": "INACTIVE",
+    "status": "PENDING",
     "bookingType": "HOURLY",
     "room": { "id" : 4
     },

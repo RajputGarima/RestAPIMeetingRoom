@@ -28,7 +28,7 @@
 	    },
 	    "foods":[],
 	    "equipDetails":[ ],
-	    "status": "INACTIVE",
+	    "status": "PENDING",
 	    "bookingType": "HOURLY"
 	  }
 	}
