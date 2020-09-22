@@ -38,6 +38,7 @@ import com.adobe.prj.service.UserService;
 import com.adobe.prj.util.BookingStatus;
 import com.adobe.prj.util.BookingType;
 import com.adobe.prj.util.RoomStatus;
+import com.adobe.prj.util.paraBookingStatus;
 import com.adobe.prj.validation.ValidJson;
 import com.adobe.prj.validation.BookingValidation;
 
@@ -113,7 +114,7 @@ public class BookingController {
 	
 	// add new booking
 	@PostMapping()
-	public @ResponseBody Booking addBooking(@RequestBody Booking b) {		
+	public @ResponseBody Booking addBooking(@ValidJson(BOOKINGSCHEMA) Booking b) {		
 		try {
 			verifyBookingContent(b);
 		}catch(Exception e) {
@@ -165,19 +166,18 @@ public class BookingController {
 //		return booking;
 //	}
 	@PatchMapping("/{id}")
-	public ResponseEntity<?> updateBookingStatus(@RequestBody BookingStatus status,@PathVariable("id") Integer id) {				
+	public ResponseEntity<?> updateBookingStatus(@RequestBody paraBookingStatus status,@PathVariable("id") Integer id) {				
 		try {
 			verifyBookingId(id);
 		}catch(Exception e) {
 			throw new ExceptionNotFound(e.getMessage());
 		}
-		
 		Booking booking = bookingService.getBooking(id).get();
-		booking.setStatus(status);
+		
+		booking.setStatus(getBookingStatus(status.getStatus()));
 		bookingService.addBooking(booking);
 		return ResponseEntity.ok("Status updated");
-	}	
-	
+	}		
 	// verify booking Id
 	public void verifyBookingId(int id) {
 		Optional<Booking> b = bookingService.getBooking(id);
@@ -270,6 +270,18 @@ public class BookingController {
 		}		
 		if(b.getTotalCost() < cost)
 			throw new ExceptionNotFound("Total cost cannot be less than Room + Equipments + Refreshments cost");
+	}
+	
+	public BookingStatus getBookingStatus(String status) {
+		if(status.matches("CANCELLED")) {
+			return BookingStatus.CANCELLED;
+		}
+		else if(status.matches("CONFIRMED")) {
+			return BookingStatus.CONFIRMED;
+		}
+		else{
+			return BookingStatus.PENDING;
+		}
 	}
 	
 }
