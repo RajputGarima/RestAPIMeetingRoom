@@ -158,8 +158,8 @@ public class BookingControllerTest {
           	                      }
           	                    })));
     	        
-    	      System.out.println("printing bookings from add:***************************************");
-  	      	  System.out.println(response);
+//    	      System.out.println("printing bookings from add:***************************************");
+//  	      	  System.out.println(response);
     	      }
     	  	    
     }
@@ -225,8 +225,8 @@ public class BookingControllerTest {
                 .getContentAsString();
         
         
-      	  System.out.println("printing bookings from get:**************************************");
-      	  System.out.println(responseBooking);
+//      	  System.out.println("printing bookings from get:**************************************");
+//      	  System.out.println(responseBooking);
         
         
         Assert.assertNotNull(mapper.readValue(responseBooking, Booking.class));
@@ -279,13 +279,13 @@ public class BookingControllerTest {
 
       List<Booking> bookings=mapper.readValue(response, new TypeReference<List<Booking>>() {
       });
-      for(Booking b:bookings) {
-    	  System.out.println("printing bookings from delete:********************************************");
-      	  System.out.println("booking id: "+b.getId());
-      	  System.out.println("room id: "+b.getRoom().getId());
-      	  System.out.println("roomlayout id: "+b.getRoomLayout().getId());
-      	  System.out.println("roomlayout title: "+b.getRoomLayout().getTitle());
-      }
+//      for(Booking b:bookings) {
+//    	  System.out.println("printing bookings from delete:********************************************");
+//      	  System.out.println("booking id: "+b.getId());
+//      	  System.out.println("room id: "+b.getRoom().getId());
+//      	  System.out.println("roomlayout id: "+b.getRoomLayout().getId());
+//      	  System.out.println("roomlayout title: "+b.getRoomLayout().getTitle());
+//      }
 
         mockMvc
                 .perform(
@@ -324,8 +324,8 @@ public class BookingControllerTest {
     	                .getResponse()
     	                .getContentAsString();
     	        
-  	    	  System.out.println("Printing post response:**************************************************");
-  	    	  System.out.println(response);
+//  	    	  System.out.println("Printing post response:**************************************************");
+//  	    	  System.out.println(response);
 
     	      }
     	    String response= mockMvc
@@ -341,8 +341,8 @@ public class BookingControllerTest {
     	      List<Booking> bookings=mapper.readValue(response, new TypeReference<List<Booking>>() {
     	      });
     	      
-    	      System.out.println("Printing get response:**************************************************");
-  	    	  System.out.println(response);
+//    	      System.out.println("Printing get response:**************************************************");
+//  	    	  System.out.println(response);
   	    	  
  	      
   	    	  bookings.get(0).setAttendees(10);
@@ -362,12 +362,17 @@ public class BookingControllerTest {
     	                              .header("Authorization", "Bearer " + jwt)
     	              )
     	              .andExpect(status().is2xxSuccessful())
+    	              .andExpect(jsonPath("$.totalCost", is(20000.0)))
+    	              .andExpect(jsonPath("$.attendees", is(10)))
+    	              .andExpect(jsonPath("$.id", is(1)))
+    	              .andExpect(jsonPath("$.status", is("PENDING")))
+    	              .andExpect(jsonPath("$.bookingType", is("HOURLY")))
     	              .andReturn()
     	              .getResponse()
     	              .getContentAsString();
     	    	  
-    	    	  System.out.println("Printing put response:**************************************************");
-    	    	  System.out.println(putResponseString);    	    	  
+//    	    	  System.out.println("Printing put response:**************************************************");
+//    	    	  System.out.println(putResponseString);    	    	  
     	    	   
 //    	    	  Booking putResponse=mapper.readValue(putResponseString,Booking.class);
 //        	      Assert.assertEquals(10,putResponse.getAttendees());
