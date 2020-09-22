@@ -2,7 +2,7 @@
 	{
 		"request" : {   
 	    "attendees":5,
-	    "room": { "id": 1},
+	    "room": {"id" : 2},
 	    "roomLayout":{"id" : 1},
 	    "schedule": {
 	    	"bookedFor": "2020-09-25",
@@ -45,10 +45,10 @@
     "totalCost": 17500.0,
     "status": "INACTIVE",
     "bookingType": "HOURLY",
-    "room": { "id" : 1
+    "room": { "id" : 2
     },
     "user": {
-        "id": 1,
+        "id": 2,
         "name": "a",
         "email": "a@adobe.com",
         "phoneNumber": "7523874538",

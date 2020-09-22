@@ -46,9 +46,7 @@
                 "timeSlots"
             ],
             "properties": {
-                "bookedFor": {
-                    "type": "string"
-                },
+
                 "timeSlots": {
                     "type": "string"
                 }

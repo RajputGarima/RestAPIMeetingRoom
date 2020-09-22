@@ -2,8 +2,8 @@
 	{
 		"request" : {   
 	    "attendees":5,
-	    "room": { "id": 1},
-	    "roomLayout":{"id" : 1},
+	    "room": { "id": 4},
+	    "roomLayout": 1,
 	    "schedule": {
 	    	"bookedFor": "2020-09-25",
 	        "timeSlots": "101010101010101"
@@ -33,11 +33,6 @@
 	  },
 	  "response" :   {
     "schedule": {
-        "bookedOn": [
-            2020,
-            9,
-            21
-        ],
         "bookedFor": "2020-09-25",
         "timeSlots": "101010101010101"
     },
@@ -45,10 +40,10 @@
     "totalCost": 17500.0,
     "status": "INACTIVE",
     "bookingType": "HOURLY",
-    "room": { "id" : 1
+    "room": { "id" : 4
     },
     "user": {
-        "id": 1,
+        "id": 4,
         "name": "a",
         "email": "a@adobe.com",
         "phoneNumber": "7523874538",
@@ -64,7 +59,12 @@
             "country": "India"
         }
     },
-    "roomLayout": { },
+    "roomLayout": {
+		"id":1,
+		"title":null,
+		"imageUrl":null,
+		"rooms":[]
+     },
     "foods": [],
     "equipDetails": []
 }
