@@ -217,25 +217,43 @@ public class BookingController {
 		if(!BookingValidation.isBinaryString(str))
 			throw new ExceptionNotFound("Incorrect format for time slots");
 		
+		int setBits = BookingValidation.setBits(str);
+		
 		// equipments & their cost check
 		List<EquipmentDetail> equipDetails = b.getEquipDetails();
+		
 		for(EquipmentDetail ed: equipDetails) {
 			Equipment equipment = ed.getEquipment();
 			Optional<Equipment> e = equipmentService.getEquipment(equipment.getId());
+			
 			if(!e.isPresent())
 				throw new ExceptionNotFound("Equipment doesn't exist");
-			if(ed.getUnits() * e.get().getPrice() != ed.getPrice())
-				throw new ExceptionNotFound("Given & Expected price for equipment_id " + equipment.getId() + " don't match." + "Expected price = " + ed.getUnits() * e.get().getPrice() +  ". Given price = "  + ed.getPrice() );
-			cost += ed.getPrice();
+			
+			if(e.get().isMultiUnits() == false && ed.getUnits() > 1)
+				throw new ExceptionNotFound("Can't book multiple units for Equipment with id " + e.get().getId());
+			
+			if(e.get().isHourlyAllowed()) {
+				if(ed.getUnits() * e.get().getPrice() * setBits != ed.getPrice() )
+					throw new ExceptionNotFound("Given & Expected price for equipment_id " + equipment.getId() + " don't match." + "Expected price = " + ed.getUnits() * e.get().getPrice() * setBits  +  ". Given price = "  + ed.getPrice());
+				cost += ed.getPrice();
+			}
+			else {
+				if(ed.getUnits() * e.get().getPrice() != ed.getPrice())
+					throw new ExceptionNotFound("Given & Expected price for equipment_id " + equipment.getId() + " don't match." + "Expected price = " + ed.getUnits() * e.get().getPrice() +  ". Given price = "  + ed.getPrice() );
+				cost += ed.getPrice();
+			}
 		}
 		
 		// food & their cost check
 		List<FoodBooking> foodBookings = b.getFoods();
+		
 		for(FoodBooking fb: foodBookings) {
 			Food food = fb.getFood();
 			Optional<Food> f = foodService.getFood(food.getId());
+			
 			if(!f.isPresent())
 				throw new ExceptionNotFound("Food doesn't exist");
+			
 			if(fb.getQuantity() * f.get().getFoodPrice() != fb.getAmount())
 				throw new ExceptionNotFound("Given & Expected price for food_id " + food.getId() + " don't match." + "Expected price = " + fb.getQuantity() * f.get().getFoodPrice() +  ". Given price = "  + fb.getAmount() );
 			cost += fb.getAmount();
@@ -250,7 +268,7 @@ public class BookingController {
 				cost += r.get().getPricePerDay() / 2;
 				break;
 			case HOURLY:
-				cost += r.get().getPricePerHour() * BookingValidation.setBits(str);
+				cost += r.get().getPricePerHour() * setBits;
 		}		
 		if(b.getTotalCost() < cost)
 			throw new ExceptionNotFound("Total cost cannot be less than Room + Equipments + Refreshments cost");
