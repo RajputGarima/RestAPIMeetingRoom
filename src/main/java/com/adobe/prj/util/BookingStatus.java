@@ -1,7 +1,8 @@
 package com.adobe.prj.util;
 
 public enum BookingStatus {
-	PENDING,
-	CONFIRMED,
-	CANCELLED
+	PENDING, //0
+	CONFIRMED, //1
+	CANCELLED, //2
+	INACTIVE //3
 }

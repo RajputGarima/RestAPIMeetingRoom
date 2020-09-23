@@ -297,6 +297,9 @@ public class BookingController {
 		else if(status.matches("CONFIRMED")) {
 			return BookingStatus.CONFIRMED;
 		}
+		else if(status.matches("INACTIVE")) {
+			return BookingStatus.INACTIVE;
+		}
 		else{
 			return BookingStatus.PENDING;
 		}

@@ -29,7 +29,7 @@ public interface BookingDao extends JpaRepository<Booking, Integer>{
 	@Query(value = "select count(*) from booking where booked_on = :pr", nativeQuery = true)
 	public long getBookingsCountMadeToday(@Param("pr") LocalDate now);
 	
-	@Query(value = "select time_slots from booking where room_fk = :id and booked_for = :date", nativeQuery = true)
+	@Query(value = "select time_slots from booking where room_fk = :id and booked_for = :date and status<>2 and status<>3", nativeQuery = true)
 	List<String> getTimeSlotsById(@Param("id") int id, @Param("date") String date);
 
 	@Query(value = "select count(*) from booking where room_fk = :id and booked_for >= :date", nativeQuery = true)
@@ -37,4 +37,7 @@ public interface BookingDao extends JpaRepository<Booking, Integer>{
 	
 	@Query(value = "select * from booking where layout_fk= :pr", nativeQuery = true)
 	public List<Booking> getByLayoutId(@Param("pr") int id);
+	
+	@Query(value="select * from booking where status<>3", nativeQuery = true)
+	public List<Booking> findAll();
 }
