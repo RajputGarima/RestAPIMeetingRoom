@@ -288,6 +288,17 @@ public class BookingController {
 		}		
 		if(b.getTotalCost() < cost)
 			throw new ExceptionNotFound("Total cost cannot be less than Room + Equipments + Refreshments cost");
+		
+		//checking user phone number and zipcode length
+		String phone = b.getUser().getPhoneNumber();
+		if(phone.length()!=10) 
+			throw new ExceptionNotFound("Incorrect mobile number length");
+		
+		int zip = b.getUser().getAddress().getZip();
+		int zipLength = String.valueOf(zip).length();
+		if(phone.length()!=6) 
+			throw new ExceptionNotFound("Incorrect zipcode length");
+		
 	}
 	
 	public BookingStatus getBookingStatus(String status) {
