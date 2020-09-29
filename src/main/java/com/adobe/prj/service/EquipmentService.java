@@ -1,5 +1,6 @@
 package com.adobe.prj.service;
 
+import java.io.Console;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +33,11 @@ public class EquipmentService {
 			eqp = equipmentDao.save(e);
 		}catch(DataIntegrityViolationException exp) {
 			// unique constraint
-		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
+				String s = exp.getMostSpecificCause().getLocalizedMessage();
+				int index= s.indexOf("key");
+				s=s.substring(0,index-4);
+//		        throw new CustomException(exp.getMostSpecificCause().getLocalizedMessage());
+				throw new CustomException(s + "not allowed");
 		}
 		catch(javax.validation.ConstraintViolationException exp) {
 			// @Min, @NotNULL

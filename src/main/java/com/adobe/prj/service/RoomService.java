@@ -67,10 +67,15 @@ public class RoomService {
 			room = roomDao.save(r);
 		}catch(DataIntegrityViolationException exp) {
 			// unique constraint
-		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
+			String s = exp.getMostSpecificCause().getLocalizedMessage();
+			int index= s.indexOf("key");
+			s=s.substring(0,index-4);
+			throw new CustomException(s + "not allowed.");
 		}
 		catch(javax.validation.ConstraintViolationException exp) {
 			// @Min, @NotNULL
+			if(r.getCapacity()<1)
+				throw new CustomException("Capacity must be greater than or equal to 1");
 			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
 		}
 		return room;
@@ -113,13 +118,26 @@ public class RoomService {
 			newRoomLayouts.add(roomLayoutDao.findByTitle(DEFAULT_LAYOUT));
 			oldr.setRoomLayouts(newRoomLayouts);
 		}
+		
+		if(oldr.getCapacity()<1)
+			throw new CustomException("Capacity must be greater than or equal to 1");
+		
+	
+//		if(roomDao.findByTitle(oldr.getTitle()).size()==1) {
+//			System.out.println("******");
+//			throw new CustomException("Duplicate entry "+ "'"+ oldr.getTitle()+ "' not allowed.");
+//		}
+		
 		Room room = null;
 		try {
 			System.out.println(oldr.toString());
 			room = roomDao.save(oldr);
 		}catch(DataIntegrityViolationException exp) {
 			// unique constraint
-		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
+			String s = exp.getMostSpecificCause().getLocalizedMessage();
+			int index= s.indexOf("key");
+			s=s.substring(0,index-4);
+			throw new CustomException(s + "not allowed.");
 		}
 		catch(javax.validation.ConstraintViolationException exp) {
 			// @Min, @NotNULL

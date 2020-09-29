@@ -57,7 +57,10 @@ public class RoomLayoutService {
 			roomLayout = roomLayoutDao.save(r);
 		}catch(DataIntegrityViolationException exp) {
 			// unique constraint
-		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
+			String s = exp.getMostSpecificCause().getLocalizedMessage();
+			int index= s.indexOf("key");
+			s=s.substring(0,index-4);
+			throw new CustomException(s + "not allowed.");
 		}
 		catch(javax.validation.ConstraintViolationException exp) {
 			// @Min, @NotNULL
@@ -99,7 +102,10 @@ public class RoomLayoutService {
 			layout = roomLayoutDao.save(rl);
 		}catch(DataIntegrityViolationException exp) {
 			// unique constraint
-		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
+			String s = exp.getMostSpecificCause().getLocalizedMessage();
+			int index= s.indexOf("key");
+			s=s.substring(0,index-4);
+			throw new CustomException(s + "not allowed.");
 		}
 		catch(javax.validation.ConstraintViolationException exp) {
 			// @Min, @NotNULL
