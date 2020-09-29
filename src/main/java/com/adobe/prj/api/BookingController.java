@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +38,11 @@ import com.adobe.prj.service.RoomService;
 import com.adobe.prj.service.UserService;
 import com.adobe.prj.util.BookingStatus;
 import com.adobe.prj.util.BookingType;
-import com.adobe.prj.util.RoomStatus;
 import com.adobe.prj.util.paraBookingStatus;
-import com.adobe.prj.validation.ValidJson;
 import com.adobe.prj.validation.BookingValidation;
+import com.adobe.prj.validation.ValidJson;
+
+import antlr.StringUtils;
 
 
 @RestController
@@ -165,6 +167,7 @@ public class BookingController {
 //		bookingService.addBooking(booking);
 //		return booking;
 //	}
+	
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> updateBookingStatus(@RequestBody paraBookingStatus status,@PathVariable("id") Integer id) {				
 		try {
@@ -177,7 +180,8 @@ public class BookingController {
 		booking.setStatus(getBookingStatus(status.getStatus()));
 		bookingService.addBooking(booking);
 		return ResponseEntity.ok("Status updated");
-	}		
+	}
+	
 	// verify booking Id
 	public void verifyBookingId(int id) {
 		Optional<Booking> b = bookingService.getBooking(id);
@@ -289,10 +293,14 @@ public class BookingController {
 		if(b.getTotalCost() < cost)
 			throw new ExceptionNotFound("Total cost cannot be less than Room + Equipments + Refreshments cost");
 		
-		//checking user phone number and zipcode length
+		//checking user phone number and zip code length
 		String phone = b.getUser().getPhoneNumber();
 		if(phone.length()!=10) 
 			throw new ExceptionNotFound("Incorrect mobile number length");
+		if(phone.charAt(0) == '0')
+			throw new ExceptionNotFound("First digit of mobile number can't be 0");
+		if(NumberUtils.isNumber(phone) == false)
+			throw new ExceptionNotFound("Mobile number must contain only digits");
 		
 		int zip = b.getUser().getAddress().getZip();
 		int zipLength = String.valueOf(zip).length();
