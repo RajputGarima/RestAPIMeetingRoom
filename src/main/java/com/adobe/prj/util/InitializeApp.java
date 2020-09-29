@@ -29,8 +29,8 @@ public class InitializeApp {
 		
 		// Adding the first admin
 		AdminDto admin= new AdminDto();
-		admin.setEmail("a@adobe.com");
-		admin.setPassword("a");
+		admin.setEmail("admin@admin.com");
+		admin.setPassword("admin");
 		Admin newadmin = adminDao.findByEmail(admin.getEmail());
 		if(newadmin == null) adminService.save(admin);			
 

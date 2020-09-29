@@ -296,7 +296,7 @@ public class BookingController {
 		
 		int zip = b.getUser().getAddress().getZip();
 		int zipLength = String.valueOf(zip).length();
-		if(phone.length()!=6) 
+		if(zipLength!=6) 
 			throw new ExceptionNotFound("Incorrect zipcode length");
 		
 	}
