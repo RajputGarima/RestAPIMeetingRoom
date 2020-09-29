@@ -76,7 +76,7 @@ public class RoomLayoutController {
 		}catch(Exception e) {
 			throw new ExceptionNotFound(e.getMessage());
 		}
-		return service.updateRoomLayout(id, r);
+		return service.addLayout(r);
 	}
 	
 	public void verifyRoomLayoutContent(RoomLayout rl) throws ExceptionNotFound {	

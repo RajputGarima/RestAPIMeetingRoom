@@ -93,6 +93,21 @@ public class RoomLayoutService {
 		return roomLayout;
 	}
 	
+	public RoomLayout addLayout(RoomLayout rl) {
+		RoomLayout layout = null;
+		try {
+			layout = roomLayoutDao.save(rl);
+		}catch(DataIntegrityViolationException exp) {
+			// unique constraint
+		        throw new CustomException("integrity violation SQL " + exp.getMostSpecificCause());
+		}
+		catch(javax.validation.ConstraintViolationException exp) {
+			// @Min, @NotNULL
+			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
+		}
+		return layout;
+	}
+	
 	@Transactional
     public ResponseEntity<Object> deleteRoomLayout(int id) {
 		RoomLayout rl = roomLayoutDao.findById(id).get();

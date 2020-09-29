@@ -42,8 +42,6 @@ import com.adobe.prj.util.paraBookingStatus;
 import com.adobe.prj.validation.BookingValidation;
 import com.adobe.prj.validation.ValidJson;
 
-import antlr.StringUtils;
-
 
 @RestController
 @RequestMapping("api/bookings")
@@ -297,8 +295,6 @@ public class BookingController {
 		String phone = b.getUser().getPhoneNumber();
 		if(phone.length()!=10) 
 			throw new ExceptionNotFound("Incorrect mobile number length");
-		if(phone.charAt(0) == '0')
-			throw new ExceptionNotFound("First digit of mobile number can't be 0");
 		if(NumberUtils.isNumber(phone) == false)
 			throw new ExceptionNotFound("Mobile number must contain only digits");
 		
