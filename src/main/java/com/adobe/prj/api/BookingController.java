@@ -228,6 +228,11 @@ public class BookingController {
 			}
 		}
 		
+		//Check room status whether active or inactive
+		if(rr.isStatus()==false) {
+			throw new ExceptionNotFound("The room '"+ rr.getTitle() +"' is inactive and cannot be used for booking.");
+		}
+		
 		// time slots check
 		String str = b.getSchedule().getTimeSlots();
 		if(str.length() != 15)
