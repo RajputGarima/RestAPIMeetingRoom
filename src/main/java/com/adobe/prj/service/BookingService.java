@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.adobe.prj.dao.BookingDao;
@@ -16,7 +15,6 @@ import com.adobe.prj.entity.Booking;
 import com.adobe.prj.entity.Room;
 import com.adobe.prj.entity.RoomLayout;
 import com.adobe.prj.exception.CustomException;
-import com.adobe.prj.util.BookingStatus;
 
 
 @Service

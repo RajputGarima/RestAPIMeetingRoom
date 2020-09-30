@@ -41,10 +41,6 @@ public class UserService {
 			// @Min, @NotNULL
 			throw new CustomException("constraint violation - name -  " + exp.getConstraintViolations() );
 		}
-//		int userId = u.getUserId();
-
-
-//		System.out.println("user id is "+userId);
 		return u;
 	}
 	
