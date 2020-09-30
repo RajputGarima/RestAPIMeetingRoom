@@ -20,7 +20,7 @@ public interface BookingDao extends JpaRepository<Booking, Integer>{
 	@Query(value = "select * from booking order by id desc limit 3", nativeQuery = true)
 	public List<Booking> getLatestBookings();
 
-	@Query(value = "select * from booking where booked_for = :pr order by booked_for limit 2", nativeQuery = true)
+	@Query(value = "select * from booking where booked_for = :pr", nativeQuery = true)
 	public List<Booking> getBookingByDate(@Param("pr") String date);
 
 	@Query(value = "select count(*) from booking where booked_for = :pr", nativeQuery = true)
